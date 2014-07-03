@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<language>
+  <name>PL</name>
+
+  <hp>PŻ</hp>
+  <mp>PM</mp>
+  <power>Moc</power>
+  <defense>Obrona</defense>
+  <cooldownReduction>Ładowanie zaklęć</cooldownReduction>
+  <hpRegeneration>Regeneracja PŻ</hpRegeneration>
+  <mpRegeneration>Regeneracja PM</mpRegeneration>
+  <attackSpeed>Szybkość ataku</attackSpeed>
+  <movementSpeed>Szybkość biegu</movementSpeed>
+
+  <spellName1>Gaz maskujący</spellName1>
+  <spellDescription1>Tworzy chmurę oparów na $sec, uniemożliwiając przeciwnikom widzenie.</spellDescription1>
+</language>

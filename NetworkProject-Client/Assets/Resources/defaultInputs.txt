@@ -1,0 +1,6 @@
+Jump;32;32
+Attack;323;323
+PickItem;122;122
+Equipment;105;105
+Character;99;99&Horizontal;275;100;276;97;10;10
+Vertical;273;119;274;115;10;10
