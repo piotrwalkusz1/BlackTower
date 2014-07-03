@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<spells>
+  <spell>
+    <id>0</id>
+    <lvl>1</lvl>
+    <cooldown>2.5</cooldown>
+  </spell>
+</spells>
