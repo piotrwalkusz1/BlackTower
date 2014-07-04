@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using NetworkProject;
 using NetworkProject.BodyParts;
+using NetworkProject.Connection;
+using NetworkProject.Connection.ToServer;
 using UnityEngine;
 
 [System.CLSCompliant(false)]
 public static class Server
 {
-    private delegate void ReceiveMessageMethod(IncomingMessage message, IConnectionMember sender);
-
     public static ServerStatus Status
     {
         get
@@ -46,9 +46,17 @@ public static class Server
         }
     }
 
-    public static void Send(INetworkPackage message)
+    public static void Send(OutgoingMessage message, IConnectionMember[] addresses)
     {
+        foreach (IConnectionMember address in addresses)
+        {
+            Send(message, address);
+        }
+    }
 
+    public static void Send(OutgoingMessage message, IConnectionMember address)
+    {
+        _server.Send(message, address);
     }
 
     private static void ReceiveMessage(IncomingMessage message)
@@ -56,7 +64,7 @@ public static class Server
         try
         {
             MessageToServerType type = (MessageToServerType)message.ReadInt();
-            ReceiveMessageMethod method = ChooseReceiveMessageMethod(type);
+            ReceiveMessageMethod method = ChooseMethodReceiveMessage(type);
             IConnectionMember sender = message.Sender;
             method(message, sender);
         }
@@ -66,47 +74,29 @@ public static class Server
         }
     }
 
-    private static ReceiveMessageMethod ChooseReceiveMessageMethod(MessageToServerType type)
+    private static Action<IncomingMessage> ChooseMethodReceiveMessage(INetworkPackage message)
     {
-        switch (type)
-        {
-            case MessageToServerType.Login:
-                return ReceiveMessageLogin;
-            case MessageToServerType.GoIntoWorld:
-                return ReceiveMessageGoIntoWorld;
-            case MessageToServerType.PlayerMove:
-                return ReceiveMessagePlayerMove;
-            case MessageToServerType.PlayerJump:
-                return ReceiveMessagePlayerJump;
-            case MessageToServerType.PlayerRotation:
-                return ReceiveMessagePlayerRotation;
-            case MessageToServerType.PickItem:
-                return ReceiveMessagePickItem;
-            case MessageToServerType.Register:
-                throw new NotImplementedException("Brak obsługi podanego typu wiadomości.");
-            case MessageToServerType.Attack:
-                return ReceiveMessageAttack;
-            case MessageToServerType.Respawn:
-                return ReceiveMessageRespawn;
-            case MessageToServerType.ChangeItemsInEquipment:
-                return ReceiveMessageChangeItemsInEquipment;
-            case MessageToServerType.ChangeEquipedItem:
-                return ReceiveMessageChangeEquipedItem;
-            case MessageToServerType.ChangeEquipedItems:
-                return ReceiveMessageChangeEquipedItems;
-            case MessageToServerType.UseSpell:
-                return ReceiveMessageUseSpell;
-            default:
-                throw new NotImplementedException("Brak obsługi podanego typu wiadomości.");
-        }
+        if (message is LoginToGame) return ReceiveMessageLogin;
+        else if (message is GoIntoWorld) return ReceiveMessageGoIntoWorld;
+        else if (message is PlayerMove) return ReceiveMessagePlayerMove;
+        else if (message is PlayerJump) return ReceiveMessagePlayerJump;
+        else if (message is PlayerRotation) return ReceiveMessagePlayerRotation;
+        else if (message is PickItem) return ReceiveMessagePickItem;
+        else if (message is Attack) return ReceiveMessageAttack;
+        else if (message is Respawn) return ReceiveMessageRespawn;
+        else if (message is ChangeItemsInEquipment) return ReceiveMessageChangeItemsInEquipment;
+        else if (message is ChangeEquipedItem) return ReceiveMessageChangeEquipedItem;
+        else if (message is ChangeEquipedItems) return ReceiveMessageChangeEquipedItems;
+        else if (message is UseSpell) return ReceiveMessageUseSpell;
+        else throw new Exception("Nie ma takiego typu żądania!");
     }
 
-    #region ToServer
+    #region Receive
 
-    private static void ReceiveMessageLogin(IncomingMessage message, IConnectionMember sender)
+    private static void ReceiveMessageLogin(IncomingMessage message)
     {
-        string login = message.ReadString();
-        string password = message.ReadString();
+        var package = (LoginToGame)message.Message;
+        
         RegisterAccount account = AccountsRepository.GetAccountByLogin(login);
 
         if (account != null && account.CheckPassword(password))
@@ -132,7 +122,7 @@ public static class Server
         }
     }
 
-    private static void ReceiveMessageGoIntoWorld(IncomingMessage message, IConnectionMember sender)
+    private static void ReceiveMessageGoIntoWorld(IncomingMessage message)
     {
         OnlineAccount account = AccountsRepository.GetOnlineAccountByAddress(sender);
         if (account != null)
@@ -163,7 +153,7 @@ public static class Server
         }
     }
 
-    private static void ReceiveMessagePlayerMove(IncomingMessage message, IConnectionMember sender)
+    private static void ReceiveMessagePlayerMove(IncomingMessage message)
     {
         NetPlayer player = FindAliveNetPlayerByAddress(sender);
 
@@ -171,7 +161,7 @@ public static class Server
         player.PlayerMovement.SetNewPosition(newTargetPosition);
     }
 
-    private static void ReceiveMessagePlayerJump(IncomingMessage message, IConnectionMember sender)
+    private static void ReceiveMessagePlayerJump(IncomingMessage message)
     {
         NetPlayer player = FindAliveNetPlayerByAddress(sender);
 
@@ -180,7 +170,7 @@ public static class Server
         player.PlayerMovement.Jump(position, direction);
     }
 
-    private static void ReceiveMessagePlayerRotation(IncomingMessage message, IConnectionMember sender)
+    private static void ReceiveMessagePlayerRotation(IncomingMessage message)
     {
         NetPlayer player = FindAliveNetPlayerByAddress(sender);
 
@@ -188,7 +178,7 @@ public static class Server
         player.PlayerMovement.SetNewRotation(rotationY);
     }
 
-    private static void ReceiveMessagePickItem(IncomingMessage message, IConnectionMember sender)
+    private static void ReceiveMessagePickItem(IncomingMessage message)
     {
         int idObject = message.ReadInt();
         NetItem netItem = FindNetItemByIdObject(idObject);
@@ -214,7 +204,7 @@ public static class Server
         }
     }
 
-    private static void ReceiveMessageAttack(IncomingMessage message, IConnectionMember sender)
+    private static void ReceiveMessageAttack(IncomingMessage message)
     {
         Vector3 direction = message.ReadVector3();
 
@@ -223,7 +213,7 @@ public static class Server
         player.PlayerCombat.Attack(direction);
     }
 
-    private static void ReceiveMessageRespawn(IncomingMessage message, IConnectionMember sender)
+    private static void ReceiveMessageRespawn(IncomingMessage message)
     {
         NetPlayer player = FindDeadNetPlayerByAddress(sender);
 
@@ -232,7 +222,7 @@ public static class Server
         respawn.Respawn(player);
     }
 
-    private static void ReceiveMessageChangeItemsInEquipment(IncomingMessage message, IConnectionMember sender)
+    private static void ReceiveMessageChangeItemsInEquipment(IncomingMessage message)
     {
         int slot1 = message.ReadInt();
         int slot2 = message.ReadInt();
@@ -246,7 +236,7 @@ public static class Server
         eq.SendUpdateSlot(slot2, sender);
     }
 
-    private static void ReceiveMessageChangeEquipedItem(IncomingMessage message, IConnectionMember sender)
+    private static void ReceiveMessageChangeEquipedItem(IncomingMessage message)
     {
         int slot = message.ReadInt();
         BodyPartType bodyPart = (BodyPartType)message.ReadInt();
@@ -273,7 +263,7 @@ public static class Server
         player.SendUpdateEquipedItems();
     }
 
-    private static void ReceiveMessageChangeEquipedItems(IncomingMessage message, IConnectionMember sender)
+    private static void ReceiveMessageChangeEquipedItems(IncomingMessage message)
     {
         BodyPartType bodyPart1 = (BodyPartType)message.ReadInt();
         BodyPartType bodyPart2 = (BodyPartType)message.ReadInt();
@@ -305,7 +295,7 @@ public static class Server
         player.SendUpdateEquipedItems();
     }
 
-    private static void ReceiveMessageUseSpell(IncomingMessage message, IConnectionMember sender)
+    private static void ReceiveMessageUseSpell(IncomingMessage message)
     {
         var player = FindAliveNetPlayerByAddress(sender);
 
@@ -320,290 +310,7 @@ public static class Server
         } 
     }
 
-    #endregion
-
-    #region ToClient
-
-    public static void SendMessageNewPosition(int idNetObject, Vector3 newPosition, IConnectionMember address)
-    {
-        OutgoingMessage message = new OutgoingMessage();
-        message.Write((int)MessageToClientType.NewPosition);
-        message.Write(idNetObject);
-        message.Write(newPosition);
-        Send(message, address);
-    }
-
-    public static void SendMessageNewRotation(int idNetObject, float rotation, IConnectionMember address)
-    {
-        OutgoingMessage message = new OutgoingMessage((int)MessageToClientType.NewRotation);
-        message.Write(idNetObject);
-        message.Write(rotation);
-        Send(message, address);
-    }
-
-    public static void SendMessageJump(int idNetObject, Vector3 position, Vector3 direction, IConnectionMember address)
-    {
-        var message = new OutgoingMessage((int)MessageToClientType.Jump);
-        message.Write(idNetObject);
-        message.Write(position);
-        message.Write(direction);
-        Send(message, address);
-    }
-
-    public static void SendMessageGoToChoiceCharacterMenu(CharacterChoiceMenuPackage choiceCharacterMenuPackage, IConnectionMember address)
-    {
-        OutgoingMessage message = new OutgoingMessage((int)MessageToClientType.GoToChoiceCharacterMenu);
-        message.Write(choiceCharacterMenuPackage);       
-        Send(message, address);
-    }
-
-    public static void SendMessageGoIntoWorld(WorldInfoPackage worldInfo, IConnectionMember address)
-    {
-        OutgoingMessage message = new OutgoingMessage((int)MessageToClientType.GoIntoWorld);
-        message.Write(worldInfo);
-        Send(message, address);
-    }
-
-    public static void SendMessageWrongLoginOrPassword(IConnectionMember address)
-    {
-        OutgoingMessage message = new OutgoingMessage();
-        message.Write((int)MessageToClientType.WrongLoginOrPassword);
-        Send(message, address);
-    }
-
-    public static void SendMessageTextMessage(string text, IConnectionMember address)
-    {
-        OutgoingMessage message = new OutgoingMessage();
-        message.Write((int)MessageToClientType.TextMessage);
-        message.Write(text);
-        Send(message, address);
-    }
-
-    public static void SendMessageCreateYourOwnPlayer(OwnPlayerPackage player, IConnectionMember address)
-    {
-        OutgoingMessage message = new OutgoingMessage((int)MessageToClientType.CreateYourOwnPlayer);
-        message.Write(player);
-        Send(message, address);
-    }
-
-    public static void SendMessageCreateOtherPlayer(OtherPlayerPackage player, IConnectionMember address)
-    {
-        OutgoingMessage message = new OutgoingMessage((int)MessageToClientType.CreateOtherPlayer);
-        message.Write(player);
-        Send(message, address);
-    }
-
-    public static void SendMessageDeleteObject(int idNetObject, IConnectionMember address)
-    {
-        OutgoingMessage message = new OutgoingMessage((int)MessageToClientType.DeleteObject);
-        message.Write(idNetObject);
-        Send(message, address);
-    }
-
-    public static void SendMessageMoveOtherPlayer(int idNetObject, Vector3 newPosition, IConnectionMember address)
-    {
-        OutgoingMessage message = new OutgoingMessage((int)MessageToClientType.MoveOtherPlayer);
-        message.Write(idNetObject);
-        message.Write(newPosition);
-        Send(message, address);
-    }
-
-    public static void SendMessageRotationOtherPlayer(int idNetObject, float newRotation, IConnectionMember address)
-    {
-        OutgoingMessage message = new OutgoingMessage((int)MessageToClientType.RotationOtherPlayer);
-        message.Write(idNetObject);
-        message.Write(newRotation);
-        Send(message, address);
-    }
-
-    public static void SendMessageJumpOtherPlayer(int idNetObject, Vector3 position, Vector3 direction, IConnectionMember address)
-    {
-        OutgoingMessage message = new OutgoingMessage((int)MessageToClientType.JumpOtherPlayer);
-        message.Write(idNetObject);
-        message.Write(position);
-        message.Write(direction);
-        Send(message, address);
-    }
-
-    public static void SendMessageUpdateItemInEquipment(ItemInEquipmentPackage item, int numberPlace, IConnectionMember address)
-    {
-        OutgoingMessage message = new OutgoingMessage((int)MessageToClientType.UpdateItemInEquipment);
-        message.Write(item);
-        message.Write(numberPlace);
-        Send(message, address);
-    }
-
-    public static void SendMessageUpdateEquipedItem(ItemInEquipmentPackage item, BodyPartType bodyPart, IConnectionMember address)
-    {
-        var message = new OutgoingMessage((int)MessageToClientType.UpdateEquipedItem);
-        message.Write(item);
-        message.Write((int)bodyPart);
-        Send(message, address);
-    }
-
-    public static void SendMessageCreateObject(ObjectPackage netObject, Vector3 position, IConnectionMember address)
-    {
-        OutgoingMessage message = new OutgoingMessage((int)MessageToClientType.CreateObject);
-        message.Write(netObject);
-        message.Write(position);
-        Send(message, address);
-    }
-
-    public static void SendMessageCreateVisualObject(ObjectPackage netObject, int idPrefab, Vector3 position, float rotation, IConnectionMember address)
-    {
-        var message = new OutgoingMessage(MessageToClientType.CreateVisualObject);
-        message.Write(netObject);
-        message.Write(idPrefab);
-        message.Write(position);
-        message.Write(rotation);
-        Send(message, address);
-    }
-
-    public static void SendMessageCreateBullet(BulletPackage bullet, IConnectionMember address)
-    {
-        OutgoingMessage message = new OutgoingMessage((int)MessageToClientType.CreateBullet);
-        message.Write(bullet);
-        Send(message, address);
-    }
-
-    public static void SendMessageCreateMonster(MonsterPackage monster, IConnectionMember address)
-    {
-        OutgoingMessage message = new OutgoingMessage((int)MessageToClientType.CreateMonster);
-        message.Write(monster);
-        Send(message, address);
-    }
-
-    public static void SendMessageCreateItemObject(ItemPackage item, IConnectionMember address)
-    {
-        var message = new OutgoingMessage((int)MessageToClientType.CreateItemObject);
-        message.Write(item);
-        Send(message, address);
-    }
-
-    public static void SendMessageMonsterAttackTarget(int idNetAttacker, int idNetVictim, IConnectionMember address)
-    {
-        OutgoingMessage message = new OutgoingMessage((int)MessageToClientType.MonsterAttackTarget);
-        message.Write(idNetAttacker);
-        message.Write(idNetVictim);
-        Send(message, address);
-    }
-
-    public static void SendMessagePlayerAttack(int idNetPlayer, IConnectionMember address)
-    {
-        OutgoingMessage message = new OutgoingMessage((int)MessageToClientType.PlayerAttack);
-        message.Write(idNetPlayer);
-        Send(message, address);
-    }
-
-    public static void SendMessageYouAreDead(OwnDeadEventPackage deadInfo, IConnectionMember address)
-    {
-        var message = new OutgoingMessage((int)MessageToClientType.YouAreDead);
-        message.Write(deadInfo);
-        Send(message, address);
-    }
-
-    public static void SendMessageYourRespawn(Vector3 position, IConnectionMember address)
-    {
-        var message = new OutgoingMessage((int)MessageToClientType.YourRespawn);
-        message.Write(position);
-        Send(message, address);
-    }
-
-    public static void SendMessageUpdateOtherHp(int netId, int hp, IConnectionMember address)
-    {
-        var message = new OutgoingMessage((int)MessageToClientType.UpdateOtherHp);
-        message.Write(netId);
-        message.Write(hp);
-        Send(message, address);
-    }
-
-    public static void SendMessageUpdateOtherMaxHp(int netId, int maxHp, IConnectionMember address)
-    {
-        var message = new OutgoingMessage(MessageToClientType.UpdateOtherMaxHp);
-        message.Write(netId);
-        message.Write(maxHp);
-        Send(message, address);
-    }
-
-    public static void SendMessageUpdateOtherAllStats(int netId, StatsPackage statsPackage, IConnectionMember address)
-    {
-        var message = new OutgoingMessage(MessageToClientType.UpdateOtherAllStats);
-        message.Write(netId);
-        message.Write(statsPackage);
-        Send(message, address);
-    }
-
-    public static void SendMessageUpdateOtherEquipedItems(int netId, EquipedItems equipedItems, IConnectionMember address)
-    {
-        var message = new OutgoingMessage(MessageToClientType.UpdateOtherEquipedItmes);
-        message.Write(netId);
-        message.Write(equipedItems);
-        Send(message, address);
-    }
-
-    public static void SendMessageUpdateYourHp(int hp, IConnectionMember address)
-    {
-        var message = new OutgoingMessage((int)MessageToClientType.UpdateYourHp);
-        message.Write(hp);
-        Send(message, address);
-    }
-
-    public static void SendMessageUpdateYourMaxHp(int maxHp, IConnectionMember address)
-    {
-        var message = new OutgoingMessage(MessageToClientType.UpdateYourMaxHp);
-        message.Write(maxHp);
-        Send(message, address);
-    }
-
-    public static void SendMessageUpdateYourAllStats(OwnPlayerStatsPackage statsPackage, IConnectionMember address)
-    {
-        var message = new OutgoingMessage(MessageToClientType.UpdateYourAllStats);
-        message.Write(statsPackage);
-        Send(message, address);
-    }
-
-    public static void SendMessageUpdateYourSpells(ListPackage<SpellPackage> spells, IConnectionMember address)
-    {
-        var message = new OutgoingMessage(MessageToClientType.UpdateYourSpells);
-        message.Write(spells);
-        Send(message, address);
-    }
-
-    public static void SendMessageUpdateYourExperience(int lvl, int exp, IConnectionMember address)
-    {
-        var message = new OutgoingMessage(MessageToClientType.UpdateYourExperience);
-        message.Write(lvl);
-        message.Write(exp);
-        Send(message, address);
-    }
-
-    #endregion
-
-    private static void Send(OutgoingMessage message, IConnectionMember address)
-    {
-        _server.Send(message, address);
-    }
-
-    private static void Send(OutgoingMessage message, IConnectionMember[] addresses)
-    {
-        _server.Send(message, addresses);
-    }
-
-    private static string[] BitsToStrings(byte[] bytes, int length, char separator)
-    {
-        string text = BitsToString(bytes, length);
-        return text.Split(new char[] { separator });
-    }
-
-    private static string BitsToString(byte[] bytes, int length)
-    {
-        string text = "";
-        for (int i = 0; i < length; i += 2)
-        {
-            text += BitConverter.ToChar(bytes, i);
-        }
-        return text;
-    }
+    #endregion 
 
     private static CharacterChoiceMenuPackage AccountToCharacterChoiceMenuInfo(RegisterAccount account)
     {
@@ -635,7 +342,7 @@ public static class Server
         NetItem[] items = GameObject.FindObjectsOfType(typeof(NetItem)) as NetItem[];
         foreach (NetItem item in items)
         {
-            if (item.IdObject == idObject)
+            if (item.IdNet == idObject)
             {
                 return item;
             }

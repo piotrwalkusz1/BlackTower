@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Net;
 using Lidgren.Network;
-using NetworkProject;
+using NetworkProject.Connection;
 
 [System.CLSCompliant(false)]
 public class ConnectionMember : IConnectionMember
@@ -14,6 +14,11 @@ public class ConnectionMember : IConnectionMember
         {
             return NetAddress.RemoteEndPoint;
         }
+    }
+
+    public ConnectionMember(NetConnection netAddress)
+    {
+        NetAddress = netAddress;
     }
 
     public bool Equals(IConnectionMember conectionMember)

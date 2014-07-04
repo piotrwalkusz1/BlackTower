@@ -19,7 +19,7 @@ public class NetVisualObject : NetObject
     public override void SendMessageAppeared(NetworkProject.IConnectionMember address)
     {
         var package = new ObjectPackage();
-        package.IdObject = IdObject;
+        package.IdObject = IdNet;
 
         Server.SendMessageCreateVisualObject(package, (int)_modelType, transform.position, transform.eulerAngles.y, address);
     }
@@ -31,6 +31,6 @@ public class NetVisualObject : NetObject
 
     public override void SendMessageDisappeared(IConnectionMember address)
     {
-        Server.SendMessageDeleteObject(IdObject, address);
+        Server.SendMessageDeleteObject(IdNet, address);
     }
 }

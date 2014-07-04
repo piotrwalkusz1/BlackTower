@@ -10,7 +10,7 @@ public class NetItem : NetObject
     public override void SendMessageAppeared(IConnectionMember address)
     {
         ItemPackage item = new ItemPackage();
-        item.IdObject = IdObject;
+        item.IdObject = IdNet;
         item.IdItem = Item.IdItem;
         item.Position = transform.position;
 
@@ -24,7 +24,7 @@ public class NetItem : NetObject
 
     public override void SendMessageDisappeared(IConnectionMember address)
     {
-        Server.SendMessageDeleteObject(IdObject, address);
+        Server.SendMessageDeleteObject(IdNet, address);
     }
 
     public bool PlayerIsEnoughCloseToPick(NetPlayer player)

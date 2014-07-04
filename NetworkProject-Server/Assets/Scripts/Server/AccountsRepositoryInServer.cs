@@ -248,7 +248,7 @@ public class AccountsRepositoryInServer : IAccountsRepository
     {
         foreach (OnlineAccount account in _onlineAccounts)
         {
-            if (account.IsLoggedCharacter() && account.OnlineCharacter.NetPlayerObject.IdObject == netPlayerObjectId)
+            if (account.IsLoggedCharacter() && account.OnlineCharacter.NetPlayerObject.IdNet == netPlayerObjectId)
             {
                 return account.OnlineCharacter;
             }

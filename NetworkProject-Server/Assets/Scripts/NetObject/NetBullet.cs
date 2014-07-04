@@ -11,7 +11,7 @@ public class NetBullet : NetObject
     {
         BulletPackage bullet = new BulletPackage();
 
-        bullet.IdObject = IdObject;
+        bullet.IdObject = IdNet;
 
         bullet._position = transform.position;
         bullet._direction = transform.TransformDirection(Vector3.forward);
@@ -27,6 +27,6 @@ public class NetBullet : NetObject
 
     public override void SendMessageDisappeared(IConnectionMember address)
     {
-        Server.SendMessageDeleteObject(IdObject, address);
+        Server.SendMessageDeleteObject(IdNet, address);
     }
 }

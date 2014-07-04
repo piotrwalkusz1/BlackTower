@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NetworkProject.Monsters
 {
-    public enum MonsterType
+    public enum MonsterName
     {
         Jumper = 0
     }

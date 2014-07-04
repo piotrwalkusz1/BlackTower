@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using Lidgren.Network;
-using NetworkProject;
+using NetworkProject.Connection;
 using UnityEngine;
 
 [System.CLSCompliant(false)]
@@ -50,35 +50,25 @@ public class LidgrenServer : IServer
     {
         NetConnection netAddress = ((ConnectionMember)address).NetAddress;
         NetOutgoingMessage netMessage = _netServer.CreateMessage();
-        netMessage.Write(message.Data.ToArray());
-        _netServer.SendMessage(netMessage, netAddress, NetDeliveryMethod.ReliableOrdered);
-    }
 
-    public void Send(OutgoingMessage message, IConnectionMember[] addresses)
-    {
-        foreach (IConnectionMember address in addresses)
-        {
-            Send(message, address);
-        }
+        netMessage.Write(message.GetBytes());
+
+        _netServer.SendMessage(netMessage, netAddress, NetDeliveryMethod.ReliableOrdered);
     }
 
     public IncomingMessage ReadMessage()
     {
-        
-
         NetIncomingMessage netMessage;
+
         while((netMessage = _netServer.ReadMessage()) != null)
         {
-            if (netMessage.MessageType != NetIncomingMessageType.Data)
-            {
-                
+            if (IsMessageUnimportant(netMessage))
+            {           
                 continue;
             }
 
-            byte[] data = netMessage.Data;
-            var address = new ConnectionMember();
-            address.NetAddress = netMessage.SenderConnection;
-            var message = new IncomingMessage(data, address);
+            var address = new ConnectionMember(netMessage.SenderConnection);
+            var message = new IncomingMessage(netMessage.Data, address);
             return message;
         }
 
@@ -88,5 +78,10 @@ public class LidgrenServer : IServer
     public void Close()
     {
         _netServer.Shutdown("");
-    }       
+    }
+
+    private bool IsMessageUnimportant(NetIncomingMessage message)
+    {
+        return message.MessageType != NetIncomingMessageType.Data;
+    }
 }

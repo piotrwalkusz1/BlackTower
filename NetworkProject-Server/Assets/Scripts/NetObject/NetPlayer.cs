@@ -1,46 +1,12 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using NetworkProject;
 
 [System.CLSCompliant(false)]
 public class NetPlayer : NetNamedObject
 {
-    public OnlineCharacter OnlineCharacter { get; set; }
-    public OnlineAccount MyAccount
-    {
-        get
-        {
-            return OnlineCharacter.MyAccount;
-        }
-    }
-    public IConnectionMember Address
-    {
-        get
-        {
-            return OnlineCharacter.Address;
-        }
-    }
-    public PlayerMovementSystem PlayerMovement
-    {
-        get
-        {
-            return OnlineCharacter.PlayerMovement;
-        }
-    }
-    public Vision Vision
-    {
-        get
-        {
-            return OnlineCharacter.Vision;
-        }
-    }
-    public PlayerEquipment Equipment
-    {
-        get
-        {
-            return OnlineCharacter.Equipment;
-        }
-    }
+    private event Action _messages;
 
     private bool _isJumpMessage;
     private bool _isJumpMessageInLastFrame;
@@ -120,12 +86,12 @@ public class NetPlayer : NetNamedObject
             return;
         }
 
-        Server.SendMessageDeleteObject(IdObject, address);
+        Server.SendMessageDeleteObject(IdNet, address);
     }
 
     public void SendJumpMessage()
     {
-        _isJumpMessage = true;
+        _message;
     }
 
     public void SendAttackMessage()
@@ -152,7 +118,7 @@ public class NetPlayer : NetNamedObject
     {
         var playerPackage = new OtherPlayerPackage();
 
-        playerPackage.IdObject = IdObject;
+        playerPackage.IdObject = IdNet;
         playerPackage.Name = Name;
         playerPackage.Position = transform.position;
         playerPackage.Rotation = transform.eulerAngles.y;
@@ -165,7 +131,7 @@ public class NetPlayer : NetNamedObject
     {
         var playerPackage = new OwnPlayerPackage();
 
-        playerPackage.IdObject = IdObject;
+        playerPackage.IdObject = IdNet;
         playerPackage.Name = Name;
         playerPackage.Position = transform.position;
         playerPackage.Stats = GetComponent<PlayerStats>().GetOwnPlayerStatsPackage();
@@ -175,7 +141,7 @@ public class NetPlayer : NetNamedObject
 
     public void InitializePlayer(int netId, RegisterCharacter characterData, IConnectionMember address)
     {
-        IdObject = netId;
+        IdNet = netId;
         Name = characterData.Name;
 
         var vision = GetComponent<Vision>();
@@ -221,7 +187,7 @@ public class NetPlayer : NetNamedObject
         {
             var package = GetComponent<PlayerStats>().GetOtherPlayerStatsPackage();
 
-            Server.SendMessageUpdateOtherAllStats(IdObject ,package, address);
+            Server.SendMessageUpdateOtherAllStats(IdNet ,package, address);
 
             return true;
         }
@@ -235,7 +201,7 @@ public class NetPlayer : NetNamedObject
     {
         if (_isAttackMessageInLastFrame)
         {
-            Server.SendMessagePlayerAttack(IdObject, address);
+            Server.SendMessagePlayerAttack(IdNet, address);
         }
     }
 
@@ -243,7 +209,7 @@ public class NetPlayer : NetNamedObject
     {
         if (_isJumpMessageInLastFrame)
         {
-            Server.SendMessageJumpOtherPlayer(IdObject, transform.position, Vector3.zero, address);
+            Server.SendMessageJumpOtherPlayer(IdNet, transform.position, Vector3.zero, address);
         }
     }
 
@@ -251,7 +217,7 @@ public class NetPlayer : NetNamedObject
     {
         if (IsChangePosition())
         {
-            Server.SendMessageMoveOtherPlayer(IdObject, transform.position, address);
+            Server.SendMessageMoveOtherPlayer(IdNet, transform.position, address);
         }
     }
 
@@ -259,7 +225,7 @@ public class NetPlayer : NetNamedObject
     {
         if (IsChangeRotation())
         {
-            Server.SendMessageRotationOtherPlayer(IdObject, transform.eulerAngles.y, address);
+            Server.SendMessageRotationOtherPlayer(IdNet, transform.eulerAngles.y, address);
         }
     }
 
@@ -269,7 +235,14 @@ public class NetPlayer : NetNamedObject
         {
             var equipedItems = GetComponent<PlayerEquipment>().GetEquipedItems();
 
-            Server.SendMessageUpdateOtherEquipedItems(IdObject, equipedItems, address);
+            Server.SendMessageUpdateOtherEquipedItems(IdNet, equipedItems, address);
         }
+    }
+
+    private void SendJumpMessageFunction()
+    {
+        var message = new NetworkProject.Connection.ToClient.Jump(IdNet);
+
+
     }
 }

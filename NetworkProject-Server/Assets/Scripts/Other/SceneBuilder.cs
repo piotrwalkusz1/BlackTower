@@ -30,7 +30,7 @@ public static class SceneBuilder
         bullet.rigidbody.AddRelativeForce(Vector3.forward * bulletInfo._speed, ForceMode.VelocityChange);
 
         NetBullet netBullet = bullet.GetComponent<NetBullet>();
-        netBullet.IdObject = _nextId;
+        netBullet.IdNet = _nextId;
         _nextId++;
         netBullet._speed = bulletInfo._speed;
 
@@ -48,7 +48,7 @@ public static class SceneBuilder
         MonsterInfo monsterInfo = MonsterRepository.GetMonsterInfo(monsterType);
 
         NetMonster netMonster = monster.GetComponent<NetMonster>();
-        netMonster.IdObject = GetNextNetId();
+        netMonster.IdNet = GetNextNetId();
 
         MonsterStats stats = monster.GetComponent<MonsterStats>();
         stats.MaxHp = monsterInfo._maxHp;
@@ -63,7 +63,7 @@ public static class SceneBuilder
         GameObject item = GameObject.Instantiate(StaticRepository.Prefabs._item, position, Quaternion.Euler(Vector3.zero)) as GameObject;
 
         NetItem netItem = item.GetComponent<NetItem>();
-        netItem.IdObject = _nextId;
+        netItem.IdNet = _nextId;
         _nextId++;
         netItem.Item = new Item(idItem);
 

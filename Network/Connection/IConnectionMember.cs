@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Net;
 
-namespace NetworkProject
+namespace NetworkProject.Connection
 {
     public interface IConnectionMember
     {

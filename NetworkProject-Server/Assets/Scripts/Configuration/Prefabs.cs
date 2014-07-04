@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using NetworkProject;
+using NetworkProject.Monsters;
 
 [System.CLSCompliant(false)]
 public class Prefabs : MonoBehaviour
@@ -17,7 +18,7 @@ public class Prefabs : MonoBehaviour
         StaticRepository.Prefabs = this;
 	}
 
-    public GameObject GetMonster(MonsterType monster)
+    public GameObject GetMonster(MonsterName monster)
     {
         return _monsters[(int)monster];
     }

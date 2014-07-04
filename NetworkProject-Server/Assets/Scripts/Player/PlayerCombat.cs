@@ -39,7 +39,7 @@ public class PlayerCombat : MonoBehaviour
         bulletInfo._liveTime = _liveTime;
         bulletInfo._position = _bulletRespawn.position;
         bulletInfo._speed = _speed;
-        bulletInfo._shooterId = GetComponent<NetObject>().IdObject;
+        bulletInfo._shooterId = GetComponent<NetObject>().IdNet;
 
         SceneBuilder.CreateBullet(bulletInfo, gameObject);
 

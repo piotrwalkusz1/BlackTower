@@ -6,7 +6,7 @@ using NetworkProject;
 [System.CLSCompliant(false)]
 public abstract class NetObject : MonoBehaviour 
 {
-    public int IdObject { get; set; }
+    public int IdNet { get; set; }
 
     protected Func<Vision, bool> _isVisible;
 
@@ -90,7 +90,7 @@ public abstract class NetObject : MonoBehaviour
     {
         if (_isHpMessageInLastFrame)
         {
-            Server.SendMessageUpdateOtherHp(IdObject, GetComponent<HealthSystem>().HP, address);
+            Server.SendMessageUpdateOtherHp(IdNet, GetComponent<HealthSystem>().HP, address);
         }
     }
 
@@ -98,7 +98,7 @@ public abstract class NetObject : MonoBehaviour
     {
         if (_isMaxHpMessageInLastFrame)
         {
-            Server.SendMessageUpdateOtherMaxHp(IdObject, GetComponent<HealthSystem>().MaxHP, address);
+            Server.SendMessageUpdateOtherMaxHp(IdNet, GetComponent<HealthSystem>().MaxHP, address);
         }
     }
 
@@ -106,7 +106,7 @@ public abstract class NetObject : MonoBehaviour
     {
         if (IsChangePosition())
         {
-            Server.SendMessageNewPosition(IdObject, transform.position, address);
+            Server.SendMessageNewPosition(IdNet, transform.position, address);
         }
     }
 
@@ -114,7 +114,7 @@ public abstract class NetObject : MonoBehaviour
     {
         if (IsChangeRotation())
         {
-            Server.SendMessageNewRotation(IdObject, transform.eulerAngles.y, address);
+            Server.SendMessageNewRotation(IdNet, transform.eulerAngles.y, address);
         }
     }
 

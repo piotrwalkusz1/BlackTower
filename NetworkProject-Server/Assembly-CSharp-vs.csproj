@@ -122,8 +122,6 @@
      <Compile Include="Assets\Scripts\Items\Equipment.cs" />
      <Compile Include="Assets\Scripts\Items\ItemDrop.cs" />
      <Compile Include="Assets\Scripts\Items\ItemExtension.cs" />
-     <Compile Include="Assets\Scripts\Items\ItemRepository.cs" />
-     <Compile Include="Assets\Scripts\Items\MagicStone.cs" />
      <Compile Include="Assets\Scripts\MonoBehaviour\Updating.cs" />
      <Compile Include="Assets\Scripts\MonoBehaviour\Vision.cs" />
      <Compile Include="Assets\Scripts\Monsters\Drop.cs" />

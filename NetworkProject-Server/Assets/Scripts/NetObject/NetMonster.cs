@@ -59,7 +59,7 @@ public class NetMonster : NetObject
 
     public override void SendMessageDisappeared(IConnectionMember address)
     {
-        Server.SendMessageDeleteObject(IdObject, address);
+        Server.SendMessageDeleteObject(IdNet, address);
     }
 
     public void SendJumpMessage()
@@ -97,7 +97,7 @@ public class NetMonster : NetObject
     {
         if (_isAttackMessageInLastFrame)
         {
-            Server.SendMessageMonsterAttackTarget(IdObject, _idAttackVictim, address);
+            Server.SendMessageMonsterAttackTarget(IdNet, _idAttackVictim, address);
         }
     }
 
@@ -105,7 +105,7 @@ public class NetMonster : NetObject
     {
         if (_isJumpMessageInLastFrame)
         {
-            Server.SendMessageJump(IdObject, transform.position, Vector3.zero, address);
+            Server.SendMessageJump(IdNet, transform.position, Vector3.zero, address);
         }
     }
 
@@ -115,7 +115,7 @@ public class NetMonster : NetObject
         {
             StatsPackage package = GetComponent<MonsterStats>().GetMonsterStatsPackage();
 
-            Server.SendMessageUpdateOtherAllStats(IdObject, package, address);
+            Server.SendMessageUpdateOtherAllStats(IdNet, package, address);
         }
 
         return _isAllStatsMessage;
@@ -124,7 +124,7 @@ public class NetMonster : NetObject
     protected MonsterPackage ToMonsterPackages()
     {
         MonsterPackage monster = new MonsterPackage();
-        monster.IdObject = IdObject;
+        monster.IdObject = IdNet;
         monster._position = transform.position;
         monster._rotation = transform.eulerAngles.y;
         monster._monsterType = MonsterType.Jumper;

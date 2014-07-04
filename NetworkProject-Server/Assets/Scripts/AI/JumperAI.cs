@@ -125,7 +125,7 @@ public class JumperAI : MonoBehaviour
 
         _lastAttackTime = DateTime.UtcNow;
 
-        _netMonster.SendAttackMessage(_targetPlayer.IdObject);
+        _netMonster.SendAttackMessage(_targetPlayer.IdNet);
     }
 
     private void Chase()

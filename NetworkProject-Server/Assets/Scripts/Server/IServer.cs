@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NetworkProject;
+using NetworkProject.Connection;
 
 public enum ServerStatus
 {
@@ -19,7 +19,6 @@ public interface IServer
 
     void Start(ServerConfig config);
     void Send(OutgoingMessage message, IConnectionMember address);
-    void Send(OutgoingMessage message, IConnectionMember[] addresses);
     IncomingMessage ReadMessage();
     void Close();
 }
