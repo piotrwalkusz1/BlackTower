@@ -1,17 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 using NetworkProject;
+using NetworkProject.Connection;
 
 [System.CLSCompliant(false)]
 public class OnlineCharacter
 {
-    public OnlineCharacter(int id)
+    public OnlineCharacter(OnlineAccount myAccount, int characterSlot)
     {
-        IdCharacter = id;
+        MyAccount = myAccount;
+        CharacterSlot = characterSlot;
     }
 
-    public int IdCharacter { get; private set; }
-    public OnlineAccount MyAccount { get; set; }
+    public int CharacterSlot { get; private set; }
+    public OnlineAccount MyAccount { get; private set; }
     public IConnectionMember Address
     {
         get
@@ -19,48 +21,10 @@ public class OnlineCharacter
             return MyAccount.Address;
         }
     }
-    public GameObject GameObject { get; set; }
-    public NetPlayer NetPlayerObject
-    {
-        get
-        {
-            return GameObject.GetComponent<NetPlayer>();
-        }
-    }
-    public PlayerMovementSystem PlayerMovement
-    {
-        get
-        {
-            return GameObject.GetComponent<PlayerMovementSystem>();
-        }
-    }
-    public Vision Vision
-    {
-        get
-        {
-            return GameObject.GetComponent<Vision>();
-        }
-    }
-    public PlayerEquipment Equipment
-    {
-        get
-        {
-            return GameObject.GetComponent<PlayerEquipment>();
-        }
-    }
-    public PlayerCombat PlayerCombat
-    {
-        get
-        {
-            return GameObject.GetComponent<PlayerCombat>();
-        }
-    }
+    public GameObject GameObject { get; private set; }
 
-    public void SendUpdateMessageToOwner()
+    public void CreatePlayerInstantiate()
     {
-        GameObject.GetComponent<PlayerHealthSystem>().SendHpUpdatingToOwner();
-        GameObject.GetComponent<PlayerEquipment>().SendUpdateAllSlots();
-        GameObject.GetComponent<SpellCaster>().SendUpdateSpells();
-        GameObject.GetComponent<PlayerExperience>().SendUpdate();
+        GameObject = SceneBuilder.CreatePlayer()
     }
 }

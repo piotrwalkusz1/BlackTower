@@ -4,7 +4,7 @@ using System.Collections;
 using NetworkProject;
 
 [System.CLSCompliant(false)]
-public class NetPlayer : NetNamedObject
+public class NetPlayer : NetObject
 {
     private event Action _messages;
 
@@ -112,31 +112,6 @@ public class NetPlayer : NetNamedObject
     public bool IsDead()
     {
         return GetComponent<PlayerHealthSystem>().IsDead();
-    }
-
-    public OtherPlayerPackage GetOtherPlayerPackage()
-    {
-        var playerPackage = new OtherPlayerPackage();
-
-        playerPackage.IdObject = IdNet;
-        playerPackage.Name = Name;
-        playerPackage.Position = transform.position;
-        playerPackage.Rotation = transform.eulerAngles.y;
-        playerPackage.Stats = GetComponent<PlayerStats>().GetOtherPlayerStatsPackage();
-
-        return playerPackage;
-    }
-
-    public OwnPlayerPackage GetOwnPlayerPackage()
-    {
-        var playerPackage = new OwnPlayerPackage();
-
-        playerPackage.IdObject = IdNet;
-        playerPackage.Name = Name;
-        playerPackage.Position = transform.position;
-        playerPackage.Stats = GetComponent<PlayerStats>().GetOwnPlayerStatsPackage();
-
-        return playerPackage;
     }
 
     public void InitializePlayer(int netId, RegisterCharacter characterData, IConnectionMember address)

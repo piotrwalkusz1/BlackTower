@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using NetworkProject;
+using NetworkProject.Items;
+using NetworkProject.Connection;
+using NetworkProject.Connection.ToClient;
 
 [System.CLSCompliant(false)]
 public class Equipment : MonoBehaviour
@@ -25,7 +28,10 @@ public class Equipment : MonoBehaviour
 
     public void SendUpdateSlot(int slot, IConnectionMember address)
     {
-        Server.SendMessageUpdateItemInEquipment(Server.ItemToItemInEquipmentPackage(_items[slot]), slot, address);
+        int myIdNet = GetComponent<NetObject>().IdNet;
+        var item = GetItemBySlot(slot);
+
+        var message = new UpdateItemInEquipment(myIdNet, slot, item);
     }
 
     public void ChangeItemInEquipment(int slot1, int slot2)

@@ -5,7 +5,7 @@ using NetworkProject;
 [System.CLSCompliant(false)]
 public static class SceneBuilder
 {
-    private static int _nextId = 0;
+    private static int _nextIdNet = 0;
 
     public static GameObject CreatePlayer(RegisterCharacter characterData, IConnectionMember address)
     {
@@ -30,8 +30,8 @@ public static class SceneBuilder
         bullet.rigidbody.AddRelativeForce(Vector3.forward * bulletInfo._speed, ForceMode.VelocityChange);
 
         NetBullet netBullet = bullet.GetComponent<NetBullet>();
-        netBullet.IdNet = _nextId;
-        _nextId++;
+        netBullet.IdNet = _nextIdNet;
+        _nextIdNet++;
         netBullet._speed = bulletInfo._speed;
 
         GameObject.Destroy(bullet, bulletInfo._liveTime);
@@ -63,8 +63,8 @@ public static class SceneBuilder
         GameObject item = GameObject.Instantiate(StaticRepository.Prefabs._item, position, Quaternion.Euler(Vector3.zero)) as GameObject;
 
         NetItem netItem = item.GetComponent<NetItem>();
-        netItem.IdNet = _nextId;
-        _nextId++;
+        netItem.IdNet = _nextIdNet;
+        _nextIdNet++;
         netItem.Item = new Item(idItem);
 
         return item;
@@ -100,6 +100,6 @@ public static class SceneBuilder
 
     public static int GetNextNetId()
     {
-        return _nextId++;
+        return _nextIdNet++;
     }
 }

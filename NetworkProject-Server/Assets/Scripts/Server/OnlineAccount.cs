@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using NetworkProject;
+using NetworkProject.Connection;
 
 [System.CLSCompliant(false)]
 public class OnlineAccount
@@ -9,9 +10,14 @@ public class OnlineAccount
     public IConnectionMember Address { get; set; }
     public OnlineCharacter OnlineCharacter { get; private set; }
 
-    public OnlineCharacter CreateOnlineCharacter(NetPlayer netPlayer, int idCharacter)
+    public OnlineAccount(RegisterAccount account)
     {
-        var onlineCharacter = new OnlineCharacter(idCharacter);
+        IdAccount = account.IdAccount;
+    }
+
+    public OnlineCharacter CreateOnlineCharacter(int characterSlot)
+    {
+        var onlineCharacter = new OnlineCharacter(characterSlot);
 
         netPlayer.OnlineCharacter = onlineCharacter;
         onlineCharacter.GameObject = netPlayer.gameObject;
@@ -19,11 +25,6 @@ public class OnlineAccount
         SetOnlineCharacter(onlineCharacter);
 
         return onlineCharacter;
-    }
-
-    public OnlineAccount(RegisterAccount account)
-    {
-        IdAccount = account.IdAccount;
     }
 
     public bool IsLoggedCharacter()

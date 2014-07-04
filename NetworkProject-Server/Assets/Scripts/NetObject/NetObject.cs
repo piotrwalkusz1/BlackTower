@@ -2,6 +2,8 @@
 using System;
 using System.Collections;
 using NetworkProject;
+using NetworkProject.Connection;
+using NetworkProject.Connection.ToClient;
 
 [System.CLSCompliant(false)]
 public abstract class NetObject : MonoBehaviour 
@@ -10,21 +12,17 @@ public abstract class NetObject : MonoBehaviour
 
     protected Func<Vision, bool> _isVisible;
 
+    protected event Action<IConnectionMember> _sendMessageUpdateEvent;
+
     private Vector3 _positionInLastFrame;
     private bool _wasMovementInLastFrame;
 
     private float _rotationInLastFrame;
     private bool _wasRotationInLastFrame;
 
-    private bool _isHpMessage;
-    private bool _isHpMessageInLastFrame;
-
-    private bool _isMaxHpMessage;
-    private bool _isMaxHpMessageInLastFrame;
-
     protected void Awake()
     {
-        VisionFunctionToDefault();
+        SetVisionFunctionToDefault();
 
         InitializePositionAndRotation();
     }
@@ -39,14 +37,9 @@ public abstract class NetObject : MonoBehaviour
         return _isVisible(vision);
     }
 
-    public void SetMethodIsVisible(Func<Vision, bool> function)
+    public bool IsMustUpdate()
     {
-        _isVisible = function;
-    }
-
-    public virtual bool IsMustUpdate()
-    {
-        return (IsChangePosition() || IsChangeRotation() || _isHpMessageInLastFrame || _isMaxHpMessageInLastFrame);
+        return (IsChangePosition() || IsChangeRotation() || _sendMessageUpdateEvent != null);
     }
 
     public int GetMap()
@@ -56,57 +49,47 @@ public abstract class NetObject : MonoBehaviour
 
     public abstract void SendMessageAppeared(IConnectionMember address);
 
-    public abstract void SendMessageUpdate(IConnectionMember address);
+    public void SendMessageUpdate(IConnectionMember address)
+    {
+        IfChangeSendPositionUpdate(address);
+
+        IfChangeSendRotationUpdate(address);
+
+        InvokeSendMessageUpdateEvent(address);
+    }
 
     public abstract void SendMessageDisappeared(IConnectionMember address);
 
     public void SendChangeHpMessage()
     {
-        _isHpMessage = true;
+        _sendMessageUpdateEvent += SendChangeHpMessageFuntion;
     }
 
     public void SendChangeMaxHpMessage()
     {
-        _isMaxHpMessage = true;
+        _sendMessageUpdateEvent += SendChangeMaxHpMessageFunction;
     }
 
     protected void MessageFlagsToDefault()
     {
         CheckChangePositionAndRotation();
 
-        _isHpMessageInLastFrame = _isHpMessage;
-        _isHpMessage = false;
-
-        _isMaxHpMessageInLastFrame = _isMaxHpMessage;
-        _isMaxHpMessage = false;
+        _sendMessageUpdateEvent = null;
     }
 
-    protected void VisionFunctionToDefault()
+    protected void SetVisionFunction(Func<Vision, bool> function)
     {
-        _isVisible = delegate(Vision vision) { return true; };
-    }
-
-    protected void IfFlagSendHpUpdate(IConnectionMember address)
-    {
-        if (_isHpMessageInLastFrame)
-        {
-            Server.SendMessageUpdateOtherHp(IdNet, GetComponent<HealthSystem>().HP, address);
-        }
-    }
-
-    protected void IfFlagSendMaxHpUpdate(IConnectionMember address)
-    {
-        if (_isMaxHpMessageInLastFrame)
-        {
-            Server.SendMessageUpdateOtherMaxHp(IdNet, GetComponent<HealthSystem>().MaxHP, address);
-        }
+        _isVisible = function;
     }
 
     protected void IfChangeSendPositionUpdate(IConnectionMember address)
     {
         if (IsChangePosition())
         {
-            Server.SendMessageNewPosition(IdNet, transform.position, address);
+            var package = new Rotate(IdNet, transform.eulerAngles.y);
+            var message = new OutgoingMessage(package);
+
+            Server.Send(message, address);
         }
     }
 
@@ -114,7 +97,10 @@ public abstract class NetObject : MonoBehaviour
     {
         if (IsChangeRotation())
         {
-            Server.SendMessageNewRotation(IdNet, transform.eulerAngles.y, address);
+            var package = new Move(IdNet, transform.position);
+            var message = new OutgoingMessage(package);
+
+            Server.Send(message, address);
         }
     }
 
@@ -141,5 +127,41 @@ public abstract class NetObject : MonoBehaviour
     {
         _positionInLastFrame = transform.position;
         _rotationInLastFrame = transform.eulerAngles.y;
+    }
+
+    protected void InvokeSendMessageUpdateEvent(IConnectionMember address)
+    {
+        if (_sendMessageUpdateEvent != null)
+        {
+            _sendMessageUpdateEvent(address);
+        }
+    }
+
+    protected void SetVisionFunctionToDefault()
+    {
+        SetVisionFunction(DefaultVisionFunction);
+    }
+
+    private void SendChangeHpMessageFuntion(IConnectionMember address)
+    {
+        int hp = GetComponent<HealthSystem>().HP;
+        var package = new UpdateHP(IdNet, hp);
+        var message = new OutgoingMessage(package);
+
+        Server.Send(message, address);
+    }
+
+    private void SendChangeMaxHpMessageFunction(IConnectionMember address)
+    {
+        int maxHp = GetComponent<HealthSystem>().MaxHP;
+        var package = new UpdateMaxHP(IdNet, maxHp);
+        var message = new OutgoingMessage(package);
+
+        Server.Send(message, address);
+    }
+
+    private bool DefaultVisionFunction(Vision vision)
+    {
+        return true;
     }
 }

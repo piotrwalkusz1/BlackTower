@@ -23,7 +23,7 @@ public class RegisterCharacter
         Spells = new List<Spell>();
     }
 
-    public void Update(NetPlayer player)
+    public void Update(GameObject player)
     {
         EndPosition = player.transform.position;
         Spells = new List<Spell>(player.GetComponent<SpellCaster>().GetSpells());

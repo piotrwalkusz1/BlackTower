@@ -3,21 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NetworkProject;
+using NetworkProject.Connection;
 
 [System.CLSCompliant(false)]
 public class AccountsRepositoryInServer : IAccountsRepository
 {
-    private List<RegisterAccount> _accountsData;
-    private List<OnlineAccount> _onlineAccounts;
+    private List<RegisterAccount> _registerAccounts = new List<RegisterAccount>();
+    private List<OnlineAccount> _onlineAccounts = new List<OnlineAccount>();
 
     private int _nextIdAccount = 0;
     private int _nextIdCharacter = 0;
 
     public AccountsRepositoryInServer()
     {
-        _accountsData = new List<RegisterAccount>();
-        _onlineAccounts = new List<OnlineAccount>();
-
         RegisterAccount account = new RegisterAccount();
         account.Login = "Login";
         account.Password = "Password";
@@ -48,7 +46,7 @@ public class AccountsRepositoryInServer : IAccountsRepository
     {
         registerAccount.IdAccount = _nextIdAccount;
         _nextIdAccount ++;
-        _accountsData.Add(registerAccount);
+        _registerAccounts.Add(registerAccount);
     }
 
     public void RegisterCharacter(int idAccount, RegisterCharacter registerCharacter)
@@ -129,18 +127,16 @@ public class AccountsRepositoryInServer : IAccountsRepository
         return onlineAccount;
     }
 
-    public OnlineCharacter LoginAndCreateCharacter(RegisterCharacter character)
+    public OnlineCharacter LoginCharacter(RegisterCharacter character)
     {
         OnlineAccount onlineAccount = GetOnlineAccountByIdCharacter(character.IdCharacter);
 
         if (onlineAccount.Address == null)
         {
-            throw new System.SystemException("Null address");
+            throw new System.SystemException("Nie ");
         }
 
-        GameObject playerInstantiate = SceneBuilder.CreatePlayer(character, onlineAccount.Address);
-
-        OnlineCharacter onlineCharacter = onlineAccount.CreateOnlineCharacter(playerInstantiate.GetComponent<NetPlayer>(), character.IdCharacter);
+        OnlineCharacter onlineCharacter = onlineAccount.CreateOnlineCharacter(playerInstantiate.GetComponent<NetPlayer>(), );
 
         onlineCharacter.SendUpdateMessageToOwner();
         
@@ -157,31 +153,36 @@ public class AccountsRepositoryInServer : IAccountsRepository
         _onlineAccounts.Remove(account);
     }
 
-    public void LogoutAndDeleteCharacter(OnlineCharacter character)
+    public void LogoutCharacter(OnlineCharacter character)
     {
         SceneBuilder.DeletePlayer(character);
 
-        UpdateRegisterCharacter(character.IdCharacter, character.NetPlayerObject);
+        UpdateRegisterCharacter(character.CharacterSlot, character.NetPlayerObject);
 
         character.MyAccount.DeleteOnlineCharacter();
     }
 
     public RegisterAccount GetAccountByLogin(string login)
     {
-        return _accountsData.Find(x => x.Login == login);
+        return _registerAccounts.Find(x => x.Login == login);
     }
 
     public RegisterAccount GetAccountById(int id)
     {
-        return _accountsData.Find(x => x.IdAccount == id);
+        return _registerAccounts.Find(x => x.IdAccount == id);
     }
 
     public OnlineAccount GetOnlineAccountByAddress(IConnectionMember address)
     {
-        var foundOnlineAccounts = from onlineAccount in _onlineAccounts
-                                  where onlineAccount.Address.Equals(address)
-                                  select onlineAccount;
-        return foundOnlineAccounts.SingleOrDefault();
+        foreach (OnlineAccount account in _onlineAccounts)
+        {
+            if (account.Address.Equals(address))
+            {
+                return account;
+            }
+        }
+
+        return null;
     }
 
     public OnlineAccount GetOnlineAccountByLogin(string login)
@@ -195,53 +196,53 @@ public class AccountsRepositoryInServer : IAccountsRepository
 
     public OnlineAccount GetOnlineAccountByIdAccount(int id)
     {
-        foreach (OnlineAccount account in _onlineAccounts)
-        {
-            if (account.IdAccount == id)
-            {
-                return account;
-            }
-        }
-        return null;
+        return _onlineAccounts.Find(x => x.IdAccount == id);
     }
 
     public OnlineAccount GetOnlineAccountByIdCharacter(int id)
     {
-        var characters = from account in _accountsData
-                         from character in account.Characters
-                         where character.IdCharacter == id
-                         select character;
-        RegisterCharacter registerCharacter = characters.SingleOrDefault();
-        if (registerCharacter == null)
+        RegisterCharacter character = GetCharacterByIdCharacter(id);
+
+        if (character == null)
         {
             return null;
         }
         else
         {
-            return GetOnlineAccountByIdAccount(registerCharacter.MyAccount.IdAccount);
+            return GetOnlineAccountByIdAccount(character.MyAccount.IdAccount);
         }
     }
 
     public RegisterCharacter GetCharacterByIdCharacter(int idCharacter)
     {
-        var characters = from account in _accountsData
-                         from character in account.Characters
-                         select character;
-        var foundCharacters = from character in characters
-                              where character.IdCharacter == idCharacter
-                              select character;
-        return foundCharacters.SingleOrDefault();
+        foreach (RegisterAccount account in _registerAccounts)
+        {
+            foreach (RegisterCharacter character in account.Characters)
+            {
+                if (character.IdCharacter == idCharacter)
+                {
+                    return character;
+                }
+            }
+        }
+
+        return null;
     }
 
     public RegisterCharacter GetCharacterByName(string name)
     {
-        var characters = from account in _accountsData
-                         from character in account.Characters
-                         select character;
-        var foundCharacters = from character in characters
-                              where character.Name == name
-                              select character;
-        return foundCharacters.SingleOrDefault();
+        foreach (RegisterAccount account in _registerAccounts)
+        {
+            foreach (RegisterCharacter character in account.Characters)
+            {
+                if (character.Name == name)
+                {
+                    return character;
+                }
+            }
+        }
+
+        return null;
     }
 
     public OnlineCharacter GetOnlineCharacterByNetId(int netPlayerObjectId)
@@ -280,7 +281,7 @@ public class AccountsRepositoryInServer : IAccountsRepository
         return null;
     }
 
-    public void UpdateRegisterCharacter(int idCharater, NetPlayer player)
+    public void UpdateRegisterCharacter(int idCharater, GameObject player)
     {
         RegisterCharacter charater = GetCharacterByIdCharacter(idCharater);
 
