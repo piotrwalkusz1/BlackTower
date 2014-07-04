@@ -1,201 +1,198 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-	<ProductVersion>10.0.20506</ProductVersion>
-	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{104B4037-DDEB-85D2-72A1-DA5AFA9CA345}</ProjectGuid>
-	<OutputType>Library</OutputType>
-	<AppDesignerFolder>Properties</AppDesignerFolder>
-	<RootNamespace></RootNamespace>
-	<AssemblyName>Assembly-CSharp</AssemblyName>
-	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-	<FileAlignment>512</FileAlignment>
-	<BaseDirectory>Assets</BaseDirectory>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{104B4037-DDEB-85D2-72A1-DA5AFA9CA345}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>
+    </RootNamespace>
+    <AssemblyName>Assembly-CSharp</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <BaseDirectory>Assets</BaseDirectory>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-	<DebugSymbols>true</DebugSymbols>
-	<DebugType>full</DebugType>
-	<Optimize>false</Optimize>
-	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_4_5_1;UNITY_4_5;UNITY_STANDALONE_WIN;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;UNITY_STANDALONE;ENABLE_MONO;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_WP8SUPPORT;ENABLE_MOVIES;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_DUCK_TYPING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN</DefineConstants>
-	<ErrorReport>prompt</ErrorReport>
-	<WarningLevel>4</WarningLevel>
-	<NoWarn>0169</NoWarn>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Temp\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;UNITY_4_5_1;UNITY_4_5;UNITY_STANDALONE_WIN;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;UNITY_STANDALONE;ENABLE_MONO;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_WP8SUPPORT;ENABLE_MOVIES;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_DUCK_TYPING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0169</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-	<DebugType>pdbonly</DebugType>
-	<Optimize>true</Optimize>
-	<OutputPath>Temp\bin\Release\</OutputPath>
-	<DefineConstants>TRACE</DefineConstants>
-	<ErrorReport>prompt</ErrorReport>
-	<WarningLevel>4</WarningLevel>
-	<NoWarn>0169</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Temp\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0169</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-	<Reference Include="System" />
+    <Reference Include="System" />
     <Reference Include="System.XML" />
-	<Reference Include="System.Core" />
-	<Reference Include="System.Xml.Linq" />
-	<Reference Include="UnityEngine">
-	  <HintPath>D:/Programy/Unity/Data/Managed/UnityEngine.dll</HintPath>
-	</Reference>
-	<Reference Include="UnityEditor">
-	  <HintPath>D:/Programy/Unity/Data/Managed/UnityEditor.dll</HintPath>
-	</Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="UnityEngine">
+      <HintPath>D:/Programy/Unity/Data/Managed/UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor">
+      <HintPath>D:/Programy/Unity/Data/Managed/UnityEditor.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Lidgren.Network\Encryption\INetEncryption.cs" />
-     <Compile Include="Assets\Lidgren.Network\Encryption\NetAESEncryption.cs" />
-     <Compile Include="Assets\Lidgren.Network\Encryption\NetBlockEncryptionBase.cs" />
-     <Compile Include="Assets\Lidgren.Network\Encryption\NetDESEncryption.cs" />
-     <Compile Include="Assets\Lidgren.Network\Encryption\NetRC2Encryption.cs" />
-     <Compile Include="Assets\Lidgren.Network\Encryption\NetTripleDESEncryption.cs" />
-     <Compile Include="Assets\Lidgren.Network\Encryption\NetXorEncryption.cs" />
-     <Compile Include="Assets\Lidgren.Network\Encryption\NetXteaEncryption.cs" />
-     <Compile Include="Assets\Lidgren.Network\NamespaceDoc.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetBigInteger.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetBitVector.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetBitWriter.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetBuffer.Peek.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetBuffer.Read.Reflection.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetBuffer.Read.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetBuffer.Write.Reflection.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetBuffer.Write.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetBuffer.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetClient.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetConnection.Handshake.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetConnection.Latency.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetConnection.MTU.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetConnection.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetConnectionStatistics.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetConnectionStatus.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetConstants.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetDeliveryMethod.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetException.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetFragmentationHelper.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetFragmentationInfo.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetIncomingMessage.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetIncomingMessageType.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetMessageType.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetNatIntroduction.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetOutgoingMessage.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetPeer.Discovery.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetPeer.Fragmentation.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetPeer.Internal.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetPeer.LatencySimulation.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetPeer.Logging.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetPeer.MessagePools.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetPeer.Send.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetPeer.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetPeerConfiguration.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetPeerStatistics.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetPeerStatus.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetQueue.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetRandom.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetReceiverChannelBase.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetReliableOrderedReceiver.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetReliableSenderChannel.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetReliableSequencedReceiver.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetReliableUnorderedReceiver.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetSRP.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetSendResult.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetSenderChannelBase.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetServer.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetStoredReliableMessage.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetTime.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetTuple.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetUPnP.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetUnreliableSenderChannel.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetUnreliableSequencedReceiver.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetUnreliableUnorderedReceiver.cs" />
-     <Compile Include="Assets\Lidgren.Network\NetUtility.cs" />
-     <Compile Include="Assets\Lidgren.Network\Properties\AssemblyInfo.cs" />
-     <Compile Include="Assets\Lidgren.Network\SenderChannelBase.cs" />
-     <Compile Include="Assets\Scripts\Client\BufferMessages.cs" />
-     <Compile Include="Assets\Scripts\Client\BufferedMessage.cs" />
-     <Compile Include="Assets\Scripts\Client\Client.cs" />
-     <Compile Include="Assets\Scripts\Client\ClientConfig.cs" />
-     <Compile Include="Assets\Scripts\Client\ClientController.cs" />
-     <Compile Include="Assets\Scripts\Client\IClient.cs" />
-     <Compile Include="Assets\Scripts\Client\LidgrenClient.cs" />
-     <Compile Include="Assets\Scripts\GUI\CharacterWindow.cs" />
-     <Compile Include="Assets\Scripts\GUI\EquipmentWindow.cs" />
-     <Compile Include="Assets\Scripts\GUI\GUIController.cs" />
-     <Compile Include="Assets\Scripts\GUI\GUIObject.cs" />
-     <Compile Include="Assets\Scripts\GUI\ItemInCharacterWindow.cs" />
-     <Compile Include="Assets\Scripts\GUI\ItemInEquipmentWindow.cs" />
-     <Compile Include="Assets\Scripts\GUI\LoginMenuInfo.cs" />
-     <Compile Include="Assets\Scripts\GUI\MessageGUI.cs" />
-     <Compile Include="Assets\Scripts\GUI\WindowGUI.cs" />
-     <Compile Include="Assets\Scripts\Item\Item.cs" />
-     <Compile Include="Assets\Scripts\Item\ItemBase.cs" />
-     <Compile Include="Assets\Scripts\Item\ItemData.cs" />
-     <Compile Include="Assets\Scripts\Movement\JumperMovement.cs" />
-     <Compile Include="Assets\Scripts\Movement\Movement.cs" />
-     <Compile Include="Assets\Scripts\Movement\PlayerMovement.cs" />
-     <Compile Include="Assets\Scripts\NetObjects\NetItem.cs" />
-     <Compile Include="Assets\Scripts\NetObjects\NetMonster.cs" />
-     <Compile Include="Assets\Scripts\NetObjects\NetNamedObject.cs" />
-     <Compile Include="Assets\Scripts\NetObjects\NetObject.cs" />
-     <Compile Include="Assets\Scripts\NetObjects\NetOtherPlayer.cs" />
-     <Compile Include="Assets\Scripts\NetObjects\NetOwnPlayer.cs" />
-     <Compile Include="Assets\Scripts\NetObjects\NetPlayer.cs" />
-     <Compile Include="Assets\Scripts\Other\ApplicationControler.cs" />
-     <Compile Include="Assets\Scripts\Other\Experience.cs" />
-     <Compile Include="Assets\Scripts\Other\HP.cs" />
-     <Compile Include="Assets\Scripts\Other\ImagesBase.cs" />
-     <Compile Include="Assets\Scripts\Other\IoC.cs" />
-     <Compile Include="Assets\Scripts\Other\JumperAnimation.cs" />
-     <Compile Include="Assets\Scripts\Other\JumperCombat.cs" />
-     <Compile Include="Assets\Scripts\Other\JumperStats.cs" />
-     <Compile Include="Assets\Scripts\Other\MeshRepository.cs" />
-     <Compile Include="Assets\Scripts\Other\MonsterCombat.cs" />
-     <Compile Include="Assets\Scripts\Other\MonsterStats.cs" />
-     <Compile Include="Assets\Scripts\Other\Prefabs.cs" />
-     <Compile Include="Assets\Scripts\Other\SceneBuilder.cs" />
-     <Compile Include="Assets\Scripts\Other\StaticRepository.cs" />
-     <Compile Include="Assets\Scripts\Other\Stats.cs" />
-     <Compile Include="Assets\Scripts\Other\Textures.cs" />
-     <Compile Include="Assets\Scripts\Player\Equipment.cs" />
-     <Compile Include="Assets\Scripts\Player\IEquippedItems.cs" />
-     <Compile Include="Assets\Scripts\Player\InputPlayer.cs" />
-     <Compile Include="Assets\Scripts\Player\OtherPlayerAnimation.cs" />
-     <Compile Include="Assets\Scripts\Player\OtherPlayerCombat.cs" />
-     <Compile Include="Assets\Scripts\Player\OtherPlayerEquipment.cs" />
-     <Compile Include="Assets\Scripts\Player\OtherPlayerStats.cs" />
-     <Compile Include="Assets\Scripts\Player\OwnPlayerAnimation.cs" />
-     <Compile Include="Assets\Scripts\Player\OwnPlayerCombat.cs" />
-     <Compile Include="Assets\Scripts\Player\OwnPlayerStats.cs" />
-     <Compile Include="Assets\Scripts\Player\PlayerAnimation.cs" />
-     <Compile Include="Assets\Scripts\Player\PlayerCamera.cs" />
-     <Compile Include="Assets\Scripts\Player\PlayerCombat.cs" />
-     <Compile Include="Assets\Scripts\Player\PlayerEquipement.cs" />
-     <Compile Include="Assets\Scripts\Player\PlayerExperience.cs" />
-     <Compile Include="Assets\Scripts\Player\PlayerGeneratorModel.cs" />
-     <Compile Include="Assets\Scripts\Player\PlayerMesh.cs" />
-     <Compile Include="Assets\Scripts\Player\PlayerStats.cs" />
-     <Compile Include="Assets\Scripts\Spell\ISpellCastOption.cs" />
-     <Compile Include="Assets\Scripts\Spell\ISpellCaster.cs" />
-     <Compile Include="Assets\Scripts\Spell\SpellCaster.cs" />
-     <Compile Include="Assets\Scripts\Spell\SpellData.cs" />
-     <Compile Include="Assets\Scripts\Spell\SpellExtension.cs" />
-     <Compile Include="Assets\Scripts\Spell\SpellRepository.cs" />
-     <None Include="Assets\Resources\items.xml" />
-     <None Include="Assets\Resources\spells.xml" />
-     <None Include="Assets\Resources\PL.xml" />
-     <None Include="Assets\Resources\defaultInputs.txt" />
- <Reference Include="Assembly-UnityScript-firstpass">
- <HintPath>C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Client/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
- </Reference>
- <Reference Include="NetworkProject">
- <HintPath>C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Client/Assets/Plugins/NetworkProject.dll</HintPath>
- </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass-vs.csproj">
-      <Project>{3A1C41A4-930B-7FB0-B69A-2B357061594C}</Project>      <Name>Assembly-CSharp-firstpass-vs</Name>    </ProjectReference>
+    <Compile Include="Assets\Lidgren.Network\Encryption\INetEncryption.cs" />
+    <Compile Include="Assets\Lidgren.Network\Encryption\NetAESEncryption.cs" />
+    <Compile Include="Assets\Lidgren.Network\Encryption\NetBlockEncryptionBase.cs" />
+    <Compile Include="Assets\Lidgren.Network\Encryption\NetDESEncryption.cs" />
+    <Compile Include="Assets\Lidgren.Network\Encryption\NetRC2Encryption.cs" />
+    <Compile Include="Assets\Lidgren.Network\Encryption\NetTripleDESEncryption.cs" />
+    <Compile Include="Assets\Lidgren.Network\Encryption\NetXorEncryption.cs" />
+    <Compile Include="Assets\Lidgren.Network\Encryption\NetXteaEncryption.cs" />
+    <Compile Include="Assets\Lidgren.Network\NamespaceDoc.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetBigInteger.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetBitVector.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetBitWriter.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetBuffer.Peek.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetBuffer.Read.Reflection.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetBuffer.Read.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetBuffer.Write.Reflection.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetBuffer.Write.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetBuffer.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetClient.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetConnection.Handshake.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetConnection.Latency.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetConnection.MTU.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetConnection.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetConnectionStatistics.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetConnectionStatus.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetConstants.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetDeliveryMethod.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetException.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetFragmentationHelper.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetFragmentationInfo.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetIncomingMessage.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetIncomingMessageType.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetMessageType.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetNatIntroduction.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetOutgoingMessage.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetPeer.Discovery.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetPeer.Fragmentation.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetPeer.Internal.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetPeer.LatencySimulation.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetPeer.Logging.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetPeer.MessagePools.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetPeer.Send.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetPeer.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetPeerConfiguration.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetPeerStatistics.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetPeerStatus.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetQueue.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetRandom.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetReceiverChannelBase.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetReliableOrderedReceiver.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetReliableSenderChannel.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetReliableSequencedReceiver.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetReliableUnorderedReceiver.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetSRP.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetSendResult.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetSenderChannelBase.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetServer.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetStoredReliableMessage.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetTime.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetTuple.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetUPnP.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetUnreliableSenderChannel.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetUnreliableSequencedReceiver.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetUnreliableUnorderedReceiver.cs" />
+    <Compile Include="Assets\Lidgren.Network\NetUtility.cs" />
+    <Compile Include="Assets\Lidgren.Network\Properties\AssemblyInfo.cs" />
+    <Compile Include="Assets\Lidgren.Network\SenderChannelBase.cs" />
+    <Compile Include="Assets\Scripts\Client\BufferMessages.cs" />
+    <Compile Include="Assets\Scripts\Client\BufferedMessage.cs" />
+    <Compile Include="Assets\Scripts\Client\Client.cs" />
+    <Compile Include="Assets\Scripts\Client\ClientConfig.cs" />
+    <Compile Include="Assets\Scripts\Client\ClientController.cs" />
+    <Compile Include="Assets\Scripts\Client\IClient.cs" />
+    <Compile Include="Assets\Scripts\Client\LidgrenClient.cs" />
+    <Compile Include="Assets\Scripts\GUI\CharacterWindow.cs" />
+    <Compile Include="Assets\Scripts\GUI\EquipmentWindow.cs" />
+    <Compile Include="Assets\Scripts\GUI\GUIController.cs" />
+    <Compile Include="Assets\Scripts\GUI\GUIObject.cs" />
+    <Compile Include="Assets\Scripts\GUI\ItemInCharacterWindow.cs" />
+    <Compile Include="Assets\Scripts\GUI\ItemInEquipmentWindow.cs" />
+    <Compile Include="Assets\Scripts\GUI\LoginMenuInfo.cs" />
+    <Compile Include="Assets\Scripts\GUI\MessageGUI.cs" />
+    <Compile Include="Assets\Scripts\GUI\WindowGUI.cs" />
+    <Compile Include="Assets\Scripts\Item\Item.cs" />
+    <Compile Include="Assets\Scripts\Item\ItemBase.cs" />
+    <Compile Include="Assets\Scripts\Item\ItemData.cs" />
+    <Compile Include="Assets\Scripts\Movement\JumperMovement.cs" />
+    <Compile Include="Assets\Scripts\Movement\Movement.cs" />
+    <Compile Include="Assets\Scripts\Movement\PlayerMovement.cs" />
+    <Compile Include="Assets\Scripts\NetObjects\NetItem.cs" />
+    <Compile Include="Assets\Scripts\NetObjects\NetMonster.cs" />
+    <Compile Include="Assets\Scripts\NetObjects\NetNamedObject.cs" />
+    <Compile Include="Assets\Scripts\NetObjects\NetObject.cs" />
+    <Compile Include="Assets\Scripts\NetObjects\NetOtherPlayer.cs" />
+    <Compile Include="Assets\Scripts\NetObjects\NetOwnPlayer.cs" />
+    <Compile Include="Assets\Scripts\NetObjects\NetPlayer.cs" />
+    <Compile Include="Assets\Scripts\Other\ApplicationControler.cs" />
+    <Compile Include="Assets\Scripts\Other\Experience.cs" />
+    <Compile Include="Assets\Scripts\Other\HP.cs" />
+    <Compile Include="Assets\Scripts\Other\ImagesBase.cs" />
+    <Compile Include="Assets\Scripts\Other\IoC.cs" />
+    <Compile Include="Assets\Scripts\Other\JumperAnimation.cs" />
+    <Compile Include="Assets\Scripts\Other\JumperCombat.cs" />
+    <Compile Include="Assets\Scripts\Other\JumperStats.cs" />
+    <Compile Include="Assets\Scripts\Other\MeshRepository.cs" />
+    <Compile Include="Assets\Scripts\Other\MonsterCombat.cs" />
+    <Compile Include="Assets\Scripts\Other\MonsterStats.cs" />
+    <Compile Include="Assets\Scripts\Other\Prefabs.cs" />
+    <Compile Include="Assets\Scripts\Other\SceneBuilder.cs" />
+    <Compile Include="Assets\Scripts\Other\StaticRepository.cs" />
+    <Compile Include="Assets\Scripts\Other\Stats.cs" />
+    <Compile Include="Assets\Scripts\Other\Textures.cs" />
+    <Compile Include="Assets\Scripts\Player\Equipment.cs" />
+    <Compile Include="Assets\Scripts\Player\IEquippedItems.cs" />
+    <Compile Include="Assets\Scripts\Player\InputPlayer.cs" />
+    <Compile Include="Assets\Scripts\Player\OtherPlayerAnimation.cs" />
+    <Compile Include="Assets\Scripts\Player\OtherPlayerCombat.cs" />
+    <Compile Include="Assets\Scripts\Player\OtherPlayerEquipment.cs" />
+    <Compile Include="Assets\Scripts\Player\OtherPlayerStats.cs" />
+    <Compile Include="Assets\Scripts\Player\OwnPlayerAnimation.cs" />
+    <Compile Include="Assets\Scripts\Player\OwnPlayerCombat.cs" />
+    <Compile Include="Assets\Scripts\Player\OwnPlayerStats.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerAnimation.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerCamera.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerCombat.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerEquipement.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerExperience.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerGeneratorModel.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerMesh.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerStats.cs" />
+    <Compile Include="Assets\Scripts\Spell\ISpellCastOption.cs" />
+    <Compile Include="Assets\Scripts\Spell\ISpellCaster.cs" />
+    <Compile Include="Assets\Scripts\Spell\SpellCaster.cs" />
+    <Compile Include="Assets\Scripts\Spell\SpellData.cs" />
+    <Compile Include="Assets\Scripts\Spell\SpellExtension.cs" />
+    <Compile Include="Assets\Scripts\Spell\SpellRepository.cs" />
+    <None Include="Assets\Resources\items.xml" />
+    <None Include="Assets\Resources\spells.xml" />
+    <None Include="Assets\Resources\PL.xml" />
+    <None Include="Assets\Resources\defaultInputs.txt" />
+    <Reference Include="Assembly-UnityScript-firstpass">
+      <HintPath>D:/NetworkProject/NetworkProject-Client/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="NetworkProject">
+      <HintPath>D:/NetworkProject/NetworkProject-Client/Assets/Plugins/NetworkProject.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -205,5 +202,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  
 </Project>

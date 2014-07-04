@@ -185,7 +185,7 @@
      <None Include="Assets\Resources\monsters.xml" />
      <None Include="Assets\Resources\items.xml" />
  <Reference Include="NetworkProject">
- <HintPath>C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Server/Assets/Plugins/NetworkProject.dll</HintPath>
+ <HintPath>D:/NetworkProject/NetworkProject-Server/Assets/Plugins/NetworkProject.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

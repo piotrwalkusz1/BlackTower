@@ -59,10 +59,10 @@
      <None Include="Assets\Resources\PL.xml" />
      <None Include="Assets\Resources\defaultInputs.txt" />
  <Reference Include="Assembly-UnityScript-firstpass">
- <HintPath>C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Client/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
+ <HintPath>D:/NetworkProject/NetworkProject-Client/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
  </Reference>
  <Reference Include="NetworkProject">
- <HintPath>C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Client/Assets/Plugins/NetworkProject.dll</HintPath>
+ <HintPath>D:/NetworkProject/NetworkProject-Client/Assets/Plugins/NetworkProject.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>D:/Programy/Unity/Data/Managed/UnityEditor.Graphs.dll</HintPath>
