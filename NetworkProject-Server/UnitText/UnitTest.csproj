@@ -74,10 +74,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Network\Network\NetworkProject.csproj">
-      <Project>{aaa6a575-be26-4699-b4ca-4b5afe80e502}</Project>
-      <Name>NetworkProject</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Assembly-CSharp-Editor.csproj">
       <Project>{a290f109-0d0d-8b72-33ae-5114b4f75e89}</Project>
       <Name>Assembly-CSharp-Editor</Name>
