@@ -19,12 +19,12 @@ namespace NetworkProject.Items.Repository
             return _items.Find(x => x.IdItem == idItem);
         }
 
-        public static void LoadItems()
+        public static void LoadItemsFromResources()
         {
-            LoadItemsFromRepository(Settings.pathToItemsInResources);
+            LoadItemsFromResources(Settings.pathToItemsInResources);
         }
 
-        public static void LoadItemsFromRepository(string pathToItemsInResources)
+        public static void LoadItemsFromResources(string pathToItemsInResources)
         {
             var textAsset = Resources.Load<TextAsset>(pathToItemsInResources);
             var reader = new StringReader(textAsset.text);
@@ -35,7 +35,7 @@ namespace NetworkProject.Items.Repository
             _items = items;
         }
 
-        public static void SaveItemsToRepository(string path, List<Item> items)
+        public static void SaveItems(string path, List<Item> items)
         {
             var serializer = new XmlSerializer(typeof(List<Item>));
 

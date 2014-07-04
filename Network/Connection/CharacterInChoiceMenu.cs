@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NetworkProject.Connection.Utility
+namespace NetworkProject.Connection
 {
     [Serializable]
     public class CharacterInChoiceMenu

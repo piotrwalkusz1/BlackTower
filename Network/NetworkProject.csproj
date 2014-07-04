@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AAA6A575-BE26-4699-B4CA-4B5AFE80E502}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NetworkProject</RootNamespace>
+    <AssemblyName>NetworkProject</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>3</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Programy\Unity\Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BreedAndGender.cs" />
+    <Compile Include="IoC.cs" />
+    <Compile Include="Benefits\AdditionalMaxHp.cs" />
+    <Compile Include="Items\Drop.cs" />
+    <Compile Include="Items\Repository\Addition.cs" />
+    <Compile Include="BodyParts\BodyPart.cs" />
+    <Compile Include="BodyParts\Chest.cs" />
+    <Compile Include="BodyParts\Feet.cs" />
+    <Compile Include="BodyParts\Head.cs" />
+    <Compile Include="BodyParts\LeftHand.cs" />
+    <Compile Include="BodyParts\Other.cs" />
+    <Compile Include="BodyParts\RightHand.cs" />
+    <Compile Include="Breed.cs" />
+    <Compile Include="Items\EquipedItems.cs" />
+    <Compile Include="Items\Item.cs" />
+    <Compile Include="Items\Repository\EquipableItem.cs" />
+    <Compile Include="Items\ItemType.cs" />
+    <Compile Include="Items\PlayerEquipedItems.cs" />
+    <Compile Include="Items\Repository\VisualEquipableItem.cs" />
+    <Compile Include="Items\Repository\ItemRepository.cs" />
+    <Compile Include="Items\Repository\VisualItem.cs" />
+    <Compile Include="Connection\ToClient\Attack.cs" />
+    <Compile Include="Connection\ToClient\Create.cs" />
+    <Compile Include="Connection\ToClient\CreateBullet.cs" />
+    <Compile Include="Connection\ToClient\CreateItem.cs" />
+    <Compile Include="Connection\ToClient\CreateMonster.cs" />
+    <Compile Include="Connection\ToClient\CreateOtherPlayer.cs" />
+    <Compile Include="Connection\ToClient\CreateOwnPlayer.cs" />
+    <Compile Include="Connection\ToClient\CreateVisualObject.cs" />
+    <Compile Include="Connection\ToClient\Dead.cs" />
+    <Compile Include="Connection\ToClient\DeleteObject.cs" />
+    <Compile Include="Connection\ToClient\GoIntoWorld.cs" />
+    <Compile Include="Connection\ToClient\Jump.cs" />
+    <Compile Include="Connection\ToClient\Move.cs" />
+    <Compile Include="Connection\ToClient\NewPosition.cs" />
+    <Compile Include="Connection\ToClient\NewRotation.cs" />
+    <Compile Include="Connection\ToClient\Respawn.cs" />
+    <Compile Include="Connection\ToClient\Rotate.cs" />
+    <Compile Include="Connection\ToClient\UpdateAllSpells.cs" />
+    <Compile Include="Connection\ToClient\UpdateAllStats.cs" />
+    <Compile Include="Connection\ToClient\UpdateEquipedItem.cs" />
+    <Compile Include="Connection\ToClient\UpdateExperience.cs" />
+    <Compile Include="Connection\ToClient\UpdateHp.cs" />
+    <Compile Include="Connection\ToClient\UpdateItemInEquipment.cs" />
+    <Compile Include="Connection\ToClient\UpdateMaxExp.cs" />
+    <Compile Include="Connection\ToClient\UpdateMaxHP.cs" />
+    <Compile Include="Connection\ToClient\UpdateSpell.cs" />
+    <Compile Include="Connection\ToServer\Attack.cs" />
+    <Compile Include="Connection\ToServer\ChangeEquipedItem.cs" />
+    <Compile Include="Connection\ToServer\ChangeEquipedItems.cs" />
+    <Compile Include="Connection\ToServer\ChangeItemsInEquipment.cs" />
+    <Compile Include="Connection\ToServer\GoIntoWorld.cs" />
+    <Compile Include="Connection\ToServer\Login.cs" />
+    <Compile Include="Connection\ToServer\PickItem.cs" />
+    <Compile Include="Connection\ToServer\PlayerJump.cs" />
+    <Compile Include="Connection\ToServer\PlayerMove.cs" />
+    <Compile Include="Connection\ToServer\PlayerRotation.cs" />
+    <Compile Include="Connection\ToServer\Register.cs" />
+    <Compile Include="Connection\ToServer\Respawn.cs" />
+    <Compile Include="Connection\ToServer\UseSpell.cs" />
+    <Compile Include="Monsters\MonsterRepository.cs" />
+    <Compile Include="Requirements\Lvl.cs" />
+    <Compile Include="Connection\ToClient\GoToChoiceCharacterMenu.cs" />
+    <Compile Include="Connection\ToClient\TextMessage.cs" />
+    <Compile Include="Connection\CharacterInChoiceMenu.cs" />
+    <Compile Include="Spells\ISpellCastOption.cs" />
+    <Compile Include="Benefits\Benefit.cs" />
+    <Compile Include="Benefits\BenefitType.cs" />
+    <Compile Include="BodyParts\BodyPartSlot.cs" />
+    <Compile Include="Requirements\Requirement.cs" />
+    <Compile Include="Requirements\RequirementType.cs" />
+    <Compile Include="Items\Repository\Shield.cs" />
+    <Compile Include="Items\Repository\Armor.cs" />
+    <Compile Include="Items\Repository\Helmet.cs" />
+    <Compile Include="Items\Repository\Item.cs" />
+    <Compile Include="Monsters\MonsterInfo.cs" />
+    <Compile Include="Monsters\MonsterType.cs" />
+    <Compile Include="IConnectionMember.cs" />
+    <Compile Include="IncomingMessage.cs" />
+    <Compile Include="Connection\INetworkPackage.cs" />
+    <Compile Include="MessageToClinetType.cs" />
+    <Compile Include="MessageToServerType.cs" />
+    <Compile Include="OutgoingMessage.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Items\Repository\Shoes.cs" />
+    <Compile Include="Spells\Spell.cs" />
+    <Compile Include="Stats.cs" />
+    <Compile Include="VisualObjectType.cs" />
+    <Compile Include="Items\Repository\Weapon.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
