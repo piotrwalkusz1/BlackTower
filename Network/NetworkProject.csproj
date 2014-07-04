@@ -108,6 +108,7 @@
     <Compile Include="Connection\ToClient\GoToChoiceCharacterMenu.cs" />
     <Compile Include="Connection\ToClient\TextMessage.cs" />
     <Compile Include="Connection\CharacterInChoiceMenu.cs" />
+    <Compile Include="Spells\ISpellCaster.cs" />
     <Compile Include="Spells\ISpellCastOption.cs" />
     <Compile Include="Benefits\Benefit.cs" />
     <Compile Include="Benefits\BenefitType.cs" />

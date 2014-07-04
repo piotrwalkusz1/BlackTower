@@ -68,6 +68,7 @@
     <Compile Include="ServerTest\IncomingMessageTest.cs" />
     <Compile Include="ServerTest\OutgoingMessageTest.cs" />
     <Compile Include="ServerTest\RegisterAccountTest.cs" />
+    <Compile Include="SpellActions\UnitTest1.cs" />
     <Compile Include="SpellsTest\SpellTest.cs" />
   </ItemGroup>
   <ItemGroup>

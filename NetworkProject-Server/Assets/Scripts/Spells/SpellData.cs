@@ -5,9 +5,6 @@ using System.Text;
 using NetworkProject;
 
 [System.CLSCompliant(false)]
-public delegate void SpellFunction(ISpellCaster spellCaster, params ISpellCastOption[] options);
-
-[System.CLSCompliant(false)]
 public class SpellData
 {
     public int IdSpell { get; private set; }

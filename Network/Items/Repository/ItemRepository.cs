@@ -22,8 +22,6 @@ namespace NetworkProject.Items.Repository
         public static void LoadItemsFromResources()
         {
             LoadItemsFromResources(Settings.pathToItemsInResources);
-
-            System.Console.WriteLine("a");
         }
 
         public static void LoadItemsFromResources(string pathToItemsInResources)
