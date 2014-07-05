@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NetworkProject.Connection
 {
-    public interface INetworkPackage
+    public interface INetworkRequest
     {
 
     }

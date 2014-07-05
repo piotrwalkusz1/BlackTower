@@ -8,6 +8,6 @@ namespace NetworkProject.Benefits
     [Serializable]
     public abstract class Benefit
     {
-        public abstract void ApplyToStats(Stats stats);
+        public abstract void ApplyToStats(IStats stats);
     }
 }

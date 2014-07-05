@@ -15,7 +15,7 @@ namespace NetworkProject.Items.Repository
 
         }
 
-        public override void ApplyItemStats(Stats stats)
+        public override void ApplyItemStats(IStats stats)
         {
             stats.Defense += _defense;
         }

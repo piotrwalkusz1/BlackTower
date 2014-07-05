@@ -10,23 +10,23 @@ namespace NetworkProject
 {
     public static class IoC
     {
-        public static BodyPart GetBodyPart(BodyPartType bodyPart)
+        public static BodyPart GetBodyPart(BodyPartSlot bodyPart)
         {
             switch (bodyPart)
             {
-                case BodyPartType.Head:
+                case BodyPartSlot.Head:
                     return new Head();
-                case BodyPartType.Chest:
+                case BodyPartSlot.Chest:
                     return new Chest();
-                case BodyPartType.Feet:
+                case BodyPartSlot.Feet:
                     return new Feet();
-                case BodyPartType.LeftHand:
+                case BodyPartSlot.LeftHand:
                     return new LeftHand();
-                case BodyPartType.RightHand:
+                case BodyPartSlot.RightHand:
                     return new RightHand();
-                case BodyPartType.Other1:
+                case BodyPartSlot.Other1:
                     return new Other();
-                case BodyPartType.Other2:
+                case BodyPartSlot.Other2:
                     return new Other();
                 default:
                     throw new ArgumentException("Nie ma takiej części ciała.");

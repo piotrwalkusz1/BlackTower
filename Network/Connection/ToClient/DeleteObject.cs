@@ -6,7 +6,7 @@ using System.Text;
 namespace NetworkProject.Connection.ToClient
 {
     [Serializable]
-    public class DeleteObject : INetworkPackage
+    public class DeleteObject : INetworkRequest
     {
         public int IdNet { get; set; }
 

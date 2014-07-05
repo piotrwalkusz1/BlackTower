@@ -6,7 +6,7 @@ using System.Text;
 namespace NetworkProject.Connection.ToClient
 {
     [Serializable]
-    public class UpdateMaxHP : INetworkPackage
+    public class UpdateMaxHP : INetworkRequest
     {
         public int IdNet { get; set; }
         public int MaxHP { get; set; }

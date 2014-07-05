@@ -24,13 +24,13 @@ namespace NetworkProject.Items.Repository
             IdItem = idItem;
         }
 
-        public void ApplyToStats(Stats stats)
+        public void ApplyToStats(IStats stats)
         {
             ApplyItemStats(stats);
             ApplyBenefits(stats);
         }
 
-        public abstract void ApplyItemStats(Stats stats);
+        public abstract void ApplyItemStats(IStats stats);
 
         public void SetBenefits(XmlNodeList benefits)
         {
@@ -80,7 +80,7 @@ namespace NetworkProject.Items.Repository
             return _requirements.ToArray();
         }
 
-        private void ApplyBenefits(Stats stats)
+        private void ApplyBenefits(IStats stats)
         {
             foreach (Benefit benefit in _benefits)
             {

@@ -6,12 +6,12 @@ using System.Text;
 namespace NetworkProject.Connection.ToClient
 {
     [Serializable]
-    public class UpdateAllStats : INetworkPackage
+    public class UpdateAllStats : INetworkRequest
     {
         public int IdNet { get; set; }
-        public Stats Stats { get; set; }
+        public IStats Stats { get; set; }
 
-        public UpdateAllStats(int idNet, Stats stats)
+        public UpdateAllStats(int idNet, IStats stats)
         {
             IdNet = idNet;
             Stats = stats;

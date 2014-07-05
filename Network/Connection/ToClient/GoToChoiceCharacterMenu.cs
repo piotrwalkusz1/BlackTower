@@ -8,7 +8,7 @@ using NetworkProject.Connection;
 namespace NetworkProject.Connection.ToClient
 {
     [Serializable]
-    public class GoToChoiceCharacterMenu : INetworkPackage
+    public class GoToChoiceCharacterMenu : INetworkRequest
     {
         public List<CharacterInChoiceMenu> Characters { get; set; }
 

@@ -6,7 +6,7 @@ using System.Text;
 namespace NetworkProject.Connection.ToServer
 {
     [Serializable]
-    public class GoIntoWorld : INetworkPackage
+    public class GoIntoWorld : INetworkRequest
     {
         public int CharacterSlot { get; set; }
 

@@ -7,7 +7,7 @@ using NetworkProject.Spells;
 namespace NetworkProject.Connection.ToClient
 {
     [Serializable]
-    public class UpdateAllSpells : INetworkPackage
+    public class UpdateAllSpells : INetworkRequest
     {
         public int IdNet { get; set; }
         public List<Spell> Spells { get; set; }

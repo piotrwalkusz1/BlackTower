@@ -32,7 +32,7 @@ public static class SceneBuilder
         NetBullet netBullet = bullet.GetComponent<NetBullet>();
         netBullet.IdNet = _nextIdNet;
         _nextIdNet++;
-        netBullet._speed = bulletInfo._speed;
+        netBullet.Speed = bulletInfo._speed;
 
         GameObject.Destroy(bullet, bulletInfo._liveTime);
 

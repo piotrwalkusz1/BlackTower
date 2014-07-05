@@ -6,7 +6,7 @@ using System.Text;
 namespace NetworkProject.Connection.ToServer
 {
     [Serializable]
-    public class ChangeItemsInEquipment : INetworkPackage
+    public class ChangeItemsInEquipment : INetworkRequest
     {
         public int Slot1 { get; set; }
         public int Slot2 { get; set; }

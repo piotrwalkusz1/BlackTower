@@ -6,7 +6,7 @@ using System.Text;
 namespace NetworkProject.Connection.ToClient
 {
     [Serializable]
-    public class Dead : INetworkPackage
+    public class Dead : INetworkRequest
     {
         public int IdNet { get; set; }
 

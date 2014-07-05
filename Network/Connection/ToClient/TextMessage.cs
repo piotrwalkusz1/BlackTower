@@ -6,7 +6,7 @@ using System.Text;
 namespace NetworkProject.Connection.ToClient
 {
     [Serializable]
-    public class TextMessage : INetworkPackage
+    public class TextMessage : INetworkRequest
     {
         public string Text { get; set;  }
 

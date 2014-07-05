@@ -21,22 +21,22 @@ namespace NetworkProject.Items
             _bodyParts.Add(new BodyParts.Other());
         }
 
-        public Item GetEquipedItem(BodyPartType slot)
+        public Item GetEquipedItem(BodyPartSlot slot)
         {
             return _bodyParts[(int)slot].EquipedItem;
         }
 
-        public bool CanEquipeItemOnThisBodyPart(Item item, BodyPartType bodyPart)
+        public bool CanEquipeItemOnThisBodyPart(Item item, BodyPartSlot bodyPart)
         {
             return _bodyParts[(int)bodyPart].CanEquipeItemOnThisBodyPart(item);
         }
 
-        public bool IsEmptySlot(BodyPartType bodyPart)
+        public bool IsEmptySlot(BodyPartSlot bodyPart)
         {
             return GetEquipedItem(bodyPart) == null;
         }
 
-        public void EquipeItem(Item item, BodyPartType bodyPartType)
+        public void EquipeItem(Item item, BodyPartSlot bodyPartType)
         {
             BodyPart bodyPart = _bodyParts[(int)bodyPartType];
 

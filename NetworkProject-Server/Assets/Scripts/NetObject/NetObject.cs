@@ -15,21 +15,23 @@ public abstract class NetObject : MonoBehaviour
     protected event Action<IConnectionMember> _sendMessageUpdateEvent;
 
     private Vector3 _positionInLastFrame;
-    private bool _wasMovementInLastFrame;
-
     private float _rotationInLastFrame;
-    private bool _wasRotationInLastFrame;
 
     protected void Awake()
     {
+        InitializePositionAndRotation();
+
         SetVisionFunctionToDefault();
 
-        InitializePositionAndRotation();
+        ApplicationController.AddNetObject(this);
     }
 
-    protected void LateUpdate()
+    public void ResetMessages()
     {
-        MessageFlagsToDefault();
+        _positionInLastFrame = transform.position;
+        _rotationInLastFrame = transform.eulerAngles.y;
+
+        _sendMessageUpdateEvent = null;
     }
 
     public bool IsVisible(Vision vision)
@@ -49,7 +51,7 @@ public abstract class NetObject : MonoBehaviour
 
     public abstract void SendMessageAppeared(IConnectionMember address);
 
-    public void SendMessageUpdate(IConnectionMember address)
+    public virtual void SendMessageUpdate(IConnectionMember address)
     {
         IfChangeSendPositionUpdate(address);
 
@@ -58,23 +60,39 @@ public abstract class NetObject : MonoBehaviour
         InvokeSendMessageUpdateEvent(address);
     }
 
-    public abstract void SendMessageDisappeared(IConnectionMember address);
+    public virtual void SendMessageDisappeared(IConnectionMember address)
+    {
+        var request = new DeleteObject(IdNet);
+        var message = new OutgoingMessage(request);
+        Server.Send(message, address);
+    }
 
     public void SendChangeHpMessage()
     {
-        _sendMessageUpdateEvent += SendChangeHpMessageFuntion;
+        Action<IConnectionMember> function = delegate(IConnectionMember address)
+        {
+            int hp = GetComponent<HealthSystem>().HP;
+            var package = new UpdateHP(IdNet, hp);
+            var message = new OutgoingMessage(package);
+
+            Server.Send(message, address);
+        };
+
+        _sendMessageUpdateEvent += function;
     }
 
     public void SendChangeMaxHpMessage()
     {
-        _sendMessageUpdateEvent += SendChangeMaxHpMessageFunction;
-    }
+        Action<IConnectionMember> function = delegate(IConnectionMember address)
+        {
+            int maxHp = GetComponent<HealthSystem>().MaxHP;
+            var package = new UpdateMaxHP(IdNet, maxHp);
+            var message = new OutgoingMessage(package);
 
-    protected void MessageFlagsToDefault()
-    {
-        CheckChangePositionAndRotation();
+            Server.Send(message, address);
+        };
 
-        _sendMessageUpdateEvent = null;
+        _sendMessageUpdateEvent += function;
     }
 
     protected void SetVisionFunction(Func<Vision, bool> function)
@@ -104,23 +122,14 @@ public abstract class NetObject : MonoBehaviour
         }
     }
 
-    protected void CheckChangePositionAndRotation()
-    {
-        _wasMovementInLastFrame = transform.position != _positionInLastFrame;
-        _wasRotationInLastFrame = transform.eulerAngles.y != _rotationInLastFrame;
-
-        _positionInLastFrame = transform.position;
-        _rotationInLastFrame = transform.eulerAngles.y;
-    }
-
     protected bool IsChangePosition()
     {
-        return _wasMovementInLastFrame;
+        return transform.position != _positionInLastFrame;
     }
 
     protected bool IsChangeRotation()
     {
-        return _wasRotationInLastFrame;
+        return transform.eulerAngles.y != _rotationInLastFrame;
     }
 
     protected void InitializePositionAndRotation()
@@ -140,24 +149,6 @@ public abstract class NetObject : MonoBehaviour
     protected void SetVisionFunctionToDefault()
     {
         SetVisionFunction(DefaultVisionFunction);
-    }
-
-    private void SendChangeHpMessageFuntion(IConnectionMember address)
-    {
-        int hp = GetComponent<HealthSystem>().HP;
-        var package = new UpdateHP(IdNet, hp);
-        var message = new OutgoingMessage(package);
-
-        Server.Send(message, address);
-    }
-
-    private void SendChangeMaxHpMessageFunction(IConnectionMember address)
-    {
-        int maxHp = GetComponent<HealthSystem>().MaxHP;
-        var package = new UpdateMaxHP(IdNet, maxHp);
-        var message = new OutgoingMessage(package);
-
-        Server.Send(message, address);
     }
 
     private bool DefaultVisionFunction(Vision vision)

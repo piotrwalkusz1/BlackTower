@@ -17,6 +17,8 @@ public class Vision : MonoBehaviour
     void Awake()
     {
         Observers = new List<IConnectionMember>();
+
+        ApplicationController.AddVision(this);
     }
 
     void Start()
@@ -24,7 +26,7 @@ public class Vision : MonoBehaviour
         _map = Standard.Settings.GetMap(transform.position);
     }
 
-    void Update()
+    public void UpdateInApplicationController()
     {
         NetObject[] netObjectsInRange = FindNetObjectsInRange();
         NetObject[] netObjectsVisible = SelectNetObjectsVisible(netObjectsInRange);
@@ -116,32 +118,20 @@ public class Vision : MonoBehaviour
 
     private NetObject[] SelectNetObjectsVisible(NetObject[] netObjects)
     {
-        var netObjectsVisible = new List<NetObject>();
-
-        foreach (NetObject netObject in netObjects)
-        {
-            if (netObject.IsVisible(this))
-            {
-                netObjectsVisible.Add(netObject);
-            }
-        }
+        var netObjectsVisible = from netObject in netObjects
+                  where netObject.IsVisible(this)
+                  select netObject;
 
         return netObjectsVisible.ToArray();
     }
 
     private NetObject[] SelectNetObjectsMustUpdate(NetObject[] netObjects)
     {
-        var netObjectsMoved = new List<NetObject>();
+        var netObjectsMusUpdate = from netObject in netObjects
+                                  where netObject.IsMustUpdate()
+                                  select netObject;
 
-        foreach (NetObject netObject in netObjects)
-        {
-            if (netObject.IsMustUpdate())
-            {
-                netObjectsMoved.Add(netObject);
-            }
-        }
-
-        return netObjectsMoved.ToArray();
+        return netObjectsMusUpdate.ToArray();
     }
 
     private void SendToObserversObjectsAppeared(NetObject[] netObjects)

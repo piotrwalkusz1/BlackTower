@@ -10,9 +10,9 @@ namespace NetworkProject.Connection.ToClient
     public class CreateMonster : Create
     {
         public int IdMonster { get; set; }
-        public Stats MonsterStats { get; set; }
+        public IStats MonsterStats { get; set; }
 
-        public CreateMonster(int idNet, Vector3 position, float rotation, int idMonster, Stats monsterStats)
+        public CreateMonster(int idNet, Vector3 position, float rotation, int idMonster, IStats monsterStats)
         {
             IdNet = idNet;
             Position = position;

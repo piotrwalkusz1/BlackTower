@@ -6,7 +6,7 @@ using System.Text;
 namespace NetworkProject.Connection.ToServer
 {
     [Serializable]
-    public class LoginToGame : INetworkPackage
+    public class LoginToGame : INetworkRequest
     {
         public string Login { get; set; }
         public string Password { get; set; }

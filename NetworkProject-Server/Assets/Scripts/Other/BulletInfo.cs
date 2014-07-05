@@ -10,4 +10,5 @@ public class BulletInfo
     public Vector3 _direction;
     public AttackInfo _attackInfo;
     public int _shooterId;
+    public int _bulletType;
 }

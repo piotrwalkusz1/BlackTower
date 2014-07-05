@@ -20,7 +20,7 @@ namespace NetworkProject.Items.Repository
             IdItem = idItem;
         }
 
-        public override void ApplyItemStats(Stats stats)
+        public override void ApplyItemStats(IStats stats)
         {
             stats.MovementSpeed += _movementSpeed;
         }

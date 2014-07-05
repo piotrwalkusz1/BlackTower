@@ -14,7 +14,7 @@ namespace NetworkProject.Requirements
             _requiredLvl = int.Parse(value);
         }
 
-        public override bool IsRequirementSatisfy(Stats stats)
+        public override bool IsRequirementSatisfy(IStats stats)
         {
             return stats.Lvl >= _requiredLvl;
         }

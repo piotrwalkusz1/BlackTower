@@ -8,13 +8,13 @@ using NetworkProject.Items;
 namespace NetworkProject.Connection.ToClient
 {
     [Serializable]
-    public class UpdateEquipedItem : INetworkPackage
+    public class UpdateEquipedItem : INetworkRequest
     {
         public int IdNet { get; set; }
-        public BodyPartType Slot { get; set; }
+        public BodyPartSlot Slot { get; set; }
         public Item Item { get; set; }
 
-        public UpdateEquipedItem(int idNet, BodyPartType slot, Item item)
+        public UpdateEquipedItem(int idNet, BodyPartSlot slot, Item item)
         {
             IdNet = idNet;
             Slot = slot;

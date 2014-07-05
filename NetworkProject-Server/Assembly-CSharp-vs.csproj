@@ -125,7 +125,6 @@
     <Compile Include="Assets\Scripts\Items\Equipment.cs" />
     <Compile Include="Assets\Scripts\Items\ItemDrop.cs" />
     <Compile Include="Assets\Scripts\Items\ItemExtension.cs" />
-    <Compile Include="Assets\Scripts\MonoBehaviour\Updating.cs" />
     <Compile Include="Assets\Scripts\MonoBehaviour\Vision.cs" />
     <Compile Include="Assets\Scripts\Monsters\Drop.cs" />
     <Compile Include="Assets\Scripts\Monsters\JumperStats.cs" />
@@ -148,6 +147,7 @@
     <Compile Include="Assets\Scripts\NetObject\NetVisualObject.cs" />
     <Compile Include="Assets\Scripts\Other\AttackInfo.cs" />
     <Compile Include="Assets\Scripts\Other\Attacker.cs" />
+    <Compile Include="Assets\Scripts\Other\BulletManager.cs" />
     <Compile Include="Assets\Scripts\Other\BulletInfo.cs" />
     <Compile Include="Assets\Scripts\Other\Damage.cs" />
     <Compile Include="Assets\Scripts\Other\Experience.cs" />
@@ -157,7 +157,7 @@
     <Compile Include="Assets\Scripts\Other\Settings.cs" />
     <Compile Include="Assets\Scripts\Other\StaticRepository.cs" />
     <Compile Include="Assets\Scripts\Other\TextRepository.cs" />
-    <Compile Include="Assets\Scripts\Player\Player.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerCombat.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerEquipment.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerExperience.cs" />
@@ -185,9 +185,12 @@
     <None Include="Assets\Resources\spells.xml" />
     <None Include="Assets\Resources\monsters.xml" />
     <None Include="Assets\Resources\items.xml" />
-    <Reference Include="NetworkProject">
-      <HintPath>C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Server/Assets/Plugins/NetworkProject.dll</HintPath>
-    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Network\NetworkProject.csproj">
+      <Project>{aaa6a575-be26-4699-b4ca-4b5afe80e502}</Project>
+      <Name>NetworkProject</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

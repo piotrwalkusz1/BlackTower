@@ -6,7 +6,7 @@ using System.Text;
 namespace NetworkProject.Connection.ToClient
 {
     [Serializable]
-    public class UpdateExperience : INetworkPackage
+    public class UpdateExperience : INetworkRequest
     {
         public int IdNet { get; set; }
         public int Exp { get; set; }

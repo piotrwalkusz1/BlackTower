@@ -23,7 +23,7 @@ public static class ItemExtension
         return true;
     }
 
-    public static bool CanBeEquipedByPlayerOnThisBodyPart(this Item item, NetPlayer player, BodyPartType bodyPart)
+    public static bool CanBeEquipedByPlayerOnThisBodyPart(this Item item, NetPlayer player, BodyPartSlot bodyPart)
     {
         ItemInfo itemInfo = ItemRepository.GetAnyItem(item.IdItem);
 
@@ -44,7 +44,7 @@ public static class ItemExtension
         return true;
     }
 
-    private static bool IsProperType(ItemInfo itemInfo, BodyPartType bodyPartType)
+    private static bool IsProperType(ItemInfo itemInfo, BodyPartSlot bodyPartType)
     {
         BodyPart bodyPart = IoC.GetBodyPart(bodyPartType);
 

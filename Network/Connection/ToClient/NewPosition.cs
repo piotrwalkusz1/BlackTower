@@ -7,7 +7,7 @@ using UnityEngine;
 namespace NetworkProject.Connection.ToClient
 {
     [Serializable]
-    public class NewPosition : INetworkPackage
+    public class NewPosition : INetworkRequest
     {
         public int IdNet { get; set; }
         public Vector3 Position { get; set; }

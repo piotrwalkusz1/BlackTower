@@ -74,7 +74,7 @@ public static class Server
         }
     }
 
-    private static Action<IncomingMessage> ChooseMethodReceiveMessage(INetworkPackage message)
+    private static Action<IncomingMessage> ChooseMethodReceiveMessage(INetworkRequest message)
     {
         if (message is LoginToGame) return ReceiveMessageLogin;
         else if (message is GoIntoWorld) return ReceiveMessageGoIntoWorld;
@@ -239,7 +239,7 @@ public static class Server
     private static void ReceiveMessageChangeEquipedItem(IncomingMessage message)
     {
         int slot = message.ReadInt();
-        BodyPartType bodyPart = (BodyPartType)message.ReadInt();
+        BodyPartSlot bodyPart = (BodyPartSlot)message.ReadInt();
 
         NetPlayer player = FindAliveNetPlayerByAddress(sender);
         PlayerEquipment eq = player.GetComponent<PlayerEquipment>();
@@ -265,8 +265,8 @@ public static class Server
 
     private static void ReceiveMessageChangeEquipedItems(IncomingMessage message)
     {
-        BodyPartType bodyPart1 = (BodyPartType)message.ReadInt();
-        BodyPartType bodyPart2 = (BodyPartType)message.ReadInt();
+        BodyPartSlot bodyPart1 = (BodyPartSlot)message.ReadInt();
+        BodyPartSlot bodyPart2 = (BodyPartSlot)message.ReadInt();
 
         if (bodyPart1 == bodyPart2)
         {

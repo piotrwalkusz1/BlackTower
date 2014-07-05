@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace NetworkProject.BodyParts
 {
-    public enum BodyPartType
+    public enum BodyPartSlot
     {
         Head,
         Chest,

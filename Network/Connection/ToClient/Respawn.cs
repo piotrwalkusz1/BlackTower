@@ -6,7 +6,7 @@ using System.Text;
 namespace NetworkProject.Connection.ToClient
 {
     [Serializable]
-    public class Respawn : INetworkPackage
+    public class Respawn : INetworkRequest
     {
         public int IdNet { get; set; }
 

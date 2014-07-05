@@ -7,6 +7,6 @@ namespace NetworkProject.Requirements
 {
     public abstract class Requirement
     {
-        public abstract bool IsRequirementSatisfy(Stats stats);
+        public abstract bool IsRequirementSatisfy(IStats stats);
     }
 }

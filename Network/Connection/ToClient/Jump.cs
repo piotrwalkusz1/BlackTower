@@ -6,7 +6,7 @@ using System.Text;
 namespace NetworkProject.Connection.ToClient
 {
     [Serializable]
-    public class Jump : INetworkPackage
+    public class Jump : INetworkRequest
     {
         public int IdNet { get; set; }
 

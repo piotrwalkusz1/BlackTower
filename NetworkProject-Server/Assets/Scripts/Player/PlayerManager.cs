@@ -7,7 +7,7 @@ using NetworkProject.Connection;
 using NetworkProject.Spells;
 using NetworkProject.Items;
 
-public class Player : MonoBehaviour
+public class PlayerManager : MonoBehaviour
 {
     public string Name { get; private set; }
 
@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
     {
         Name = characterData.Name;
 
-        InitializeNetPlayer(idNet);
+        InitializeNetPlayer(idNet, ownerAddress);
 
         InitalizeVision(ownerAddress);
 
@@ -32,39 +32,40 @@ public class Player : MonoBehaviour
         GetComponent<PlayerHealthSystem>().Recuparate(); // musi być na końcu!
     }
 
-    private void InitializeNetPlayer(int idNet)
+    private void InitializeNetPlayer(int idNet, IConnectionMember ownerAddress)
     {
-        var netPlayer = gameObject.AddComponent<NetPlayer>();
+        var netPlayer = GetComponent<NetPlayer>();
         netPlayer.IdNet = idNet;
+        netPlayer.OwnerAddress = ownerAddress;
     }
 
     private void InitalizeVision(IConnectionMember ownerAddress)
     {
-        var vision = gameObject.AddComponent<Vision>();
+        var vision = GetComponent<Vision>();
         vision.AddObserver(ownerAddress);
     }
 
     private void InitializeStats(RegisterCharacter characterData)
     {
-        var stats = gameObject.AddComponent<PlayerStats>();
+        var stats = GetComponent<PlayerStats>();
         stats.Set(characterData);
     }
 
     private void InitializeSpellCaster(List<Spell> spells)
     {
-        var spellCaster = gameObject.AddComponent<SpellCaster>();
+        var spellCaster = GetComponent<SpellCaster>();
         spellCaster.SetSpells(spells);
     }
 
     private void InitializePlayerExperience(int lvl, int exp)
     {
-        var playerExperience = gameObject.AddComponent<PlayerExperience>();
+        var playerExperience = GetComponent<PlayerExperience>();
         playerExperience.Set(lvl, exp);
     }
 
     private void InitializePlayerEquipment()
     {
-        var playerEquipment = gameObject.AddComponent<PlayerEquipment>();
+        var playerEquipment = GetComponent<PlayerEquipment>();
 
         playerEquipment.AddItem(new Item(0)); //temporary
         playerEquipment.AddItem(new Item(1)); //temporary

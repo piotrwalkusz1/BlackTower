@@ -1,11 +1,19 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using NetworkProject;
 
 [System.CLSCompliant(false)]
-public class PlayerStats : MonoBehaviour
+public class PlayerStats : MonoBehaviour, IStats
 {
+    public virtual int Lvl
+    {
+        get
+        {
+            return GetComponent<PlayerExperience>().Lvl;
+        }
+    }   
     public virtual int Hp
     {
         get
@@ -50,6 +58,25 @@ public class PlayerStats : MonoBehaviour
         {
             GetComponent<PlayerCombat>()._attackSpeed = value;
         }
+    } 
+    public virtual int Defense
+    {
+        get
+        {
+            return GetComponent<PlayerHealthSystem>().Defense;
+        }
+        set
+        {
+            GetComponent<PlayerHealthSystem>().Defense = value;
+        }
+    }
+    public virtual Breed Breed { get; set; }
+    public virtual List<int> Damages
+    {
+        get
+        {
+            return new List<int>() { MinDmg, MaxDmg };
+        }
     }
     public virtual int MinDmg
     {
@@ -73,18 +100,6 @@ public class PlayerStats : MonoBehaviour
             GetComponent<PlayerCombat>()._maxDmg = value;
         }
     }
-    public virtual int Defense
-    {
-        get
-        {
-            return GetComponent<PlayerHealthSystem>().Defense;
-        }
-        set
-        {
-            GetComponent<PlayerHealthSystem>().Defense = value;
-        }
-    }
-    public virtual Breed Breed { get; set; }
 
     public void CalculateStatsAndSendUpdate()
     {
@@ -104,38 +119,6 @@ public class PlayerStats : MonoBehaviour
     public void SendUpdateToOtherPlayer()
     {
         GetComponent<NetPlayer>().SendChangeAllStatsMessage();
-    }
-
-    public OwnPlayerStatsPackage GetOwnPlayerStatsPackage()
-    {
-        var package = new OwnPlayerStatsPackage();
-        package._attackSpeed = AttackSpeed;
-        package._breed = Breed;
-        package._defense = Defense;
-        package._hp = Hp;
-        package._hpRegeneration = RegenerationHP;
-        package._maxDmg = MaxDmg;
-        package._maxHp = MaxHP;
-        package._minDmg = MinDmg;
-        package._movementSpeed = MovementSpeed;
-
-        return package;
-    }
-
-    public OtherPlayerStatsPackage GetOtherPlayerStatsPackage()
-    {
-        var package = new OtherPlayerStatsPackage();
-        package._attackSpeed = AttackSpeed;
-        package._breed = Breed;
-        package._defense = Defense;
-        package._hp = Hp;
-        package._hpRegeneration = RegenerationHP;
-        package._maxDmg = MaxDmg;
-        package._maxHp = MaxHP;
-        package._minDmg = MinDmg;
-        package._movementSpeed = MovementSpeed;
-
-        return package;
     }
 
     public void Set(RegisterCharacter characterData)
@@ -160,68 +143,6 @@ public class PlayerStats : MonoBehaviour
 
         ApplyWeapon(eq);
         ApplyArmor(eq);
-    }
-
-    private void ApplyWeapon(PlayerEquipment equipment)
-    {
-        if (equipment._weapon == null)
-        {
-            return;
-        }
-
-        WeaponInfo weapon = ItemRepository.GetWeapon(equipment._weapon.IdItem);
-
-        ApplyWeaponStats(weapon);
-        ApplyItemBenefits(weapon);
-    }
-
-    private void ApplyWeaponStats(WeaponInfo weapon)
-    {
-        MinDmg = weapon._minDmg;
-        MaxDmg = weapon._maxDmg;
-        AttackSpeed = weapon._attackSpeed;
-    }   
-
-    private void ApplyArmor(PlayerEquipment equipment)
-    {
-        if (equipment._armor == null)
-        {
-            return;
-        }
-
-        ArmorInfo armor = ItemRepository.GetArmor(equipment._armor.IdItem);
-
-        ApplyArmorStats(armor);
-        ApplyItemBenefits(armor);
-    }
-
-    private void ApplyArmorStats(ArmorInfo armor)
-    {
-        Defense += armor._defense;
-    }
-
-    private void ApplyItemBenefits(ItemInfo item)
-    {
-        foreach (ItemBenefit benefit in item.GetBenefits())
-        {
-            ApplyBenefit(benefit);
-        }
-    }
-
-    private void ApplyBenefit(ItemBenefit benefit)
-    {
-        var method = ChooseMethodApplyBenefit(benefit._type);
-
-        method(benefit._value);
-    }
-
-    private Action<object> ChooseMethodApplyBenefit(ItemBenefitType type)
-    {
-        switch (type)
-        {
-            default:
-                throw new System.Exception("Nie ma takiego benefitu : " + type.ToString());
-        }
     }
 
     private void StatsToDefault()

@@ -6,7 +6,7 @@ using System.Text;
 namespace NetworkProject.Connection.ToClient
 {
     [Serializable]
-    public class GoIntoWorld : INetworkPackage
+    public class GoIntoWorld : INetworkRequest
     {
         public int MapNumber { get; set; }
 

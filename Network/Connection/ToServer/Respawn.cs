@@ -6,7 +6,7 @@ using System.Text;
 namespace NetworkProject.Connection.ToServer
 {
     [Serializable]
-    public class Respawn : INetworkPackage
+    public class Respawn : INetworkRequest
     {
 
     }

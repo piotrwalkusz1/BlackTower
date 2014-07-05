@@ -7,12 +7,12 @@ using NetworkProject.BodyParts;
 namespace NetworkProject.Connection.ToServer
 {
     [Serializable]
-    public class ChangeEquipedItem : INetworkPackage
+    public class ChangeEquipedItem : INetworkRequest
     {
         public int SlotInEquipment { get; set; }
-        public BodyPartType EquipedItem { get; set; }
+        public BodyPartSlot EquipedItem { get; set; }
 
-        public ChangeEquipedItem(int slotInEquipment, BodyPartType equipedItem)
+        public ChangeEquipedItem(int slotInEquipment, BodyPartSlot equipedItem)
         {
             SlotInEquipment = slotInEquipment;
             EquipedItem = equipedItem;

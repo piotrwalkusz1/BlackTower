@@ -13,17 +13,17 @@ public class PlayerEquipment : Equipment
         return _equipedItems;
     }
 
-    public Item GetEquipedItem(BodyPartType type)
+    public Item GetEquipedItem(BodyPartSlot type)
     {
         return _equipedItems.GetEquipedItem(type);
     }
 
-    public bool IsEmptySlot(BodyPartType bodyPart)
+    public bool IsEmptySlot(BodyPartSlot bodyPart)
     {
         return _equipedItems.IsEmptySlot(bodyPart);
     }
 
-    public void EquipeItem(Item item, BodyPartType bodyPartType)
+    public void EquipeItem(Item item, BodyPartSlot bodyPartType)
     {
         _equipedItems.EquipeItem(item, bodyPartType);
     }
@@ -44,7 +44,7 @@ public class PlayerEquipment : Equipment
         Server.SendMessageUpdateItemInEquipment(Server.ItemToItemInEquipmentPackage(_items[slot]), slot, address);
     }
 
-    public bool CanEquipeItemOnThisBodyPart(ItemInfo item, BodyPartType bodyPart)
+    public bool CanEquipeItemOnThisBodyPart(ItemInfo item, BodyPartSlot bodyPart)
     {
         return _equipedItems.CanEquipeItemOnThisBodyPart(item, bodyPart);
     }

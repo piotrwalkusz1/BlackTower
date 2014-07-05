@@ -20,7 +20,7 @@ namespace NetworkProject.Benefits
             _additionalMaxHp = additionalMaxHp;
         }
 
-        public override void ApplyToStats(Stats stats)
+        public override void ApplyToStats(IStats stats)
         {
             stats.MaxHP += _additionalMaxHp;
         }

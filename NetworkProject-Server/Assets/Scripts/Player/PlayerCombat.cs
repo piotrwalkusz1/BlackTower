@@ -48,6 +48,6 @@ public class PlayerCombat : MonoBehaviour
 
     private bool WeaponIsEquiped()
     {
-        return !GetComponent<PlayerEquipment>().IsEmptySlot(BodyPartType.RightHand);
+        return !GetComponent<PlayerEquipment>().IsEmptySlot(BodyPartSlot.RightHand);
     }
 }

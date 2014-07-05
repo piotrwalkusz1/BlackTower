@@ -9,9 +9,9 @@ namespace NetworkProject.Connection.ToClient
     [Serializable]
     public class CreateOtherPlayer : Create
     {
-        public Stats PlayerStats { get; set; }
+        public IStats PlayerStats { get; set; }
 
-        public CreateOtherPlayer(int idNet, Vector3 position, float rotation, Stats playerStats)
+        public CreateOtherPlayer(int idNet, Vector3 position, float rotation, IStats playerStats)
         {
             IdNet = idNet;
             PlayerStats = playerStats;
