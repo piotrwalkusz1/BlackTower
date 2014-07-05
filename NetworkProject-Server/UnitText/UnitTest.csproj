@@ -75,17 +75,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Assembly-CSharp-Editor.csproj">
-      <Project>{a290f109-0d0d-8b72-33ae-5114b4f75e89}</Project>
-      <Name>Assembly-CSharp-Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Assembly-CSharp.csproj">
+    <ProjectReference Include="..\Assembly-CSharp-vs.csproj">
       <Project>{0f2dd397-ab76-7bfd-4af7-3da8b5b78c82}</Project>
-      <Name>Assembly-CSharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LidgrenNetwork\Lidgren.Network.csproj">
-      <Project>{49ba1c69-6104-41ac-a5d8-b54fa9f696e8}</Project>
-      <Name>Lidgren.Network</Name>
+      <Name>Assembly-CSharp-vs</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

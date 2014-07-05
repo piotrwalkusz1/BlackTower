@@ -47,6 +47,8 @@
     <Compile Include="Combat\Bullet.cs" />
     <Compile Include="Combat\Bullets.cs" />
     <Compile Include="Combat\NormalBullet.cs" />
+    <Compile Include="Connection\ErrorCode.cs" />
+    <Compile Include="Connection\ToClient\ErrorMessage.cs" />
     <Compile Include="Destroy.cs" />
     <Compile Include="IoC.cs" />
     <Compile Include="Benefits\AdditionalMaxHp.cs" />

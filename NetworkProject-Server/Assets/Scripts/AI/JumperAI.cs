@@ -16,7 +16,7 @@ public class JumperAI : MonoBehaviour
 
     private DateTime _lastAttackTime;
 
-    private JumperMovementSystem _movement;
+    private JumperMovement _movement;
     private NetMonster _netMonster;
     private NetPlayer _targetPlayer;
     private DateTime _nextSearchingTime = DateTime.UtcNow;
@@ -31,7 +31,7 @@ public class JumperAI : MonoBehaviour
 
         _lastAttackTime = DateTime.UtcNow;
 
-        _movement = GetComponent<JumperMovementSystem>();
+        _movement = GetComponent<JumperMovement>();
         _netMonster = GetComponent<NetMonster>();
 	}
 	

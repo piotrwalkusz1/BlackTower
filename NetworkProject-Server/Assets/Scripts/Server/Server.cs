@@ -7,6 +7,7 @@ using NetworkProject;
 using NetworkProject.BodyParts;
 using NetworkProject.Connection;
 using NetworkProject.Connection.ToServer;
+using NetworkProject.Items;
 using UnityEngine;
 
 [System.CLSCompliant(false)]
@@ -30,7 +31,7 @@ public static class Server
     {
         _server = Standard.IoC.GetImplementationServer();
         _server.Start(config);
-    }       
+    }
 
     public static void Close()
     {
@@ -46,6 +47,13 @@ public static class Server
         }
     }
 
+    public static void SendRequestAsMessage(INetworkRequest request, IConnectionMember address)
+    {
+        var message = new OutgoingMessage(request);
+
+        Send(message, address);
+    }
+
     public static void Send(OutgoingMessage message, IConnectionMember[] addresses)
     {
         foreach (IConnectionMember address in addresses)
@@ -59,14 +67,21 @@ public static class Server
         _server.Send(message, address);
     }
 
+    public static void SendErrorMessage(ErrorCode errorCode, IConnectionMember address)
+    {
+        var request = new NetworkProject.Connection.ToClient.ErrorMessage(errorCode);
+        var message = new OutgoingMessage(request);
+
+        Send(message, address);
+    }
+
     private static void ReceiveMessage(IncomingMessage message)
     {
         try
         {
-            MessageToServerType type = (MessageToServerType)message.ReadInt();
-            ReceiveMessageMethod method = ChooseMethodReceiveMessage(type);
+            Action<IncomingMessage> method = ChooseMethodReceiveMessage(message.Request);
             IConnectionMember sender = message.Sender;
-            method(message, sender);
+            method(message);
         }
         catch (Exception ex)
         {
@@ -74,148 +89,140 @@ public static class Server
         }
     }
 
-    private static Action<IncomingMessage> ChooseMethodReceiveMessage(INetworkRequest message)
+    private static Action<IncomingMessage> ChooseMethodReceiveMessage(INetworkRequest request)
     {
-        if (message is LoginToGame) return ReceiveMessageLogin;
-        else if (message is GoIntoWorld) return ReceiveMessageGoIntoWorld;
-        else if (message is PlayerMove) return ReceiveMessagePlayerMove;
-        else if (message is PlayerJump) return ReceiveMessagePlayerJump;
-        else if (message is PlayerRotation) return ReceiveMessagePlayerRotation;
-        else if (message is PickItem) return ReceiveMessagePickItem;
-        else if (message is Attack) return ReceiveMessageAttack;
-        else if (message is Respawn) return ReceiveMessageRespawn;
-        else if (message is ChangeItemsInEquipment) return ReceiveMessageChangeItemsInEquipment;
-        else if (message is ChangeEquipedItem) return ReceiveMessageChangeEquipedItem;
-        else if (message is ChangeEquipedItems) return ReceiveMessageChangeEquipedItems;
-        else if (message is UseSpell) return ReceiveMessageUseSpell;
+        if (request is LoginToGame) return ReceiveMessageLogin;
+        else if (request is GoIntoWorld) return ReceiveMessageGoIntoWorld;
+        else if (request is PlayerMove) return ReceiveMessagePlayerMove;
+        else if (request is PlayerJump) return ReceiveMessagePlayerJump;
+        else if (request is PlayerRotation) return ReceiveMessagePlayerRotation;
+        else if (request is PickItem) return ReceiveMessagePickItem;
+        else if (request is Attack) return ReceiveMessageAttack;
+        else if (request is Respawn) return ReceiveMessageRespawn;
+        else if (request is ChangeItemsInEquipment) return ReceiveMessageChangeItemsInEquipment;
+        else if (request is ChangeEquipedItem) return ReceiveMessageChangeEquipedItem;
+        else if (request is ChangeEquipedItems) return ReceiveMessageChangeEquipedItems;
+        else if (request is UseSpell) return ReceiveMessageUseSpell;
         else throw new Exception("Nie ma takiego typu żądania!");
     }
 
     #region Receive
 
-    private static void ReceiveMessageLogin(IncomingMessage message)
+    private static void ReceiveMessageLogin(IncomingMessage message) 
     {
-        var request = (LoginToGame)message.Request;
-        
-        RegisterAccount account = AccountsRepository.GetAccountByLogin(login);
-
-        if (account != null && account.CheckPassword(password))
+        try
         {
-            OnlineAccount onlineAccount = AccountsRepository.GetOnlineAccountByIdAccount(account.IdAccount);
-            if (onlineAccount == null)
+            var loginData = (LoginToGame)message.Request;
+
+            OnlineAccount account = AccountRepository.LoginAccount(loginData.Login, loginData.Password, message.Sender);
+
+            var requestToClient = new NetworkProject.Connection.ToClient.GoToChoiceCharacterMenu();
+
+            foreach (RegisterCharacter character in account.GetCharacters())
             {
-                AccountsRepository.LoginAccount(account, sender);
+                var characterData = new CharacterInChoiceMenu(character.Name);
 
-                CharacterChoiceMenuPackage menuInfo = AccountToCharacterChoiceMenuInfo(account);
-
-                SendMessageGoToChoiceCharacterMenu(menuInfo, sender);
+                requestToClient.AddCharacter(characterData);
             }
-            else
-            {
-                AccountsRepository.LogoutAccount(onlineAccount);
-                SendMessageTextMessage(TextRepository.AccountHasAlreadyBeenLogged, sender);
-            }    
-        }        
-        else 
+
+            var messageToClient = new OutgoingMessage(requestToClient);
+
+            Send(messageToClient, message.Sender);
+        }
+        catch (AccountRepositoryException exception)
         {
-            SendMessageWrongLoginOrPassword(sender);
+            switch (exception.ErrorCode)
+            {
+                case AccountRepositoryExceptionCode.WrongLoginOrPassword:
+                    SendErrorMessage(ErrorCode.WrongLoginOrPassword, message.Sender);
+                    break;
+                case AccountRepositoryExceptionCode.CharacterAlreadyLogin:
+                    SendErrorMessage(ErrorCode.AccountAlreadyLogin, message.Sender);
+                    break;
+                default:
+                    MonoBehaviour.print("Inny błąd : " + exception.ErrorCode.ToString() + '\n' + exception.StackTrace);
+                    break;
+            }
         }
     }
 
     private static void ReceiveMessageGoIntoWorld(IncomingMessage message)
     {
-        OnlineAccount account = AccountsRepository.GetOnlineAccountByAddress(sender);
-        if (account != null)
+        OnlineAccount account = AccountRepository.GetOnlineAccountByAddress(message.Sender);
+        GoIntoWorld requestData = (GoIntoWorld)message.Request;
+
+        if (account.IsLoggedCharacter())
         {
-            if (!account.IsLoggedCharacter())
-            {
-                int numberCharacter = message.ReadInt();
-                RegisterAccount registerAccount = AccountsRepository.GetAccountById(account.IdAccount);
-                RegisterCharacter registerCharacter = registerAccount.Characters[numberCharacter];
-                OnlineCharacter onlineCharacter = AccountsRepository.LoginAndCreateCharacter(registerCharacter);
-                OwnPlayerPackage ownPlayer = OnlineCharacterToOwnPlayer(onlineCharacter);
-
-                WorldInfoPackage worldInfo = new WorldInfoPackage();
-                worldInfo.MapNumber = onlineCharacter.NetPlayerObject.GetMap();
-
-                SendMessageGoIntoWorld(worldInfo, sender);
-                SendMessageCreateYourOwnPlayer(ownPlayer, sender);   
-            }
-            else
-            {
-                AccountsRepository.LogoutAndDeleteCharacter(account.OnlineCharacter);
-                SendMessageTextMessage(TextRepository.SomeCharacterHasAlreadyBeenLogged, sender);
-            }            
+            Server.SendErrorMessage(ErrorCode.CharacterAlreadyLogin, message.Sender);
         }
         else
-        {
-            SendMessageTextMessage(TextRepository.AccountIsNotLogged, sender);
+        {  
+            OnlineCharacter player = AccountRepository.LoginCharacter(account, requestData.CharacterSlot);
+
+            player.CreatePlayerInstantiate();
+
+            int map = Standard.Settings.GetMap(player.Instantiate.transform.position);
+            var goIntoWorldRequest = new NetworkProject.Connection.ToClient.GoIntoWorld(map);
+            var goInfoWorldMessage = new OutgoingMessage(goIntoWorldRequest);
+
+            var netPlayer = player.Instantiate.GetComponent<NetPlayer>();
+            var tran = player.Instantiate.transform;
+            var stats = player.Instantiate.GetComponent<PlayerStats>();
+            var createOwnPlayerRequest = new NetworkProject.Connection.ToClient.CreateOwnPlayer(netPlayer.IdNet, tran.position, tran.eulerAngles.y, stats);
+            var createOwnPlayerMessage = new OutgoingMessage(createOwnPlayerRequest);
+
+            Send(goInfoWorldMessage, message.Sender);
+            Send(createOwnPlayerMessage, message.Sender);
         }
     }
 
     private static void ReceiveMessagePlayerMove(IncomingMessage message)
     {
-        NetPlayer player = FindAliveNetPlayerByAddress(sender);
+        var request = (PlayerMove)message.Request;
+        var netPlayer = FindAliveNetPlayerByAddress(message.Sender);
 
-        Vector3 newTargetPosition = message.ReadVector3();
-        player.PlayerMovement.SetNewPosition(newTargetPosition);
+        netPlayer.GetComponent<PlayerMovement>().SetNewPosition(request.NewPosition);
     }
 
     private static void ReceiveMessagePlayerJump(IncomingMessage message)
     {
-        NetPlayer player = FindAliveNetPlayerByAddress(sender);
+        //narazie niepotrzebne
+        //var request = (PlayerJump)message.Request;
+        var netPlayer = FindAliveNetPlayerByAddress(message.Sender);
 
-        Vector3 position = message.ReadVector3();
-        Vector3 direction = message.ReadVector3();
-        player.PlayerMovement.Jump(position, direction);
+        netPlayer.GetComponent<PlayerMovement>().JumpAndSendMessage();
     }
 
     private static void ReceiveMessagePlayerRotation(IncomingMessage message)
     {
-        NetPlayer player = FindAliveNetPlayerByAddress(sender);
+        var request = (PlayerRotation)message.Request;
+        var netPlayer = FindAliveNetPlayerByAddress(message.Sender);
 
-        float rotationY = message.ReadFloat();
-        player.PlayerMovement.SetNewRotation(rotationY);
+        netPlayer.GetComponent<PlayerMovement>().SetNewRotation(request.NewRotation);
     }
 
     private static void ReceiveMessagePickItem(IncomingMessage message)
     {
-        int idObject = message.ReadInt();
-        NetItem netItem = FindNetItemByIdObject(idObject);
+        var request = (PickItem)message.Request;
 
-        if (netItem != null)
-        {
-            NetPlayer player = FindAliveNetPlayerByAddress(sender);
+        var netItem = FindNetItemByIdObject(request.IdNetItem);
+        var player = FindAliveNetPlayerByAddress(message.Sender);
 
-            if (netItem.PlayerIsEnoughCloseToPick(player) && player.Equipment.IsFreePlace())
-            {
-                int numberPlace = player.Equipment.AddItem(netItem.Item);
-
-                ItemInEquipmentPackage item = ItemToItemInEquipmentPackage(netItem.Item);
-
-                SendMessageUpdateItemInEquipment(item, numberPlace, sender);
-
-                SceneBuilder.DeleteObject(netItem.gameObject);
-            }
-        }
-        else
-        {
-            MonoBehaviour.print("Item is null");
-        }
+        netItem.TryPickByPlayer(player);
     }
 
     private static void ReceiveMessageAttack(IncomingMessage message)
     {
-        Vector3 direction = message.ReadVector3();
+        var attackData = (Attack)message.Request;
 
-        OnlineCharacter player = AccountsRepository.GetOnlineCharacterByAddress(sender);
+        var player = FindAliveNetPlayerByAddress(message.Sender);
 
-        player.PlayerCombat.Attack(direction);
+        player.GetComponent<PlayerCombat>().Attack(attackData.Direction);
     }
 
     private static void ReceiveMessageRespawn(IncomingMessage message)
     {
-        NetPlayer player = FindDeadNetPlayerByAddress(sender);
+        NetPlayer player = FindDeadNetPlayerByAddress(message.Sender);
 
         PlayerRespawn respawn = FindNearestPlayerRespawnOnMap(player.GetMap(), player.transform.position);
 
@@ -224,93 +231,80 @@ public static class Server
 
     private static void ReceiveMessageChangeItemsInEquipment(IncomingMessage message)
     {
-        int slot1 = message.ReadInt();
-        int slot2 = message.ReadInt();
+        var request = (ChangeItemsInEquipment)message.Request;
 
-        NetPlayer netPlayer = FindAliveNetPlayerByAddress(sender);
+        NetPlayer netPlayer = FindAliveNetPlayerByAddress(message.Sender);
         Equipment eq = netPlayer.GetComponent<Equipment>();
 
-        eq.ChangeItemInEquipment(slot1, slot2);
+        eq.ChangeItemInEquipment(request.Slot1, request.Slot2);
 
-        eq.SendUpdateSlot(slot1, sender);
-        eq.SendUpdateSlot(slot2, sender);
+        eq.SendUpdateSlot(request.Slot1, message.Sender);
+        eq.SendUpdateSlot(request.Slot2, message.Sender);
     }
 
     private static void ReceiveMessageChangeEquipedItem(IncomingMessage message)
     {
-        int slot = message.ReadInt();
-        BodyPartSlot bodyPart = (BodyPartSlot)message.ReadInt();
+        var request = (ChangeEquipedItem)message.Request;
 
-        NetPlayer player = FindAliveNetPlayerByAddress(sender);
-        PlayerEquipment eq = player.GetComponent<PlayerEquipment>();
+        var player = FindAliveNetPlayerByAddress(message.Sender);
+        var eq = player.GetComponent<PlayerEquipment>();
 
-        Item equipedItem = eq.GetEquipedItem(bodyPart);
-        Item itemInSlot = eq.GetItemBySlot(slot);
+        eq.TryEquipeItemInEquipmentOnThisBodyPart(request.SlotInEquipment, request.EquipedItemSlot);
 
-        if (itemInSlot != null && !itemInSlot.CanBeEquipedByPlayerOnThisBodyPart(player, bodyPart))
-        {
-            throw new Exception("Nie można założyć!");
-        }
+        Item equipedItem = eq.GetEquipedItem(request.EquipedItemSlot);
+        Item itemInEquipment = eq.GetItemBySlot(request.SlotInEquipment);
 
-        eq.EquipeItem(itemInSlot, bodyPart);
-        eq.SetItem(equipedItem, slot);    
+        var updateEquipedItem = new NetworkProject.Connection.ToClient.UpdateEquipedItem(player.IdNet, request.EquipedItemSlot, equipedItem);
+        var updateItemInEquipment = new NetworkProject.Connection.ToClient.UpdateItemInEquipment(player.IdNet, request.SlotInEquipment, itemInEquipment);
 
-        SendMessageUpdateEquipedItem(ItemToItemInEquipmentPackage(itemInSlot), bodyPart, sender);
-        SendMessageUpdateItemInEquipment(ItemToItemInEquipmentPackage(equipedItem), slot, sender);
+        SendRequestAsMessage(updateEquipedItem, message.Sender);
+        SendRequestAsMessage(updateItemInEquipment, message.Sender);
 
         player.GetComponent<PlayerStats>().CalculateStatsAndSendUpdate();
 
-        player.SendUpdateEquipedItems();
+        player.SendUpdateEquipedItem(request.EquipedItemSlot, equipedItem);
     }
 
     private static void ReceiveMessageChangeEquipedItems(IncomingMessage message)
     {
-        BodyPartSlot bodyPart1 = (BodyPartSlot)message.ReadInt();
-        BodyPartSlot bodyPart2 = (BodyPartSlot)message.ReadInt();
+        var request = (ChangeEquipedItems)message.Request;
 
-        if (bodyPart1 == bodyPart2)
-        {
-            throw new Exception("Te same miejsca!");
-        }  
+        var player = FindAliveNetPlayerByAddress(message.Sender);
+        var eq = player.GetComponent<PlayerEquipment>();
 
-        NetPlayer player = FindAliveNetPlayerByAddress(sender);
-        PlayerEquipment eq = player.GetComponent<PlayerEquipment>();
+        eq.TryChangeEquipedItems(request.Slot1, request.Slot2);
 
-        Item item1 = eq.GetEquipedItem(bodyPart1);
-        Item item2 = eq.GetEquipedItem(bodyPart2);
+        Item item1 = eq.GetEquipedItem(request.Slot1);
+        Item item2 = eq.GetEquipedItem(request.Slot2);
 
-        if ((item1 != null && !item1.CanBeEquipedByPlayerOnThisBodyPart(player, bodyPart2)) || (item2 != null && !item2.CanBeEquipedByPlayerOnThisBodyPart(player, bodyPart1)))
-        {
-            throw new Exception("Nie można założyć itemu.");
-        }
+        var updateEquipedItem1 = new NetworkProject.Connection.ToClient.UpdateEquipedItem(player.IdNet, request.Slot1, item1);
+        var updateEquipedItem2 = new NetworkProject.Connection.ToClient.UpdateEquipedItem(player.IdNet, request.Slot2, item2);
 
-        eq.EquipeItem(item1, bodyPart2);
-        eq.EquipeItem(item2, bodyPart1);
-
-        SendMessageUpdateEquipedItem(ItemToItemInEquipmentPackage(item1), bodyPart2, sender);
-        SendMessageUpdateEquipedItem(ItemToItemInEquipmentPackage(item2), bodyPart1, sender);
+        SendRequestAsMessage(updateEquipedItem1, message.Sender);
+        SendRequestAsMessage(updateEquipedItem2, message.Sender);
 
         player.GetComponent<PlayerStats>().CalculateStatsAndSendUpdate();
 
-        player.SendUpdateEquipedItems();
+        player.SendUpdateEquipedItem(request.Slot1, item1);
+        player.SendUpdateEquipedItem(request.Slot2, item2);
     }
 
     private static void ReceiveMessageUseSpell(IncomingMessage message)
     {
-        var player = FindAliveNetPlayerByAddress(sender);
+        var request = (UseSpell)message.Request;
 
-        var spellCastInfo = message.Read<SpellCastPackage>();
+        var player = FindAliveNetPlayerByAddress(message.Sender);
 
         string reason;
-        bool success = player.GetComponent<SpellCaster>().CastSpell(spellCastInfo._idSpell, out reason);
-        
+        bool success = player.GetComponent<SpellCaster>().CastSpell(request.IdSpell, out reason);
+
         if (!success)
         {
             MonoBehaviour.print(reason);
-        } 
+        }
     }
 
-    #endregion 
+    #endregion
 
     private static NetItem FindNetItemByIdObject(int idObject)
     {
@@ -328,32 +322,32 @@ public static class Server
 
     private static NetPlayer FindNetPlayerByAddress(IConnectionMember address)
     {
-        OnlineCharacter onlineCharacter = AccountsRepository.GetOnlineCharacterByAddress(address);
-        return onlineCharacter.NetPlayerObject;
+        OnlineCharacter onlineCharacter = AccountRepository.GetOnlineCharacterByAddress(address);
+        return onlineCharacter.Instantiate.GetComponent<NetPlayer>();
     }
 
     private static NetPlayer FindAliveNetPlayerByAddress(IConnectionMember address)
     {
-        OnlineCharacter onlineCharacter = AccountsRepository.GetOnlineCharacterByAddress(address);
-        
-        if(onlineCharacter.NetPlayerObject.IsDead())
+        var player = FindNetPlayerByAddress(address);
+
+        if (player.GetComponent<PlayerHealthSystem>().IsDead())
         {
-            throw new Exception("Gracz jest martwy");
+            throw new Exception("Gracz jest martwy!");
         }
 
-        return onlineCharacter.NetPlayerObject;
+        return player;
     }
 
     private static NetPlayer FindDeadNetPlayerByAddress(IConnectionMember address)
     {
-        OnlineCharacter onlineCharacter = AccountsRepository.GetOnlineCharacterByAddress(address);
-        
-        if (!onlineCharacter.NetPlayerObject.IsDead())
+        var player = FindNetPlayerByAddress(address);
+
+        if (!player.GetComponent<PlayerHealthSystem>().IsDead())
         {
-            throw new Exception("Gracz jest żywy");
+            throw new Exception("Gracz jest żywy!");
         }
 
-        return onlineCharacter.NetPlayerObject;
+        return player;
     }
 
     private static PlayerRespawn FindNearestPlayerRespawnOnMap(int map, Vector3 position)

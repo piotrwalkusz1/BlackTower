@@ -49,7 +49,7 @@ public class Equipment : MonoBehaviour
         return index;
     }
 
-    public void SetItem(Item item, int slot)
+    public void SetSlot(Item item, int slot)
     {
         _items[slot] = item;
     }

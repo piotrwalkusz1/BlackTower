@@ -2,7 +2,7 @@
 using System.Collections;
 
 [System.CLSCompliant(false)]
-public class JumperMovementSystem : MovementSystem
+public class JumperMovement : Movement
 {
     public float _moveSpeed;
 

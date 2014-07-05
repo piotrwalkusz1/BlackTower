@@ -1,36 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 using NetworkProject;
+using NetworkProject.Connection;
+using NetworkProject.Connection.ToServer;
 
 public class NetVisualObject : NetObject
 {
     public VisualObjectType _modelType;
 
-    new protected void Awake()
+    public override void SendMessageAppeared(IConnectionMember address)
     {
-        VisionFunctionToDefault();
-    }
-
-    new protected void LateUpdate()
-    {
-
-    }
-
-    public override void SendMessageAppeared(NetworkProject.IConnectionMember address)
-    {
-        var package = new ObjectPackage();
-        package.IdObject = IdNet;
-
-        Server.SendMessageCreateVisualObject(package, (int)_modelType, transform.position, transform.eulerAngles.y, address);
+        var request = new
     }
 
     public override void SendMessageUpdate(IConnectionMember address)
     {
         //empty
-    }
-
-    public override void SendMessageDisappeared(IConnectionMember address)
-    {
-        Server.SendMessageDeleteObject(IdNet, address);
     }
 }

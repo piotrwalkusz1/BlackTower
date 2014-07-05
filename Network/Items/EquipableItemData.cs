@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using NetworkProject.Benefits;
 using NetworkProject.Requirements;
+using NetworkProject.BodyParts;
 
 namespace NetworkProject.Items
 {
@@ -78,6 +79,19 @@ namespace NetworkProject.Items
         public Requirement[] GetRequirement()
         {
             return _requirements.ToArray();
+        }
+
+        public bool CanEquipe(IStats stats)
+        {
+            foreach(Requirement req in _requirements)
+            {
+                if (!req.IsRequirementSatisfy(stats))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private void ApplyBenefits(IStats stats)

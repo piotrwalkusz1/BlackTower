@@ -32,11 +32,11 @@ public class JumperStats : MonsterStats
     {
         get
         {
-            return GetComponent<JumperMovementSystem>()._moveSpeed;
+            return GetComponent<JumperMovement>()._moveSpeed;
         }
         set
         {
-            GetComponent<JumperMovementSystem>()._moveSpeed = value;
+            GetComponent<JumperMovement>()._moveSpeed = value;
         }
     }
 }

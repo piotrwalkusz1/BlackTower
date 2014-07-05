@@ -9,13 +9,13 @@ namespace NetworkProject.Connection.ToServer
     [Serializable]
     public class ChangeEquipedItems : INetworkRequest
     {
-        public BodyPartSlot EquipedItem1;
-        public BodyPartSlot EquipedItem2;
+        public BodyPartSlot Slot1;
+        public BodyPartSlot Slot2;
 
-        public ChangeEquipedItems(BodyPartSlot equipedItem1, BodyPartSlot equipedItem2)
+        public ChangeEquipedItems(BodyPartSlot slot1, BodyPartSlot slot2)
         {
-            EquipedItem1 = equipedItem1;
-            EquipedItem2 = equipedItem2;
+            Slot1 = slot1;
+            Slot2 = slot2;
         }
     }
 }

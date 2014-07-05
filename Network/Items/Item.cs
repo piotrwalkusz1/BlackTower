@@ -13,6 +13,13 @@ namespace NetworkProject.Items
         {
             IdItem = idItem;
         }
+
+        public bool CanEquipe(IStats stats)
+        {
+            EquipableItemData item = (EquipableItemData)ItemRepository.GetItemByIdItem(IdItem);
+
+            return item.CanEquipe(stats);
+        }
     }
 }
 

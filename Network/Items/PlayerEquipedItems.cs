@@ -26,9 +26,11 @@ namespace NetworkProject.Items
             return _bodyParts[(int)slot].EquipedItem;
         }
 
-        public bool CanEquipeItemOnThisBodyPart(Item item, BodyPartSlot bodyPart)
+        public bool CanEquipeItem(Item item, IStats stats)
         {
-            return _bodyParts[(int)bodyPart].CanEquipeItemOnThisBodyPart(item);
+            EquipableItemData itemData = (EquipableItemData)ItemRepository.GetItemByIdItem(item.IdItem);
+
+            return itemData.CanEquipe(stats);
         }
 
         public bool IsEmptySlot(BodyPartSlot bodyPart)

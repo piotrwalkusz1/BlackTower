@@ -19,9 +19,9 @@ namespace Standard
             return new LidgrenServer();
         }
 
-        public static IAccountsRepository GetImplementationAccountsRepository()
+        public static IAccountRepository GetImplementationAccountsRepository()
         {
-            return new AccountsRepositoryInServer();
+            return new AccountRepositoryInServer();
         }
     }
 }

@@ -10,12 +10,12 @@ namespace NetworkProject.Connection.ToServer
     public class ChangeEquipedItem : INetworkRequest
     {
         public int SlotInEquipment { get; set; }
-        public BodyPartSlot EquipedItem { get; set; }
+        public BodyPartSlot EquipedItemSlot { get; set; }
 
         public ChangeEquipedItem(int slotInEquipment, BodyPartSlot equipedItem)
         {
             SlotInEquipment = slotInEquipment;
-            EquipedItem = equipedItem;
+            EquipedItemSlot = equipedItem;
         }
     }
 }

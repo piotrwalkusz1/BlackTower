@@ -4,7 +4,7 @@ using NetworkProject;
 using NetworkProject.Connection;
 
 [System.CLSCompliant(false)]
-public interface IAccountsRepository 
+public interface IAccountRepository 
 {
     void RegisterAccount(RegisterAccount registerAccount);
     void RegisterCharacter(int idAccount, RegisterCharacter registerCharacter);

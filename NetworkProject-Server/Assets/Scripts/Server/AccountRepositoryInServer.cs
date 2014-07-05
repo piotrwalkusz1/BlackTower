@@ -6,7 +6,7 @@ using NetworkProject;
 using NetworkProject.Connection;
 
 [System.CLSCompliant(false)]
-public class AccountsRepositoryInServer : IAccountsRepository
+public class AccountRepositoryInServer : IAccountRepository
 {
     private List<RegisterAccount> _registerAccounts = new List<RegisterAccount>();
     private List<OnlineAccount> _onlineAccounts = new List<OnlineAccount>();
@@ -14,7 +14,7 @@ public class AccountsRepositoryInServer : IAccountsRepository
     private int _nextIdAccount = 0;
     private int _nextIdCharacter = 0;
 
-    public AccountsRepositoryInServer()
+    public AccountRepositoryInServer()
     {
         RegisterAccount account = new RegisterAccount();
         account.Login = "Login";
@@ -71,9 +71,9 @@ public class AccountsRepositoryInServer : IAccountsRepository
         return onlineAccount != null;
     }
 
-    public bool IsAccountLogged(RegisterAccount account)
+    public bool IsAccountLogged(int idAccount)
     {
-        OnlineAccount onlineAccount = GetOnlineAccountByLogin(account.Login);
+        OnlineAccount onlineAccount = GetOnlineAccountByIdAccount(idAccount);
         return onlineAccount != null;
     }
 
@@ -121,6 +121,11 @@ public class AccountsRepositoryInServer : IAccountsRepository
 
     public OnlineAccount LoginAccount(int idAccount, IConnectionMember address)
     {
+        if (IsAccountLogged(idAccount))
+        {
+            throw new AccountRepositoryException(AccountRepositoryExceptionCode.AccountAlreadyLogin);
+        }
+
         OnlineAccount onlineAccount = new OnlineAccount(idAccount, address);
         _onlineAccounts.Add(onlineAccount);
         return onlineAccount;

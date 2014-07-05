@@ -4,11 +4,11 @@ using NetworkProject;
 using NetworkProject.Connection;
 
 [System.CLSCompliant(false)]
-public static class AccountsRepository
+public static class AccountRepository
 {
-    private static IAccountsRepository _accountRepository;
+    private static IAccountRepository _accountRepository;
 
-    static AccountsRepository()
+    static AccountRepository()
     {
         _accountRepository = Standard.IoC.GetImplementationAccountsRepository();
     }
@@ -23,9 +23,7 @@ public static class AccountsRepository
         }
         else
         {
-            MonoBehaviour.print("Złe hasło.");
-
-            return null;
+            throw new AccountRepositoryException(AccountRepositoryExceptionCode.WrongLoginOrPassword);
         }
     }
 

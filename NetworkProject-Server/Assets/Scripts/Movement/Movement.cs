@@ -2,7 +2,7 @@
 using System.Collections;
 
 [System.CLSCompliant(false)]
-public class MovementSystem : MonoBehaviour
+public class Movement : MonoBehaviour
 {
     public virtual void Stop()
     {

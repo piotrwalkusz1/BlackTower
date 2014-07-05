@@ -21,7 +21,7 @@ public class OnlineCharacter
     {
         get
         {
-            RegisterAccount account = AccountsRepository.GetAccountById(MyAccount.IdAccount);
+            RegisterAccount account = AccountRepository.GetAccountById(MyAccount.IdAccount);
             return account.Characters[CharacterSlotInAccount];
         }
     }

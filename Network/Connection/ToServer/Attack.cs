@@ -9,11 +9,11 @@ namespace NetworkProject.Connection.ToServer
     [Serializable]
     public class Attack : INetworkRequest
     {
-        public Vector3 RotationAttack { get; set; }
+        public Vector3 Direction { get; set; }
 
-        public Attack(Vector3 rotationAttack)
+        public Attack(Vector3 direction)
         {
-            RotationAttack = rotationAttack;
+            Direction = direction;
         }
     }
 }

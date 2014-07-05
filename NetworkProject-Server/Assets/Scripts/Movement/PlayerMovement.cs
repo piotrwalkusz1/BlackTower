@@ -2,7 +2,7 @@
 using System.Collections;
 
 [System.CLSCompliant(false)]
-public class PlayerMovementSystem : MovementSystem
+public class PlayerMovement : Movement
 {
     private NetPlayer _netPlayer;
 
@@ -11,7 +11,7 @@ public class PlayerMovementSystem : MovementSystem
         _netPlayer = GetComponent<NetPlayer>();
     }
 
-    virtual public void Jump(Vector3 position, Vector3 direction)
+    virtual public void JumpAndSendMessage()
     {
         _netPlayer.SendJumpMessage();
     }
