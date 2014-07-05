@@ -119,26 +119,21 @@ public class AccountsRepositoryInServer : IAccountsRepository
         }
     }
 
-    public OnlineAccount LoginAccount(RegisterAccount account, IConnectionMember address)
+    public OnlineAccount LoginAccount(int idAccount, IConnectionMember address)
     {
-        OnlineAccount onlineAccount = new OnlineAccount(account);
-        onlineAccount.Address = address;
+        OnlineAccount onlineAccount = new OnlineAccount(idAccount, address);
         _onlineAccounts.Add(onlineAccount);
         return onlineAccount;
     }
 
-    public OnlineCharacter LoginCharacter(RegisterCharacter character)
+    public OnlineCharacter LoginCharacter(OnlineAccount account, int characterSlotInAccount)
     {
-        OnlineAccount onlineAccount = GetOnlineAccountByIdCharacter(character.IdCharacter);
-
-        if (onlineAccount.Address == null)
+        if (account.IsLoggedCharacter())
         {
-            throw new System.SystemException("Nie ");
+            throw new System.Exception("Na tym koncie jest już zalogowana postać!");
         }
 
-        OnlineCharacter onlineCharacter = onlineAccount.CreateOnlineCharacter(playerInstantiate.GetComponent<NetPlayer>(), );
-
-        onlineCharacter.SendUpdateMessageToOwner();
+        OnlineCharacter onlineCharacter = account.LoginCharacter(characterSlotInAccount);
         
         return onlineCharacter;
     }
@@ -153,13 +148,13 @@ public class AccountsRepositoryInServer : IAccountsRepository
         _onlineAccounts.Remove(account);
     }
 
-    public void LogoutCharacter(OnlineCharacter character)
+    public void LogoutAndDeleteCharacter(OnlineCharacter character)
     {
+        character.UpdateRegisterCharacter();
+
         SceneBuilder.DeletePlayer(character);
 
-        UpdateRegisterCharacter(character.CharacterSlot, character.NetPlayerObject);
-
-        character.MyAccount.DeleteOnlineCharacter();
+        character.MyAccount.LogoutCharacter();
     }
 
     public RegisterAccount GetAccountByLogin(string login)
@@ -245,23 +240,11 @@ public class AccountsRepositoryInServer : IAccountsRepository
         return null;
     }
 
-    public OnlineCharacter GetOnlineCharacterByNetId(int netPlayerObjectId)
+    public OnlineCharacter GetOnlineCharacterByIdNet(int idNet)
     {
         foreach (OnlineAccount account in _onlineAccounts)
         {
-            if (account.IsLoggedCharacter() && account.OnlineCharacter.NetPlayerObject.IdNet == netPlayerObjectId)
-            {
-                return account.OnlineCharacter;
-            }
-        }
-        return null;
-    }
-
-    public OnlineCharacter GetOnlineCharacterByName(string name)
-    {
-        foreach (OnlineAccount account in _onlineAccounts)
-        {
-            if (account.IsLoggedCharacter() && account.OnlineCharacter.NetPlayerObject.Name == name)
+            if (account.IsLoggedCharacter() && account.OnlineCharacter.Instantiate.GetComponent<NetPlayer>().IdNet == idNet)
             {
                 return account.OnlineCharacter;
             }
@@ -279,12 +262,5 @@ public class AccountsRepositoryInServer : IAccountsRepository
             }
         }
         return null;
-    }
-
-    public void UpdateRegisterCharacter(int idCharater, GameObject player)
-    {
-        RegisterCharacter charater = GetCharacterByIdCharacter(idCharater);
-
-        charater.Update(player);
     }
 }

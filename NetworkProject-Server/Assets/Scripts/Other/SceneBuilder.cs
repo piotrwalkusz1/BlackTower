@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using NetworkProject;
+using NetworkProject.Combat;
+using NetworkProject.Monsters;
+using NetworkProject.Connection;
 
 [System.CLSCompliant(false)]
 public static class SceneBuilder
@@ -12,50 +15,45 @@ public static class SceneBuilder
         Vector3 position = characterData.EndPosition;
         GameObject playerInstantiate = GameObject.Instantiate(StaticRepository.Prefabs._player, position, Quaternion.Euler(Vector3.zero)) as GameObject;
 
-        NetPlayer netPlayer = playerInstantiate.GetComponent<NetPlayer>();
-        netPlayer.InitializePlayer(GetNextNetId(), characterData, address);
+        PlayerManager player = playerInstantiate.GetComponent<PlayerManager>();
+        player.Initialize(GetNextIdNet(), characterData, address);
 
         return playerInstantiate;
     }
 
     public static GameObject CreateBullet(BulletInfo bulletInfo, GameObject attacker)
     {
-        GameObject bullet = GameObject.Instantiate(StaticRepository.Prefabs._bullet, bulletInfo._position, Quaternion.LookRotation(bulletInfo._direction)) as GameObject;
+        GameObject instantiate = bulletInfo.Bullet.CreateInstantiate(bulletInfo.Position, bulletInfo.Rotation);
 
-        Damage damage = bullet.GetComponent<Damage>();
-        damage._attackInfo = bulletInfo._attackInfo;
+        Damage damage = instantiate.GetComponent<Damage>();
+        damage._attackInfo = bulletInfo.AttackInfo;
         damage._attacker = attacker;
-        
 
-        bullet.rigidbody.AddRelativeForce(Vector3.forward * bulletInfo._speed, ForceMode.VelocityChange);
+        NetBullet netBullet = instantiate.GetComponent<NetBullet>();
+        netBullet.IdNet = GetNextIdNet();
 
-        NetBullet netBullet = bullet.GetComponent<NetBullet>();
-        netBullet.IdNet = _nextIdNet;
-        _nextIdNet++;
-        netBullet.Speed = bulletInfo._speed;
+        GameObject.Destroy(instantiate, bulletInfo.LiveTime);
 
-        GameObject.Destroy(bullet, bulletInfo._liveTime);
-
-        return bullet;
+        return instantiate;
     }
 
-    public static GameObject CreateMonster(MonsterType monsterType, Vector3 position, float rotation)
+    public static GameObject CreateMonster(MonsterName monsterName, Vector3 position, float rotation)
     {
-        GameObject monster = StaticRepository.Prefabs.GetMonster(monsterType);
+        GameObject instantiate = StaticRepository.Prefabs.GetMonster(monsterName);
 
-        monster = GameObject.Instantiate(monster, position, Quaternion.Euler(0, rotation, 0)) as GameObject;
+        instantiate = GameObject.Instantiate(instantiate, position, Quaternion.Euler(0, rotation, 0)) as GameObject;
 
-        MonsterInfo monsterInfo = MonsterRepository.GetMonsterInfo(monsterType);
+        Monster monsterInfo = MonsterRepository.GetMonster(monsterName);
 
-        NetMonster netMonster = monster.GetComponent<NetMonster>();
-        netMonster.IdNet = GetNextNetId();
+        NetMonster netMonster = instantiate.GetComponent<NetMonster>();
+        netMonster.IdNet = GetNextIdNet();
 
-        MonsterStats stats = monster.GetComponent<MonsterStats>();
+        MonsterStats stats = instantiate.GetComponent<MonsterStats>();
         stats.MaxHp = monsterInfo._maxHp;
         stats.HP = monsterInfo._maxHp;
         stats.MovingSpeed = monsterInfo._movingSpeed;
 
-        return monster;
+        return instantiate;
     }
 
     public static GameObject CreateItem(int idItem, Vector3 position)
@@ -63,8 +61,7 @@ public static class SceneBuilder
         GameObject item = GameObject.Instantiate(StaticRepository.Prefabs._item, position, Quaternion.Euler(Vector3.zero)) as GameObject;
 
         NetItem netItem = item.GetComponent<NetItem>();
-        netItem.IdNet = _nextIdNet;
-        _nextIdNet++;
+        netItem.IdNet = GetNextIdNet();
         netItem.Item = new Item(idItem);
 
         return item;
@@ -90,7 +87,7 @@ public static class SceneBuilder
 
     public static void DeletePlayer(OnlineCharacter onlineCharacter)
     {
-        GameObject.Destroy(onlineCharacter.GameObject);
+        GameObject.Destroy(onlineCharacter.Instantiate);
     }
 
     public static void DeleteObject(GameObject gameObject)
@@ -98,7 +95,7 @@ public static class SceneBuilder
         MonoBehaviour.Destroy(gameObject);
     }
 
-    public static int GetNextNetId()
+    public static int GetNextIdNet()
     {
         return _nextIdNet++;
     }

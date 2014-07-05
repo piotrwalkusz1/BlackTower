@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NetworkProject;
-using NetworkProject.Items.Repository;
+using NetworkProject.Items;
 
 namespace NetworkProject.BodyParts
 {
     public class Other : BodyPart
     {
-        public override bool CanEquipeItemOnThisBodyPart(Item item)
+        public override bool CanEquipeItemOnThisBodyPart(ItemData item)
         {
-            return item is Addition;
+            return item is AdditionData;
         }
     }
 }

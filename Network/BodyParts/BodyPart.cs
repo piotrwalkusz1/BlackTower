@@ -13,12 +13,12 @@ namespace NetworkProject.BodyParts
 
         public bool CanEquipeItemOnThisBodyPart(Item item)
         {
-            var itemData = Items.Repository.ItemRepository.GetItemByIdItem(item.IdItem);
+            var itemData = ItemRepository.GetItemByIdItem(item.IdItem);
 
             return CanEquipeItemOnThisBodyPart(itemData);
         }
 
-        public abstract bool CanEquipeItemOnThisBodyPart(Items.Repository.Item item);
+        public abstract bool CanEquipeItemOnThisBodyPart(ItemData item);
     }
 }
 

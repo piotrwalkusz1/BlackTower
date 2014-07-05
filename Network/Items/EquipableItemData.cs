@@ -6,20 +6,20 @@ using System.Text;
 using NetworkProject.Benefits;
 using NetworkProject.Requirements;
 
-namespace NetworkProject.Items.Repository
+namespace NetworkProject.Items
 {
     [Serializable]
-    public abstract class EquipableItem : Item
+    public abstract class EquipableItemData : ItemData
     {
         protected List<Benefit> _benefits = new List<Benefit>();
         protected List<Requirement> _requirements = new List<Requirement>();
 
-        public EquipableItem()
+        public EquipableItemData()
         {
 
         }
 
-        public EquipableItem(int idItem)
+        public EquipableItemData(int idItem)
         {
             IdItem = idItem;
         }

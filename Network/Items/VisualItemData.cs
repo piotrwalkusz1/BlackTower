@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NetworkProject.Items.Repository
+namespace NetworkProject.Items
 {
     [Serializable]
-    public class VisualItem : Item
+    public class VisualItemData : ItemData
     {
         public override int IdItem
         {
@@ -19,7 +19,7 @@ namespace NetworkProject.Items.Repository
                 ItemData.IdItem = value;
             }
         }
-        public virtual Item ItemData 
+        public virtual ItemData ItemData 
         {
             get
             {
@@ -29,19 +29,19 @@ namespace NetworkProject.Items.Repository
         public int IdTexture { get; set; }
         public int IdPrefabOnScene { get; set; }
 
-        private Item _itemData;
+        private ItemData _itemData;
 
-        public VisualItem()
+        public VisualItemData()
         {
 
         }
 
-        public VisualItem(Item itemData)
+        public VisualItemData(ItemData itemData)
         {
             _itemData = itemData;
         }
 
-        public VisualItem(Item itemData, int idTexture, int idPrefabOnScene)
+        public VisualItemData(ItemData itemData, int idTexture, int idPrefabOnScene)
         {
             _itemData = itemData;
             IdTexture = idTexture;

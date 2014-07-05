@@ -2,6 +2,8 @@
 using System.Collections;
 using NetworkProject;
 using NetworkProject.BodyParts;
+using NetworkProject.Items;
+using NetworkProject.Connection;
 
 [System.CLSCompliant(false)]
 public class PlayerEquipment : Equipment
@@ -28,23 +30,7 @@ public class PlayerEquipment : Equipment
         _equipedItems.EquipeItem(item, bodyPartType);
     }
 
-    public void SendUpdateAllSlots()
-    {
-        IConnectionMember address = GetComponent<NetPlayer>().Address;
-        for(int i = 0; i < _items.Count; i++)
-        {
-            Server.SendMessageUpdateItemInEquipment(Server.ItemToItemInEquipmentPackage(_items[i]), i, address);
-        }
-        
-    }
-
-    public void SendUpdateSlot(int slot)
-    {
-        IConnectionMember address = GetComponent<NetPlayer>().Address;
-        Server.SendMessageUpdateItemInEquipment(Server.ItemToItemInEquipmentPackage(_items[slot]), slot, address);
-    }
-
-    public bool CanEquipeItemOnThisBodyPart(ItemInfo item, BodyPartSlot bodyPart)
+    public bool CanEquipeItemOnThisBodyPart(Item item, BodyPartSlot bodyPart)
     {
         return _equipedItems.CanEquipeItemOnThisBodyPart(item, bodyPart);
     }

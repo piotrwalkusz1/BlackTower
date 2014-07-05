@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using NetworkProject.Items;
 
 [System.CLSCompliant(false)]
 public class Drop : MonoBehaviour
@@ -20,9 +21,9 @@ public class Drop : MonoBehaviour
 
     public void DropItems()
     {
-        foreach (ItemDrop item in _itemsDrop)
+        foreach (ItemDrop drop in _itemsDrop)
         {
-            if (DrawLots(item._chance))
+            if (DrawLots(drop.Chances))
             {
                 Vector3? position = CalculatePosition();
 
@@ -32,7 +33,7 @@ public class Drop : MonoBehaviour
                 }
                 else
                 {
-                    SceneBuilder.CreateItem(item._idItem, position.Value);
+                    SceneBuilder.CreateItem(drop.Item.IdItem, position.Value);
                 }
             }
         }

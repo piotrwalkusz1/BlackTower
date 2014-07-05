@@ -50,8 +50,8 @@
     <Compile Include="Destroy.cs" />
     <Compile Include="IoC.cs" />
     <Compile Include="Benefits\AdditionalMaxHp.cs" />
-    <Compile Include="Items\Drop.cs" />
-    <Compile Include="Items\Repository\Addition.cs" />
+    <Compile Include="Items\ItemDrop.cs" />
+    <Compile Include="Items\AdditionData.cs" />
     <Compile Include="BodyParts\BodyPart.cs" />
     <Compile Include="BodyParts\Chest.cs" />
     <Compile Include="BodyParts\Feet.cs" />
@@ -62,12 +62,12 @@
     <Compile Include="Breed.cs" />
     <Compile Include="Items\EquipedItems.cs" />
     <Compile Include="Items\Item.cs" />
-    <Compile Include="Items\Repository\EquipableItem.cs" />
+    <Compile Include="Items\EquipableItemData.cs" />
     <Compile Include="Items\ItemType.cs" />
     <Compile Include="Items\PlayerEquipedItems.cs" />
-    <Compile Include="Items\Repository\VisualEquipableItem.cs" />
-    <Compile Include="Items\Repository\ItemRepository.cs" />
-    <Compile Include="Items\Repository\VisualItem.cs" />
+    <Compile Include="Items\VisualEquipableItemData.cs" />
+    <Compile Include="Items\ItemRepository.cs" />
+    <Compile Include="Items\VisualItemData.cs" />
     <Compile Include="Connection\ToClient\Attack.cs" />
     <Compile Include="Connection\ToClient\Create.cs" />
     <Compile Include="Connection\ToClient\CreateBullet.cs" />
@@ -120,10 +120,10 @@
     <Compile Include="BodyParts\BodyPartSlot.cs" />
     <Compile Include="Requirements\Requirement.cs" />
     <Compile Include="Requirements\RequirementType.cs" />
-    <Compile Include="Items\Repository\Shield.cs" />
-    <Compile Include="Items\Repository\Armor.cs" />
-    <Compile Include="Items\Repository\Helmet.cs" />
-    <Compile Include="Items\Repository\Item.cs" />
+    <Compile Include="Items\ShieldData.cs" />
+    <Compile Include="Items\ArmorData.cs" />
+    <Compile Include="Items\HelmetData.cs" />
+    <Compile Include="Items\ItemData.cs" />
     <Compile Include="Monsters\Monster.cs" />
     <Compile Include="Monsters\MonsterType.cs" />
     <Compile Include="Connection\IConnectionMember.cs" />
@@ -132,12 +132,12 @@
     <Compile Include="Connection\OutgoingMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="Items\Repository\Shoes.cs" />
+    <Compile Include="Items\ShoesData.cs" />
     <Compile Include="Spells\Spell.cs" />
     <Compile Include="IStats.cs" />
     <Compile Include="Updating.cs" />
     <Compile Include="VisualObjectType.cs" />
-    <Compile Include="Items\Repository\Weapon.cs" />
+    <Compile Include="Items\WeaponData.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

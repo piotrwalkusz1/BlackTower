@@ -3,16 +3,18 @@ using System.Collections;
 using NetworkProject;
 using NetworkProject.Connection;
 using NetworkProject.Connection.ToClient;
+using NetworkProject.Combat;
 
 [System.CLSCompliant(false)]
 public class NetBullet : NetObject
 {
-    public float Speed { get; set; }
-    public int BulletType { get; set; }
-
     public override void SendMessageAppeared(IConnectionMember address)
     {
-        var request = new CreateBullet(IdNet, )
+        var bulletManager = GetComponent<BulletManager>();
+        var request = new CreateBullet(IdNet, transform.position, transform.eulerAngles, bulletManager.Bullet);
+        var message = new OutgoingMessage(request);
+
+        Server.Send(message, address);
     }
 
     public override void SendMessageUpdate(IConnectionMember address)

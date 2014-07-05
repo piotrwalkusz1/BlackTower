@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 
-namespace NetworkProject.Items.Repository
+namespace NetworkProject.Items
 {
     [Serializable]
-    public class Addition : EquipableItem
+    public class AdditionData : EquipableItemData
     {
-        public Addition(int idItem)
+        public AdditionData(int idItem)
         {
             IdItem = idItem;
         }

@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NetworkProject.Items.Repository
+namespace NetworkProject.Items
 {
-    public class Helmet : EquipableItem
+    public class HelmetData : EquipableItemData
     {
         public int _defense;
 
-        public Helmet()
+        public HelmetData()
         {
 
         }
 
-        public Helmet(int idItem)
+        public HelmetData(int idItem)
         {
             IdItem = idItem;
         }

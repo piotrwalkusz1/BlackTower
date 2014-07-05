@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 
-namespace NetworkProject.Items.Repository
+namespace NetworkProject.Items
 {
     [Serializable]
-    public class Item
+    public class ItemData
     {
         public virtual int IdItem
         {
@@ -23,12 +23,12 @@ namespace NetworkProject.Items.Repository
 
         private int _idItem;
 
-        public Item()
+        public ItemData()
         {
 
         }
 
-        public Item(int idItem)
+        public ItemData(int idItem)
         {
             _idItem = idItem;
         }

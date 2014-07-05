@@ -4,7 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using NetworkProject;
-using NetworkProject.Items.Repository;
+using NetworkProject.Items;
+using NetworkProject.Monsters;
 
 [System.CLSCompliant(false)]
 public class ApplicationController : MonoBehaviour
@@ -17,6 +18,7 @@ public class ApplicationController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         ItemRepository.LoadItemsFromResources();
+        MonsterRepository.LoadMonstersFromResources();
 
         Application.LoadLevelAdditive("Map1");
     }

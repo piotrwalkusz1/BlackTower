@@ -7,14 +7,14 @@ using System.Xml.Serialization;
 using System.IO;
 using UnityEngine;
 
-namespace NetworkProject.Items.Repository
+namespace NetworkProject.Items
 {
     [Serializable]
     public static class ItemRepository
     {
-        private static List<Item> _items;
+        private static List<ItemData> _items;
 
-        public static Item GetItemByIdItem(int idItem)
+        public static ItemData GetItemByIdItem(int idItem)
         {
             return _items.Find(x => x.IdItem == idItem);
         }
@@ -28,16 +28,16 @@ namespace NetworkProject.Items.Repository
         {
             var textAsset = Resources.Load<TextAsset>(pathToItemsInResources);
             var reader = new StringReader(textAsset.text);
-            var serializer = new XmlSerializer(typeof(List<Item>));
+            var serializer = new XmlSerializer(typeof(List<ItemData>));
 
-            List<Item> items = (List<Item>)serializer.Deserialize(reader);
+            List<ItemData> items = (List<ItemData>)serializer.Deserialize(reader);
 
             _items = items;
         }
 
-        public static void SaveItems(string path, List<Item> items)
+        public static void SaveItems(string path, List<ItemData> items)
         {
-            var serializer = new XmlSerializer(typeof(List<Item>));
+            var serializer = new XmlSerializer(typeof(List<ItemData>));
 
             using (var writter = new StreamWriter(path))
             {

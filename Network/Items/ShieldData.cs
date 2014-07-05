@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NetworkProject.Items.Repository
+namespace NetworkProject.Items
 {
     [Serializable]
-    public class Shield : EquipableItem
+    public class ShieldData : EquipableItemData
     {
         public int _defense;
 
-        public Shield(int idItem) : base(idItem)
+        public ShieldData(int idItem) : base(idItem)
         {
 
         }

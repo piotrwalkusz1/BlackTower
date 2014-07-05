@@ -42,6 +42,8 @@ namespace NetworkProject.Items
 
             bodyPart.EquipedItem = item;
         }
+        
+
     }
 }
 

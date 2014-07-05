@@ -3,51 +3,52 @@ using System;
 using System.Collections;
 using NetworkProject;
 using NetworkProject.BodyParts;
+using NetworkProject.Combat;
 
 [System.CLSCompliant(false)]
 public class PlayerCombat : MonoBehaviour
 {
-    public float _attackSpeed;
-    public int _minDmg;
-    public int _maxDmg;
-    public Transform _bulletRespawn;
+    public float AttackSpeed { get; set; }
+    public int MinDmg { get; set; }
+    public int MaxDmg { get; set; }
+    public Transform BulletRespawn { get; set; }
+    public float BulletSpeed { get; set; }
+    public float BulletLifeTime { get; set; }
 
-    private NetPlayer _netPlayer;
-
-    private const float _speed = 10f;
-    private const float _liveTime = 5f;
+    private Func<Bullet> _createBulletFunction;
 
     void Awake()
     {
-        _netPlayer = GetComponent<NetPlayer>();
+        _createBulletFunction = delegate()
+        {
+            return new NormalBullet(BulletSpeed);
+        };
     }
     
     public void Attack(Vector3 direction)
     {
-        if (!WeaponIsEquiped())
+        if (WeaponIsEquiped())
         {
-            return;
+            Attacker attacker = new Attacker(gameObject);
+            int dmg = UnityEngine.Random.Range(MinDmg, MaxDmg);
+            AttackInfo attackInfo = new AttackInfo(attacker, dmg, DamageType.Physical);
+
+            BulletInfo bulletInfo = new BulletInfo();
+            bulletInfo.Bullet = _createBulletFunction();
+            bulletInfo.AttackInfo = attackInfo;
+            bulletInfo.LiveTime = BulletLifeTime;
+            bulletInfo.Position = BulletRespawn.position;
+            bulletInfo.Rotation = Quaternion.LookRotation(direction);
+
+            SceneBuilder.CreateBullet(bulletInfo, gameObject);
+
+            GetComponent<NetPlayer>().SendAttackMessage();
         }
-
-        Attacker attacker = new Attacker(gameObject);
-        int dmg = UnityEngine.Random.Range(_minDmg, _maxDmg);
-        AttackInfo attackInfo = new AttackInfo(attacker, dmg, DamageType.Physical);
-
-        BulletInfo bulletInfo = new BulletInfo();
-        bulletInfo._attackInfo = attackInfo;
-        bulletInfo._direction = direction;
-        bulletInfo._liveTime = _liveTime;
-        bulletInfo._position = _bulletRespawn.position;
-        bulletInfo._speed = _speed;
-        bulletInfo._shooterId = GetComponent<NetObject>().IdNet;
-
-        SceneBuilder.CreateBullet(bulletInfo, gameObject);
-
-        _netPlayer.SendAttackMessage();
     }
 
     private bool WeaponIsEquiped()
     {
         return !GetComponent<PlayerEquipment>().IsEmptySlot(BodyPartSlot.RightHand);
     }
+
 }

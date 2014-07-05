@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NetworkProject.Items
 {
-    public struct Drop
+    public struct ItemDrop
     {
         public Item Item
         {
@@ -25,7 +25,7 @@ namespace NetworkProject.Items
         public Item _item;
         public float _chances;
 
-        public Drop(Item item, float chances)
+        public ItemDrop(Item item, float chances)
         {
             _item = item;
             _chances = chances;

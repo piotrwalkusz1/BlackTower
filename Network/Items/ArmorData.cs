@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NetworkProject.Items.Repository
+namespace NetworkProject.Items
 {
     [Serializable]
-    public class Armor : EquipableItem
+    public class ArmorData : EquipableItemData
     {
         public int _defense;
 
-        public Armor()
+        public ArmorData()
         {
 
         }
 
-        public Armor(int idItem)
+        public ArmorData(int idItem)
         {
             IdItem = idItem;
         }

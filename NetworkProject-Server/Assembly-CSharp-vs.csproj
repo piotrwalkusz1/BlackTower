@@ -123,12 +123,10 @@
     <Compile Include="Assets\Scripts\HealthSystem\HealthSystem.cs" />
     <Compile Include="Assets\Scripts\HealthSystem\PlayerHealthSystem.cs" />
     <Compile Include="Assets\Scripts\Items\Equipment.cs" />
-    <Compile Include="Assets\Scripts\Items\ItemDrop.cs" />
     <Compile Include="Assets\Scripts\Items\ItemExtension.cs" />
     <Compile Include="Assets\Scripts\MonoBehaviour\Vision.cs" />
     <Compile Include="Assets\Scripts\Monsters\Drop.cs" />
     <Compile Include="Assets\Scripts\Monsters\JumperStats.cs" />
-    <Compile Include="Assets\Scripts\Monsters\MonsterRepository.cs" />
     <Compile Include="Assets\Scripts\Monsters\MonsterRespawn.cs" />
     <Compile Include="Assets\Scripts\Monsters\MonsterRespawnLimit.cs" />
     <Compile Include="Assets\Scripts\Monsters\MonsterStats.cs" />

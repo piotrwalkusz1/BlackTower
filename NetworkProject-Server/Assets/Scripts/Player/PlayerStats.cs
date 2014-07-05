@@ -3,6 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using NetworkProject;
+using NetworkProject.Connection;
+using NetworkProject.Connection.ToClient;
 
 [System.CLSCompliant(false)]
 public class PlayerStats : MonoBehaviour, IStats
@@ -52,11 +54,11 @@ public class PlayerStats : MonoBehaviour, IStats
     {
         get
         {
-            return GetComponent<PlayerCombat>()._attackSpeed;
+            return GetComponent<PlayerCombat>().AttackSpeed;
         }
         set
         {
-            GetComponent<PlayerCombat>()._attackSpeed = value;
+            GetComponent<PlayerCombat>().AttackSpeed = value;
         }
     } 
     public virtual int Defense
@@ -82,22 +84,22 @@ public class PlayerStats : MonoBehaviour, IStats
     {
         get
         {
-            return GetComponent<PlayerCombat>()._minDmg;
+            return GetComponent<PlayerCombat>().MinDmg;
         }
         set
         {
-            GetComponent<PlayerCombat>()._minDmg = value;
+            GetComponent<PlayerCombat>().MinDmg = value;
         }
     }
     public virtual int MaxDmg
     {
         get
         {
-            return GetComponent<PlayerCombat>()._maxDmg;
+            return GetComponent<PlayerCombat>().MaxDmg;
         }
         set
         {
-            GetComponent<PlayerCombat>()._maxDmg = value;
+            GetComponent<PlayerCombat>().MaxDmg = value;
         }
     }
 
@@ -110,10 +112,11 @@ public class PlayerStats : MonoBehaviour, IStats
 
     public void SendUpdateToOwner()
     {
-        var package = GetOwnPlayerStatsPackage();
-        var address = GetComponent<NetPlayer>().Address;
+        var netPlayer = GetComponent<NetPlayer>();
+        var request = new UpdateAllStats(netPlayer.IdNet, this);
+        var message = new OutgoingMessage(request);
 
-        Server.SendMessageUpdateYourAllStats(package, address);
+        Server.Send(message, netPlayer.OwnerAddress);
     }
 
     public void SendUpdateToOtherPlayer()

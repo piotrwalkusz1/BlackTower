@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using NetworkProject;
+using NetworkProject.Connection;
 
 [System.CLSCompliant(false)]
 public static class AccountsRepository
@@ -9,47 +10,33 @@ public static class AccountsRepository
 
     static AccountsRepository()
     {
-        _accountRepository = IoC.GetImplementationAccountsRepository();
+        _accountRepository = Standard.IoC.GetImplementationAccountsRepository();
     }
 
-    public static bool IsAccountLogged(string login)
+    public static OnlineAccount LoginAccount(string login, string password, IConnectionMember address)
     {
-        return _accountRepository.IsAccountLogged(login);
+        var registerAccount = GetAccountByLogin(login);
+
+        if (registerAccount.CheckPassword(password))
+        {
+            return LoginAccount(registerAccount.IdAccount, address);
+        }
+        else
+        {
+            MonoBehaviour.print("Złe hasło.");
+
+            return null;
+        }
     }
 
-    public static bool IsAccountLogged(IConnectionMember address)
+    public static OnlineAccount LoginAccount(int idAccount, IConnectionMember address)
     {
-        return _accountRepository.IsAccountLogged(address);
+        return _accountRepository.LoginAccount(idAccount, address);
     }
 
-    public static bool IsAccountLogged(RegisterAccount account)
+    public static OnlineCharacter LoginCharacter(OnlineAccount account, int characterSlotInAccount)
     {
-        return _accountRepository.IsAccountLogged(account);
-    }
-
-    public static bool IsCharacterLogged(string login)
-    {
-        return _accountRepository.IsCharacterLogged(login);
-    }
-
-    public static bool IsCharacterLogged(IConnectionMember address)
-    {
-        return _accountRepository.IsCharacterLogged(address);
-    }
-
-    public static bool IsCharacterLogged(RegisterAccount account)
-    {
-        return _accountRepository.IsCharacterLogged(account);
-    }
-
-    public static OnlineAccount LoginAccount(RegisterAccount account, IConnectionMember address)
-    {
-        return _accountRepository.LoginAccount(account, address);
-    }
-
-    public static OnlineCharacter LoginAndCreateCharacter(RegisterCharacter character)
-    {
-        return _accountRepository.LoginAndCreateCharacter(character);
+        return _accountRepository.LoginCharacter(account, characterSlotInAccount);
     }
 
     public static void LogoutAccount(OnlineAccount account)
@@ -92,18 +79,15 @@ public static class AccountsRepository
         return _accountRepository.GetCharacterByIdCharacter(idPlayer);
     }
 
-    public static RegisterCharacter GetCharacterByName(string name)
-    {
-        return _accountRepository.GetCharacterByName(name);
-    }
-
     public static OnlineCharacter GetOnlineCharacterByAddress(IConnectionMember address)
     {
         return _accountRepository.GetOnlineCharacterByAddress(address);
     }
 
-    public static void UpdateRegisterCharacter(int idCharacter, NetPlayer player)
+    public static void UpdateRegisterCharacter(int idCharacter, GameObject player)
     {
-        _accountRepository.UpdateRegisterCharacter(idCharacter, player);
+        var character = GetCharacterById(idCharacter);
+
+        character.Update(player);
     }
 }

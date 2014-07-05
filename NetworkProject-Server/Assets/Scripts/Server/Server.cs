@@ -95,7 +95,7 @@ public static class Server
 
     private static void ReceiveMessageLogin(IncomingMessage message)
     {
-        var package = (LoginToGame)message.Message;
+        var request = (LoginToGame)message.Request;
         
         RegisterAccount account = AccountsRepository.GetAccountByLogin(login);
 
@@ -312,31 +312,6 @@ public static class Server
 
     #endregion 
 
-    private static CharacterChoiceMenuPackage AccountToCharacterChoiceMenuInfo(RegisterAccount account)
-    {
-        var menuInfo = new CharacterChoiceMenuPackage();
-
-        int count = account.Characters.Count;
-
-        for (int i = 0; i < count; i++)
-        {           
-            if (account.Characters[i] != null)
-            {
-                var character = new CharacterInChoiceMenuPackage();
-                character.Name = account.Characters[i].Name;
-
-                menuInfo.AddCharacter(character);
-            }
-        }
-
-        return menuInfo;
-    }
-
-    private static OwnPlayerPackage OnlineCharacterToOwnPlayer(OnlineCharacter onlineCharacter)
-    {
-        return onlineCharacter.GameObject.GetComponent<NetPlayer>().GetOwnPlayerPackage();
-    }
-
     private static NetItem FindNetItemByIdObject(int idObject)
     {
         NetItem[] items = GameObject.FindObjectsOfType(typeof(NetItem)) as NetItem[];
@@ -379,18 +354,6 @@ public static class Server
         }
 
         return onlineCharacter.NetPlayerObject;
-    }
-
-    public static ItemInEquipmentPackage ItemToItemInEquipmentPackage(Item item)
-    {
-        if (item == null)
-        {
-            return new ItemInEquipmentPackage(-1);
-        }
-        else
-        {
-            return new ItemInEquipmentPackage(item.IdItem);
-        } 
     }
 
     private static PlayerRespawn FindNearestPlayerRespawnOnMap(int map, Vector3 position)

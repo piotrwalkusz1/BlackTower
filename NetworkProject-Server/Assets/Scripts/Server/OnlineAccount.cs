@@ -7,22 +7,20 @@ using NetworkProject.Connection;
 public class OnlineAccount
 {
     public int IdAccount { get; private set; }
-    public IConnectionMember Address { get; set; }
+    public IConnectionMember Address { get; private set; }
     public OnlineCharacter OnlineCharacter { get; private set; }
 
-    public OnlineAccount(RegisterAccount account)
+    public OnlineAccount(int idAccount, IConnectionMember address)
     {
-        IdAccount = account.IdAccount;
+        IdAccount = idAccount;
+        Address = address;
     }
 
-    public OnlineCharacter CreateOnlineCharacter(int characterSlot)
+    public OnlineCharacter LoginCharacter(int characterSlotInAccount)
     {
-        var onlineCharacter = new OnlineCharacter(characterSlot);
+        var onlineCharacter = new OnlineCharacter(this, characterSlotInAccount);
 
-        netPlayer.OnlineCharacter = onlineCharacter;
-        onlineCharacter.GameObject = netPlayer.gameObject;
-
-        SetOnlineCharacter(onlineCharacter);
+        OnlineCharacter = onlineCharacter;
 
         return onlineCharacter;
     }
@@ -32,13 +30,7 @@ public class OnlineAccount
         return OnlineCharacter != null;
     }
 
-    public void SetOnlineCharacter(OnlineCharacter character)
-    {
-        character.MyAccount = this;
-        OnlineCharacter = character;
-    }
-
-    public void DeleteOnlineCharacter()
+    public void LogoutCharacter()
     {
         OnlineCharacter = null;
     }

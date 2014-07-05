@@ -1,14 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using NetworkProject.Combat;
 
 [System.CLSCompliant(false)]
 public class BulletInfo
 {
-    public float _speed;
-    public float _liveTime;
-    public Vector3 _position;
-    public Vector3 _direction;
-    public AttackInfo _attackInfo;
-    public int _shooterId;
-    public int _bulletType;
+    public Bullet Bullet { get; set; }
+    public float LiveTime { get; set; }
+    public Vector3 Position { get; set; }
+    public Quaternion Rotation { get; set; }
+    public AttackInfo AttackInfo { get; set; }
 }
