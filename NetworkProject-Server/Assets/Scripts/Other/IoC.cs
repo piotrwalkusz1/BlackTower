@@ -14,14 +14,19 @@ namespace Standard
 
         }
 
-        public static IServer GetImplementationServer()
+        public static IServer GetServer()
         {
             return new LidgrenServer();
         }
 
-        public static IAccountRepository GetImplementationAccountsRepository()
+        public static IAccountRepository GetAccountRepository()
         {
             return new AccountRepositoryInServer();
+        }
+
+        public static IGameObjectRepository GetGameObjectRepository()
+        {
+            return new GameObjectRepositoryByFind();
         }
     }
 }

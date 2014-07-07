@@ -20,7 +20,7 @@ namespace NetworkProject.Items
             IdItem = idItem;
         }
 
-        public override void ApplyItemStats(IStats stats)
+        protected override void ApplyItemStats(IEquipableStats stats)
         {
             stats.Defense += _defense;
         }

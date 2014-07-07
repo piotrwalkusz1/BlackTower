@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[assembly : System.CLSCompliant(false)]
+
 namespace Standard
 {
     [System.CLSCompliant(false)]

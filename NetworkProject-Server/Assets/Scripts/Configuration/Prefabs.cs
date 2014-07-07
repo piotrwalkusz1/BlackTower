@@ -18,8 +18,8 @@ public class Prefabs : MonoBehaviour
         StaticRepository.Prefabs = this;
 	}
 
-    public GameObject GetMonster(MonsterName monster)
+    public GameObject GetMonster(int id)
     {
-        return _monsters[(int)monster];
+        return _monsters[id];
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using NetworkProject.Spells;
 
-namespace NetworkProject.SpellActions
+namespace NetworkProject.Spells
 {
     public static partial class SpellActionsRepository
     {
@@ -15,9 +15,9 @@ namespace NetworkProject.SpellActions
 
         }
 
-        public static SpellFunction GetSpellAction(SpellActionName spell)
+        public static SpellFunction GetSpellAction(int idSpell)
         {
-            return _spells[(int)spell];
+            return _spells[idSpell];
         }
     }
 }

@@ -85,7 +85,7 @@ public class NetPlayer : NetObject
         _sendMessageUpdateEvent += function;
     }
 
-    public void SendUpdateEquipedItem(BodyPartSlot slot, Item item)
+    public void SendUpdateEquipedItem(int slot, Item item)
     {
         Action<IConnectionMember> function = delegate(IConnectionMember address)
         {
@@ -96,5 +96,12 @@ public class NetPlayer : NetObject
         };
 
         _sendMessageUpdateEvent += function;
+    }
+
+    public void SendRespawnMessageToOwner()
+    {
+        var request = new NetworkProject.Connection.ToClient.Respawn(IdNet);
+
+        Server.SendRequestAsMessage(request, OwnerAddress);
     }
 }

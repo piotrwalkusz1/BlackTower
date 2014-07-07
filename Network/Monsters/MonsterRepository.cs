@@ -38,5 +38,10 @@ namespace NetworkProject.Monsters
                 serializer.Serialize(writter, monsters);
             }
         }
+
+        public static Monster GetMonster(int monsterId)
+        {
+            return _monsters[monsterId];
+        }
     }
 }

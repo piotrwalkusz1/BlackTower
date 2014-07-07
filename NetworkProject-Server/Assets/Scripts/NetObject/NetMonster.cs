@@ -1,42 +1,20 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using NetworkProject;
+using NetworkProject.Connection;
+using NetworkProject.Connection.ToClient;
 
 [System.CLSCompliant(false)]
 public class NetMonster : NetObject
 {
-    private bool _isJumpMessage;
-    private bool _isJumpMessageInLastFrame;
-
-    private bool _isAttackMessage;
-    private bool _isAttackMessageInLastFrame;
-    private int _idAttackVictim;
-
-    private bool _isAllStatsMessage;
-    private bool _isAllStatsMessageInLastFrame;
-
-    new protected void Awake()
-    {
-        VisionFunctionToDefault();
-
-        InitializePositionAndRotation();
-    }
-
-    new protected void LateUpdate()
-    {
-        MessageFlagsToDefault();
-    }
-
-    public override bool IsMustUpdate()
-    {
-        return (base.IsMustUpdate() || _isJumpMessageInLastFrame || _isAttackMessageInLastFrame || _isAllStatsMessageInLastFrame);
-    }
+    public int IdMonster { get; set; }
 
     public override void SendMessageAppeared(IConnectionMember address)
     {
-        MonsterPackage monster = ToMonsterPackages();
+        var receive = new CreateMonster(IdNet, transform.position, transform.eulerAngles.y, IdMonster, GetComponent<MonsterStats>());
 
-        Server.SendMessageCreateMonster(monster, address);
+        Server.SendRequestAsMessage(receive, address);
     }
 
     public override void SendMessageUpdate(IConnectionMember address)
@@ -45,91 +23,27 @@ public class NetMonster : NetObject
 
         IfChangeSendRotationUpdate(address);
 
-        if (!IfFlagSendAllStatsMessage(address))
-        {
-            IfFlagSendHpUpdate(address);
-
-            IfFlagSendMaxHpUpdate(address);
-        }
-
-        IfFlagSendAttackEvent(address);
-
-        IfFlagSendJumpEvent(address);
-    }
-
-    public override void SendMessageDisappeared(IConnectionMember address)
-    {
-        Server.SendMessageDeleteObject(IdNet, address);
+        InvokeSendMessageUpdateEvent(address);
     }
 
     public void SendJumpMessage()
     {
-        _isJumpMessage = true;
+        var request = new Jump(IdNet);
+
+        GenerateSendFunctionAndAddToUpdateEvent(request);
     }
 
     public void SendAttackMessage(int idAttackVictim)
     {
-        _isAttackMessage = true;
-        _idAttackVictim = idAttackVictim;
+        var request = new Attack(IdNet);
+
+        GenerateSendFunctionAndAddToUpdateEvent(request);
     }
 
     public void SendAllStatsMessage()
     {
-        _isAllStatsMessage = true;
-    }
+        var request = new UpdateAllStats(IdNet, (IStats)GetComponent(typeof(IStats)));
 
-    new protected void MessageFlagsToDefault()
-    {
-        base.MessageFlagsToDefault();
-
-        _isAttackMessageInLastFrame = _isAttackMessage;
-        _isAttackMessage = false;
-        _idAttackVictim = -1;
-
-        _isJumpMessageInLastFrame = _isJumpMessage;
-        _isJumpMessage = false;
-
-        _isAllStatsMessageInLastFrame = _isAllStatsMessage;
-        _isAllStatsMessage = false;
-    }
-
-    protected void IfFlagSendAttackEvent(IConnectionMember address)
-    {
-        if (_isAttackMessageInLastFrame)
-        {
-            Server.SendMessageMonsterAttackTarget(IdNet, _idAttackVictim, address);
-        }
-    }
-
-    protected void IfFlagSendJumpEvent(IConnectionMember address)
-    {
-        if (_isJumpMessageInLastFrame)
-        {
-            Server.SendMessageJump(IdNet, transform.position, Vector3.zero, address);
-        }
-    }
-
-    protected bool IfFlagSendAllStatsMessage(IConnectionMember address)
-    {
-        if (_isAllStatsMessageInLastFrame)
-        {
-            StatsPackage package = GetComponent<MonsterStats>().GetMonsterStatsPackage();
-
-            Server.SendMessageUpdateOtherAllStats(IdNet, package, address);
-        }
-
-        return _isAllStatsMessage;
-    }
-
-    protected MonsterPackage ToMonsterPackages()
-    {
-        MonsterPackage monster = new MonsterPackage();
-        monster.IdObject = IdNet;
-        monster._position = transform.position;
-        monster._rotation = transform.eulerAngles.y;
-        monster._monsterType = MonsterType.Jumper;
-        monster._stats = GetComponent<JumperStats>().GetMonsterStatsPackage();
-
-        return monster;
+        GenerateSendFunctionAndAddToUpdateEvent(request);
     }
 }

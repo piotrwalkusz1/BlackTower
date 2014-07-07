@@ -12,40 +12,55 @@ namespace NetworkProject.Items
 
         public PlayerEquipedItems()
         {
-            _bodyParts.Add(new BodyParts.Head());
-            _bodyParts.Add(new BodyParts.Chest());
-            _bodyParts.Add(new BodyParts.Feet());
-            _bodyParts.Add(new BodyParts.RightHand());
-            _bodyParts.Add(new BodyParts.LeftHand());
-            _bodyParts.Add(new BodyParts.Other());
-            _bodyParts.Add(new BodyParts.Other());
+            _bodyParts = new List<BodyPart>(IoC.GetBodyParts());
         }
 
-        public Item GetEquipedItem(BodyPartSlot slot)
+        public Item GetEquipedItem(int slot)
         {
-            return _bodyParts[(int)slot].EquipedItem;
+            return _bodyParts[slot].EquipedItem;
         }
 
-        public bool CanEquipeItem(Item item, IStats stats)
+        public bool CanEquipeItem(Item item, IEquipableStats stats)
         {
             EquipableItemData itemData = (EquipableItemData)ItemRepository.GetItemByIdItem(item.IdItem);
 
             return itemData.CanEquipe(stats);
         }
 
-        public bool IsEmptySlot(BodyPartSlot bodyPart)
+        public bool IsEmptySlot(int bodyPart)
         {
             return GetEquipedItem(bodyPart) == null;
         }
 
-        public void EquipeItem(Item item, BodyPartSlot bodyPartType)
+        public void EquipeItem(Item item, int bodyPartType)
         {
             BodyPart bodyPart = _bodyParts[(int)bodyPartType];
 
             bodyPart.EquipedItem = item;
         }
-        
 
+        public override void ApplyToStats(IEquipableStats player)
+        {
+            foreach (var bodyPart in _bodyParts)
+            {
+                bodyPart.ApplyEquipedItemToStats(player);
+            }
+        }
+
+        public bool IsEquipedWeapon()
+        {
+            foreach (var bodyPart in _bodyParts)
+            {
+                ItemData item = ItemRepository.GetItemByIdItem(bodyPart.EquipedItem.IdItem);
+
+                if (item is WeaponData)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
 

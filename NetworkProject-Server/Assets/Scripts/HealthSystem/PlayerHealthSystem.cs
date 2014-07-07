@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using NetworkProject;
+using NetworkProject.Connection.ToClient;
 
 [System.CLSCompliant(false)]
 public class PlayerHealthSystem : HealthSystem
@@ -16,43 +17,38 @@ public class PlayerHealthSystem : HealthSystem
         DecreaseHP(dmg);
     }
 
-    public override void Die()
+    public override void DieAndSendUpdate()
     {
+        base.DieAndSendUpdate();
+
         NetPlayer player = GetComponent<NetPlayer>();
 
-        OwnDeadEventPackage deadInfo = new OwnDeadEventPackage();
+        var request = new Dead(player.IdNet);
 
-        Server.SendMessageYouAreDead(deadInfo, player.Address);
+        Server.SendRequestAsMessage(request, player.OwnerAddress);
     }
 
-    public void SendHpUpdatingToOwner()
+    public override void SendUpdateHP()
+    {
+        SendUpdateHPToOthers();
+
+        SendUpdateHPToOwner();
+    }
+
+    public void SendUpdateHPToOwner()
     {
         NetPlayer netPlayer = GetComponent<NetPlayer>();
 
-        Server.SendMessageUpdateYourHp(HP, netPlayer.Address);
+        var request = new UpdateHP(netPlayer.IdNet, HP);
+
+        Server.SendRequestAsMessage(request, netPlayer.OwnerAddress);
     }
 
-    public void SendHpUpdatingToOtherPlayer()
-    {
-        NetPlayer netPlayer = GetComponent<NetPlayer>();
-
-        netPlayer.SendChangeHpMessage();
-    }
-
-    public override void SendHpUpdating()
-    {
-        NetPlayer netPlayer = GetComponent<NetPlayer>();
-
-        netPlayer.SendChangeHpMessage();
-
-        Server.SendMessageUpdateYourHp(HP, netPlayer.Address);
-    }
-
-    public void RecuperateAndSendHpUpdating()
+    public void RecuperateAndSendHPUpdate()
     {
         Recuparate();
 
-        SendHpUpdating();
+        SendUpdateHP();
     }
 
     protected int ApplyDefense(int baseDmg)

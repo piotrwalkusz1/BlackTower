@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NetworkProject;
 using NetworkProject.Connection;
+using NetworkProject.Spells;
 
 [System.CLSCompliant(false)]
 public class AccountRepositoryInServer : IAccountRepository
@@ -16,128 +17,51 @@ public class AccountRepositoryInServer : IAccountRepository
 
     public AccountRepositoryInServer()
     {
-        RegisterAccount account = new RegisterAccount();
-        account.Login = "Login";
-        account.Password = "Password";
+        RegisterAccount account = new RegisterAccount("Login", "Password");
         RegisterAccount(account);
 
         RegisterCharacter character = new RegisterCharacter();
         character.Name = "Neon";
         character.EndPosition = new Vector3(0, 400, 0);
         character.Breed = Breed.Troll;
-        character.AddSpell(new Spell(SpellRepository.GetSpellById(0)));
+        character.AddSpell(new Spell(SpellRepository.GetSpell(0)));
         character.Lvl = 1;
         character.Exp = 0;
-        RegisterCharacter(account.IdAccount, character);
+        RegisterCharacter(account, character);
 
-        RegisterAccount account2 = new RegisterAccount();
-        account2.Login = "Login1";
-        account2.Password = "Password";
+        RegisterAccount account2 = new RegisterAccount("Login1", "Password");
         RegisterAccount(account2);
 
         RegisterCharacter character2 = new RegisterCharacter();
         character2.Name = "Spejkon";
         character2.EndPosition = new Vector3(3, 400, 3);
         character2.Breed = Breed.Troll;
-        RegisterCharacter(account2.IdAccount, character2);  
+        RegisterCharacter(account2, character2);  
     }
 
     public void RegisterAccount(RegisterAccount registerAccount)
     {
-        registerAccount.IdAccount = _nextIdAccount;
-        _nextIdAccount ++;
+        registerAccount.IdAccount = NextAccountId();
+
         _registerAccounts.Add(registerAccount);
     }
 
-    public void RegisterCharacter(int idAccount, RegisterCharacter registerCharacter)
+    public void RegisterCharacter(RegisterAccount account, RegisterCharacter character)
     {
-        registerCharacter.IdCharacter = _nextIdCharacter;
-        _nextIdCharacter ++;
+        character.IdCharacter = NextCharacterId();
 
-        RegisterAccount account = GetAccountById(idAccount);
-
-        account.AddCharacter(registerCharacter);
+        account.AddCharacter(character);
     }
 
-    public bool IsAccountLogged(string login)
+    public OnlineAccount LoginAccount(RegisterAccount account, IConnectionMember address)
     {
-        OnlineAccount onlineAccount = GetOnlineAccountByLogin(login);
-        return onlineAccount != null;
-    }
-
-    public bool IsAccountLogged(IConnectionMember address)
-    {
-        OnlineAccount onlineAccount = GetOnlineAccountByAddress(address);
-        return onlineAccount != null;
-    }
-
-    public bool IsAccountLogged(int idAccount)
-    {
-        OnlineAccount onlineAccount = GetOnlineAccountByIdAccount(idAccount);
-        return onlineAccount != null;
-    }
-
-    public bool IsCharacterLogged(string login)
-    {
-        OnlineAccount onlineAccount = GetOnlineAccountByLogin(login);
-
-        if (onlineAccount == null)
-        {
-            return false;
-        }
-        else
-        {
-            return onlineAccount.OnlineCharacter != null;
-        }
-    }
-
-    public bool IsCharacterLogged(IConnectionMember address)
-    {
-        OnlineAccount onlineAccount = GetOnlineAccountByAddress(address);
-
-        if (onlineAccount == null)
-        {
-            return false;
-        }
-        else
-        {
-            return onlineAccount.OnlineCharacter != null;
-        }
-    }
-
-    public bool IsCharacterLogged(RegisterAccount account)
-    {
-        OnlineAccount onlineAccount = GetOnlineAccountByLogin(account.Login);
-
-        if (onlineAccount == null)
-        {
-            return false;
-        }
-        else
-        {
-            return onlineAccount.OnlineCharacter != null;
-        }
-    }
-
-    public OnlineAccount LoginAccount(int idAccount, IConnectionMember address)
-    {
-        if (IsAccountLogged(idAccount))
-        {
-            throw new AccountRepositoryException(AccountRepositoryExceptionCode.AccountAlreadyLogin);
-        }
-
-        OnlineAccount onlineAccount = new OnlineAccount(idAccount, address);
+        OnlineAccount onlineAccount = new OnlineAccount(account.IdAccount, address);
         _onlineAccounts.Add(onlineAccount);
         return onlineAccount;
     }
 
     public OnlineCharacter LoginCharacter(OnlineAccount account, int characterSlotInAccount)
     {
-        if (account.IsLoggedCharacter())
-        {
-            throw new System.Exception("Na tym koncie jest już zalogowana postać!");
-        }
-
         OnlineCharacter onlineCharacter = account.LoginCharacter(characterSlotInAccount);
         
         return onlineCharacter;
@@ -162,110 +86,23 @@ public class AccountRepositoryInServer : IAccountRepository
         character.MyAccount.LogoutCharacter();
     }
 
-    public RegisterAccount GetAccountByLogin(string login)
+    public RegisterAccount[] GetAccounts()
     {
-        return _registerAccounts.Find(x => x.Login == login);
+        return _registerAccounts.ToArray();
     }
 
-    public RegisterAccount GetAccountById(int id)
+    public OnlineAccount[] GetOnlineAccounts()
     {
-        return _registerAccounts.Find(x => x.IdAccount == id);
+        return _onlineAccounts.ToArray();
     }
 
-    public OnlineAccount GetOnlineAccountByAddress(IConnectionMember address)
+    private int NextAccountId()
     {
-        foreach (OnlineAccount account in _onlineAccounts)
-        {
-            if (account.Address.Equals(address))
-            {
-                return account;
-            }
-        }
-
-        return null;
+        return _nextIdAccount++;
     }
 
-    public OnlineAccount GetOnlineAccountByLogin(string login)
+    private int NextCharacterId()
     {
-        RegisterAccount registerAccount = GetAccountByLogin(login);
-
-        OnlineAccount onlineAccount = GetOnlineAccountByIdAccount(registerAccount.IdAccount);
-
-        return onlineAccount;
-    }
-
-    public OnlineAccount GetOnlineAccountByIdAccount(int id)
-    {
-        return _onlineAccounts.Find(x => x.IdAccount == id);
-    }
-
-    public OnlineAccount GetOnlineAccountByIdCharacter(int id)
-    {
-        RegisterCharacter character = GetCharacterByIdCharacter(id);
-
-        if (character == null)
-        {
-            return null;
-        }
-        else
-        {
-            return GetOnlineAccountByIdAccount(character.MyAccount.IdAccount);
-        }
-    }
-
-    public RegisterCharacter GetCharacterByIdCharacter(int idCharacter)
-    {
-        foreach (RegisterAccount account in _registerAccounts)
-        {
-            foreach (RegisterCharacter character in account.Characters)
-            {
-                if (character.IdCharacter == idCharacter)
-                {
-                    return character;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public RegisterCharacter GetCharacterByName(string name)
-    {
-        foreach (RegisterAccount account in _registerAccounts)
-        {
-            foreach (RegisterCharacter character in account.Characters)
-            {
-                if (character.Name == name)
-                {
-                    return character;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public OnlineCharacter GetOnlineCharacterByIdNet(int idNet)
-    {
-        foreach (OnlineAccount account in _onlineAccounts)
-        {
-            if (account.IsLoggedCharacter() && account.OnlineCharacter.Instantiate.GetComponent<NetPlayer>().IdNet == idNet)
-            {
-                return account.OnlineCharacter;
-            }
-        }
-        return null;
-    }
-
-    public OnlineCharacter GetOnlineCharacterByAddress(IConnectionMember address)
-    {
-        foreach (OnlineAccount account in _onlineAccounts)
-        {
-            if (account.IsLoggedCharacter() && account.Address.Equals(address))
-            {
-                return account.OnlineCharacter;
-            }
-        }
-        return null;
+        return _nextIdCharacter++;
     }
 }

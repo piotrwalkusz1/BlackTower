@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using NetworkProject.Connection.ToClient;
 
 [System.CLSCompliant(false)]
 public class PlayerExperience : Experience
@@ -14,7 +15,7 @@ public class PlayerExperience : Experience
     {
         get
         {
-            return NetworkProject.Settings.MaxExpInLvl(Lvl);
+            return NetworkProject.Settings.GetMaxExpInLvl(Lvl);
         }
     }
 
@@ -24,8 +25,12 @@ public class PlayerExperience : Experience
         Exp = exp;
     }
 
-    public void SendUpdate()
+    public void SendUpdateExpToOwner()
     {
-        Server.SendMessageUpdateYourExperience(Lvl, Exp, GetComponent<NetPlayer>().Address);
+        NetPlayer netPlayer = GetComponent<NetPlayer>();
+
+        var request = new UpdateExperience(netPlayer.IdNet, Exp);
+
+        Server.SendRequestAsMessage(request, netPlayer.OwnerAddress);
     }
 }

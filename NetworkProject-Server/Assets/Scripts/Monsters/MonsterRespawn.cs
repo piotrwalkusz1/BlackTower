@@ -6,7 +6,7 @@ using NetworkProject;
 [System.CLSCompliant(false)]
 public class MonsterRespawn : MonoBehaviour
 {
-    public MonsterType _monsterType;
+    public int monsterId;
     public float _time;
     protected DateTime _nextRespawnTime;
 
@@ -32,7 +32,7 @@ public class MonsterRespawn : MonoBehaviour
 
     protected GameObject CreateMonster()
     {
-        return SceneBuilder.CreateMonster(_monsterType, transform.position, transform.eulerAngles.y);
+        return SceneBuilder.CreateMonster(monsterId, transform.position, transform.eulerAngles.y);
     }
 
     protected void SetNextRespawnTime()

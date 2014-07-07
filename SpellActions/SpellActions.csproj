@@ -7,7 +7,7 @@
     <ProjectGuid>{21F651FC-53F9-4C99-AB9E-6D5A49DA3403}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NetworkProject.SpellActions</RootNamespace>
+    <RootNamespace>NetworkProject.Spells</RootNamespace>
     <AssemblyName>SpellActions</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -39,9 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SpellActionData.cs" />
     <Compile Include="SpellActionRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpellActionName.cs" />
     <Compile Include="SpellFunction.cs" />
   </ItemGroup>
   <ItemGroup>

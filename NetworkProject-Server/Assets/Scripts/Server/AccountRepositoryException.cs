@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-class AccountRepositoryException : Exception
+public class AccountRepositoryException : Exception
 {
     public AccountRepositoryExceptionCode ErrorCode { get; set; }
 

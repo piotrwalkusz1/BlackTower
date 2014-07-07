@@ -43,6 +43,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Benefits\IBuffBenefit.cs" />
+    <Compile Include="Benefits\IEquipeBenefit.cs" />
     <Compile Include="BreedAndGender.cs" />
     <Compile Include="Combat\Bullet.cs" />
     <Compile Include="Combat\Bullets.cs" />
@@ -50,8 +52,12 @@
     <Compile Include="Connection\ErrorCode.cs" />
     <Compile Include="Connection\ToClient\ErrorMessage.cs" />
     <Compile Include="Destroy.cs" />
+    <Compile Include="IEquipableStats.cs" />
+    <Compile Include="IMonsterStats.cs" />
     <Compile Include="IoC.cs" />
     <Compile Include="Benefits\AdditionalMaxHp.cs" />
+    <Compile Include="IPlayerStats.cs" />
+    <Compile Include="ISpellCasterStats.cs" />
     <Compile Include="Items\ItemDrop.cs" />
     <Compile Include="Items\AdditionData.cs" />
     <Compile Include="BodyParts\BodyPart.cs" />
@@ -111,23 +117,20 @@
     <Compile Include="Connection\ToServer\UseSpell.cs" />
     <Compile Include="Monsters\MonsterRepository.cs" />
     <Compile Include="Movement\SimpleMovement.cs" />
-    <Compile Include="Requirements\Lvl.cs" />
+    <Compile Include="Requirements\IEquipeRequirement.cs" />
+    <Compile Include="Requirements\ISpellCastRequirement.cs" />
+    <Compile Include="Requirements\LvlRequirement.cs" />
     <Compile Include="Connection\ToClient\GoToChoiceCharacterMenu.cs" />
     <Compile Include="Connection\ToClient\TextMessage.cs" />
     <Compile Include="Connection\CharacterInChoiceMenu.cs" />
-    <Compile Include="Spells\ISpellCaster.cs" />
     <Compile Include="Spells\ISpellCastOption.cs" />
-    <Compile Include="Benefits\Benefit.cs" />
-    <Compile Include="Benefits\BenefitType.cs" />
-    <Compile Include="BodyParts\BodyPartSlot.cs" />
-    <Compile Include="Requirements\Requirement.cs" />
-    <Compile Include="Requirements\RequirementType.cs" />
+    <Compile Include="Benefits\IBenefit.cs" />
+    <Compile Include="Requirements\IRequirement.cs" />
     <Compile Include="Items\ShieldData.cs" />
     <Compile Include="Items\ArmorData.cs" />
     <Compile Include="Items\HelmetData.cs" />
     <Compile Include="Items\ItemData.cs" />
     <Compile Include="Monsters\Monster.cs" />
-    <Compile Include="Monsters\MonsterType.cs" />
     <Compile Include="Connection\IConnectionMember.cs" />
     <Compile Include="Connection\IncomingMessage.cs" />
     <Compile Include="Connection\INetworkRequest.cs" />
@@ -135,10 +138,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Items\ShoesData.cs" />
+    <Compile Include="Spells\ISpellRepository.cs" />
     <Compile Include="Spells\Spell.cs" />
     <Compile Include="IStats.cs" />
+    <Compile Include="Spells\SpellData.cs" />
+    <Compile Include="Spells\SpellRepository.cs" />
+    <Compile Include="Spells\SpellRepositoryImp.cs" />
     <Compile Include="Updating.cs" />
-    <Compile Include="VisualObjectType.cs" />
     <Compile Include="Items\WeaponData.cs" />
   </ItemGroup>
   <ItemGroup />

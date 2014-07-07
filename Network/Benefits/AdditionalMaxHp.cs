@@ -6,7 +6,7 @@ using System.Text;
 namespace NetworkProject.Benefits
 {
     [Serializable]
-    public class AdditionalMaxHp : Benefit
+    public class AdditionalMaxHp : IBuffBenefit, IEquipeBenefit
     {
         private int _additionalMaxHp;
 
@@ -20,7 +20,20 @@ namespace NetworkProject.Benefits
             _additionalMaxHp = additionalMaxHp;
         }
 
-        public override void ApplyToStats(IStats stats)
+        public void ApplyToStats(IStats stats)
+        {
+            if (stats is IEquipableStats)
+            {
+                ApplyToStats((IEquipableStats)stats);
+            }
+        }
+
+        public void ApplyToStats(IPlayerStats stats)
+        {
+            ApplyToStats((IEquipableStats)stats);
+        }
+
+        public void ApplyToStats(IEquipableStats stats)
         {
             stats.MaxHP += _additionalMaxHp;
         }

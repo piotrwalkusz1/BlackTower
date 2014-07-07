@@ -5,54 +5,58 @@ using System.Text;
 using NetworkProject.BodyParts;
 using NetworkProject.Benefits;
 using NetworkProject.Requirements;
+using NetworkProject.Spells;
 
 namespace NetworkProject
 {
     public static class IoC
     {
-        public static BodyPart GetBodyPart(BodyPartSlot bodyPart)
+        private static List<BodyPart> _bodyParts;
+
+        static IoC()
         {
-            switch (bodyPart)
+            InitializeBodyParts();
+        }
+
+        public static BodyPart GetBodyPart(int slot)
+        {
+            try
             {
-                case BodyPartSlot.Head:
-                    return new Head();
-                case BodyPartSlot.Chest:
-                    return new Chest();
-                case BodyPartSlot.Feet:
-                    return new Feet();
-                case BodyPartSlot.LeftHand:
-                    return new LeftHand();
-                case BodyPartSlot.RightHand:
-                    return new RightHand();
-                case BodyPartSlot.Other1:
-                    return new Other();
-                case BodyPartSlot.Other2:
-                    return new Other();
-                default:
-                    throw new ArgumentException("Nie ma takiej części ciała.");
+                return (BodyPart)Activator.CreateInstance(_bodyParts[slot].GetType());
+            }
+            catch (IndexOutOfRangeException)
+            {
+                throw new ArgumentOutOfRangeException("Nie ma takiego id części ciała.");
             }
         }
 
-        public static Benefit GetBenefit(BenefitType benefitType, string value)
+        public static BodyPart[] GetBodyParts()
         {
-            switch (benefitType)
+            BodyPart[] bodyParts = new BodyPart[_bodyParts.Count];
+
+            for (int i = 0; i < _bodyParts.Count; i++)
             {
-                case BenefitType.AdditionalMaxHp:
-                    return new AdditionalMaxHp(value);
-                default:
-                    throw new Exception("Nie ma takiego benefitu.");
+                bodyParts[i] = (BodyPart)Activator.CreateInstance(_bodyParts[i].GetType());
             }
+
+            return bodyParts;
         }
 
-        public static Requirement GetRequirement(RequirementType requirementType, string value)
+        public static ISpellRepository GetSpellRepository()
         {
-            switch (requirementType)
-            {
-                case RequirementType.Lvl:
-                    return new RequirementLvl(value);
-                default:
-                    throw new Exception("Nie ma takiego wymagania.");
-            }
+            return new SpellRepositoryImp();
+        }
+
+        private static void InitializeBodyParts()
+        {
+            _bodyParts = new List<BodyPart>();
+            _bodyParts.Add(new BodyParts.Head());
+            _bodyParts.Add(new BodyParts.Chest());
+            _bodyParts.Add(new BodyParts.Feet());
+            _bodyParts.Add(new BodyParts.RightHand());
+            _bodyParts.Add(new BodyParts.LeftHand());
+            _bodyParts.Add(new BodyParts.Other());
+            _bodyParts.Add(new BodyParts.Other());
         }
     }
 }

@@ -2,19 +2,23 @@
 using System;
 using System.Collections;
 using NetworkProject;
+using NetworkProject.Monsters;
+using NetworkProject.Items;
 
 [System.CLSCompliant(false)]
 public class JumperAI : MonoBehaviour
 {
-    private const float FindRange = 15f;
-    private const float AttactRange = 2f;
-    private const float TimeBetweenAttacks = 1.5f;
-    private const float _timeBetweenSearchings = 3f;
+    private const float FIND_RANGE = 15f;
+    private const float TIME_BETWEEN_SEARCHING = 3f;
+
+    private float _attackRange;
+    private float _attackSpeed;
+    
 
     private int _minDmg = 0;
     private int _maxDmg = 1;
 
-    private DateTime _lastAttackTime;
+    private DateTime _nextAttackTime = DateTime.UtcNow;
 
     private JumperMovement _movement;
     private NetMonster _netMonster;
@@ -23,13 +27,14 @@ public class JumperAI : MonoBehaviour
 
 	void Awake() 
     {
-        MonsterInfo monster = MonsterRepository.GetMonsterInfo(MonsterType.Jumper);
+        _attackSpeed = 1.5f;
+        _attackRange = 2f;
+
+        Monster monster = MonsterRepository.GetMonster(GetComponent<NetMonster>().IdMonster);
         _minDmg = monster._damages[0];
         _maxDmg = monster._damages[1];
 
         InitializeItemsToDrop(monster);
-
-        _lastAttackTime = DateTime.UtcNow;
 
         _movement = GetComponent<JumperMovement>();
         _netMonster = GetComponent<NetMonster>();
@@ -40,17 +45,16 @@ public class JumperAI : MonoBehaviour
         if (DateTime.UtcNow > _nextSearchingTime)
         {
             FindTargetPlayer();
-            _nextSearchingTime = DateTime.UtcNow.AddSeconds(_timeBetweenSearchings);
+            _nextSearchingTime = DateTime.UtcNow.AddSeconds(TIME_BETWEEN_SEARCHING);
         }
 
-        else if (_targetPlayer != null && _targetPlayer.IsDead())
+        if (_targetPlayer != null)
         {
-            FindTargetPlayer();
-        }
-            
+            if (_targetPlayer.GetComponent<PlayerHealthSystem>().IsDead())
+            {
+                FindTargetPlayer();
+            }
 
-        else if (_targetPlayer != null)
-        {
             ChaseAndAttackPlayer();
         }
 	}
@@ -65,12 +69,12 @@ public class JumperAI : MonoBehaviour
     {
         NetPlayer[] players = GameObject.FindObjectsOfType(typeof(NetPlayer)) as NetPlayer[];
 
-        float nearest = FindRange;
+        float nearest = FIND_RANGE;
         NetPlayer nearestPlayer = null;
 
         foreach (NetPlayer player in players)
         {
-            if (player.IsDead())
+            if (player.GetComponent<PlayerHealthSystem>().IsDead())
             {
                 continue;
             }
@@ -91,7 +95,7 @@ public class JumperAI : MonoBehaviour
     {
         Vector3 offset = transform.position - _targetPlayer.transform.position;
 
-        if (offset.sqrMagnitude <= AttactRange * AttactRange)
+        if (offset.sqrMagnitude <= _attackRange * _attackRange)
         {
             Stop();
 
@@ -121,9 +125,9 @@ public class JumperAI : MonoBehaviour
 
         HealthSystem healtSystem = _targetPlayer.GetComponent<HealthSystem>();
         healtSystem.Attack(attackInfo);
-        healtSystem.SendHpUpdating();
+        healtSystem.SendUpdateHPToOthers();
 
-        _lastAttackTime = DateTime.UtcNow;
+        _nextAttackTime = DateTime.UtcNow.AddSeconds(_attackSpeed);
 
         _netMonster.SendAttackMessage(_targetPlayer.IdNet);
     }
@@ -135,16 +139,7 @@ public class JumperAI : MonoBehaviour
 
     private bool CanAttack()
     {
-        TimeSpan offset =  DateTime.UtcNow - _lastAttackTime;
-
-        if (offset.TotalSeconds >= TimeBetweenAttacks)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return DateTime.UtcNow > _nextAttackTime;
     }
 
     private void Stop()
@@ -152,13 +147,10 @@ public class JumperAI : MonoBehaviour
         _movement.Stop();
     }
 
-    private void InitializeItemsToDrop(MonsterInfo monster)
+    private void InitializeItemsToDrop(Monster monster)
     {
         Drop drop = GetComponent<Drop>();
 
-        for (int i = 0; i < monster._itemsToDrop.Count; i++)
-        {
-            drop.AddItemToDrop(new ItemDrop(monster._itemsToDrop[i], monster._chancesToDrop[i]));
-        }
+        drop.AddItemToDrop(monster._drop.ToArray());
     }
 }

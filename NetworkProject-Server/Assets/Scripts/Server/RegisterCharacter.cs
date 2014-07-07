@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using NetworkProject;
+using NetworkProject.Spells;
 
 [System.CLSCompliant(false)]
 public class RegisterCharacter
@@ -21,6 +22,8 @@ public class RegisterCharacter
     public RegisterCharacter()
     {
         Spells = new List<Spell>();
+
+        Lvl = 1;
     }
 
     public void Update(GameObject player)

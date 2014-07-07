@@ -15,17 +15,17 @@ public class PlayerEquipment : Equipment
         return _equipedItems;
     }
 
-    public Item GetEquipedItem(BodyPartSlot slot)
+    public Item GetEquipedItem(int slot)
     {
         return _equipedItems.GetEquipedItem(slot);
     }
 
-    public bool IsEmptySlot(BodyPartSlot bodyPart)
+    public bool IsEmptySlot(int bodyPart)
     {
         return _equipedItems.IsEmptySlot(bodyPart);
     }
 
-    public bool CanEquipeItem(Item item, BodyPartSlot slot)
+    public bool CanEquipeItem(Item item, int slot)
     {
         if (item == null)
         {
@@ -38,19 +38,19 @@ public class PlayerEquipment : Equipment
         return itemData.CanEquipe(GetComponent<PlayerStats>()) && bodyPart.CanEquipeItemOnThisBodyPart(itemData);
     }
 
-    public void EquipeItem(Item item, BodyPartSlot bodyPartType)
+    public void EquipeItem(Item item, int bodyPartType)
     {
         _equipedItems.EquipeItem(item, bodyPartType);
     }
 
-    public bool CanEquipeItemInEquipmentOnThisBodyPart(int equipmentSlot, BodyPartSlot bodyPartSlot)
+    public bool CanEquipeItemInEquipmentOnThisBodyPart(int equipmentSlot, int bodyPartSlot)
     {
         Item itemInEquipment = GetItemBySlot(equipmentSlot);
 
         return CanEquipeItem(itemInEquipment, bodyPartSlot);
     }
 
-    public void EquipeItemInEquipmentOnThisBodyPart(int equipmentSlot, BodyPartSlot bodyPartSlot)
+    public void EquipeItemInEquipmentOnThisBodyPart(int equipmentSlot, int bodyPartSlot)
     {
         Item itemInEquipment = GetItemBySlot(equipmentSlot);
         Item equipedItem = GetEquipedItem(bodyPartSlot);
@@ -59,7 +59,7 @@ public class PlayerEquipment : Equipment
         SetSlot(equipedItem, equipmentSlot);
     }
 
-    public bool TryEquipeItemInEquipmentOnThisBodyPart(int equipmentSlot, BodyPartSlot bodyPartSlot)
+    public bool TryEquipeItemInEquipmentOnThisBodyPart(int equipmentSlot, int bodyPartSlot)
     {
         if (CanEquipeItemInEquipmentOnThisBodyPart(equipmentSlot, bodyPartSlot))
         {
@@ -72,7 +72,7 @@ public class PlayerEquipment : Equipment
         } 
     }
 
-    public bool CanChangeEquipedItems(BodyPartSlot slot1, BodyPartSlot slot2)
+    public bool CanChangeEquipedItems(int slot1, int slot2)
     {
         Item item1 = GetEquipedItem(slot1);
         Item item2 = GetEquipedItem(slot2);
@@ -80,7 +80,7 @@ public class PlayerEquipment : Equipment
         return CanEquipeItem(item1, slot2) && CanEquipeItem(item2, slot1);
     }
 
-    public void ChangeEquipedItems(BodyPartSlot slot1, BodyPartSlot slot2)
+    public void ChangeEquipedItems(int slot1, int slot2)
     {
         Item item1 = GetEquipedItem(slot1);
         Item item2 = GetEquipedItem(slot2);
@@ -89,7 +89,7 @@ public class PlayerEquipment : Equipment
         EquipeItem(item2, slot1);
     }
 
-    public bool TryChangeEquipedItems(BodyPartSlot slot1, BodyPartSlot slot2)
+    public bool TryChangeEquipedItems(int slot1, int slot2)
     {
         if (CanChangeEquipedItems(slot1, slot2))
         {
@@ -100,5 +100,15 @@ public class PlayerEquipment : Equipment
         {
             return false;
         }
+    }
+
+    public override void ApplyToStats(IEquipableStats stats)
+    {
+        _equipedItems.ApplyToStats(stats);
+    }
+
+    public bool IsEquipedWeapon()
+    {
+        return _equipedItems.IsEquipedWeapon();
     }
 }

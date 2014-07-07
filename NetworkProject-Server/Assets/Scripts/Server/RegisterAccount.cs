@@ -12,8 +12,11 @@ public class RegisterAccount
     public string Password { get; set; }
     public List<RegisterCharacter> Characters { get; private set; }
 
-    public RegisterAccount()
+    public RegisterAccount(string login, string password)
     {
+        Login = login;
+        Password = password;
+
         Characters = new List<RegisterCharacter>();
     }
 

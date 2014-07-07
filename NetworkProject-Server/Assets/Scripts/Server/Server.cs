@@ -27,9 +27,18 @@ public static class Server
 
     private static IServer _server;
 
+    static Server()
+    {
+        _server = Standard.IoC.GetServer();
+    }
+
+    public static void Set(IServer server)
+    {
+        _server = server;
+    }
+
     public static void Start(ServerConfig config)
     {
-        _server = Standard.IoC.GetImplementationServer();
         _server.Start(config);
     }
 
@@ -40,10 +49,17 @@ public static class Server
 
     public static void Listen()
     {
-        IncomingMessage m;
-        while ((m = _server.ReadMessage()) != null)
+        try
         {
-            ReceiveMessage(m);
+            IncomingMessage m;
+            while ((m = _server.ReadMessage()) != null)
+            {
+                ExecuteMessage(m);
+            }
+        }
+        catch (Exception ex)
+        {
+            MonoBehaviour.print(ex.Message + '\n' + ex.TargetSite + '\n' + ex.StackTrace);
         }
     }
 
@@ -75,18 +91,11 @@ public static class Server
         Send(message, address);
     }
 
-    private static void ReceiveMessage(IncomingMessage message)
+    public static void ExecuteMessage(IncomingMessage message)
     {
-        try
-        {
-            Action<IncomingMessage> method = ChooseMethodReceiveMessage(message.Request);
-            IConnectionMember sender = message.Sender;
-            method(message);
-        }
-        catch (Exception ex)
-        {
-            MonoBehaviour.print(ex.Message + '\n' + ex.TargetSite + '\n' + ex.StackTrace);
-        }
+        Action<IncomingMessage> method = ChooseMethodReceiveMessage(message.Request);
+        IConnectionMember sender = message.Sender;
+        method(message);
     }
 
     private static Action<IncomingMessage> ChooseMethodReceiveMessage(INetworkRequest request)
@@ -295,12 +304,11 @@ public static class Server
 
         var player = FindAliveNetPlayerByAddress(message.Sender);
 
-        string reason;
-        bool success = player.GetComponent<SpellCaster>().CastSpell(request.IdSpell, out reason);
+        bool success = player.GetComponent<SpellCaster>().TryCastSpellFromSpellBook(request.IdSpell);
 
         if (!success)
         {
-            MonoBehaviour.print(reason);
+            throw new System.Exception("Nie udało się rzucić zaklęcia!");
         }
     }
 

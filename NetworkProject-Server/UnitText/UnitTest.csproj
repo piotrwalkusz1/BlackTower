@@ -50,6 +50,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Programy\Unity\Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="xunit">
+      <HintPath>..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -65,16 +68,25 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServerTest\IncomingMessageTest.cs" />
-    <Compile Include="ServerTest\OutgoingMessageTest.cs" />
-    <Compile Include="ServerTest\RegisterAccountTest.cs" />
-    <Compile Include="SpellActions\UnitTest1.cs" />
-    <Compile Include="SpellsTest\SpellTest.cs" />
+    <Compile Include="IoCTest.cs" />
+    <Compile Include="ServerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Network\NetworkProject.csproj">
+      <Project>{aaa6a575-be26-4699-b4ca-4b5afe80e502}</Project>
+      <Name>NetworkProject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SpellActions\SpellActions.csproj">
+      <Project>{21f651fc-53f9-4c99-ab9e-6d5a49da3403}</Project>
+      <Name>SpellActions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Assembly-CSharp-firstpass-vs.csproj">
+      <Project>{3c8b5763-220e-b358-3256-6f8acc67e425}</Project>
+      <Name>Assembly-CSharp-firstpass-vs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Assembly-CSharp-vs.csproj">
       <Project>{0f2dd397-ab76-7bfd-4af7-3da8b5b78c82}</Project>
       <Name>Assembly-CSharp-vs</Name>

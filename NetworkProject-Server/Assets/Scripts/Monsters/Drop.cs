@@ -7,7 +7,7 @@ using NetworkProject.Items;
 [System.CLSCompliant(false)]
 public class Drop : MonoBehaviour
 {
-    public List<ItemDrop> _itemsDrop = new List<ItemDrop>(); 
+    private List<ItemDrop> _itemsDrop = new List<ItemDrop>(); 
 
     void OnDead()
     {
@@ -17,6 +17,11 @@ public class Drop : MonoBehaviour
     public void AddItemToDrop(ItemDrop item)
     {
         _itemsDrop.Add(item);
+    }
+
+    public void AddItemToDrop(ItemDrop[] items)
+    {
+        _itemsDrop.AddRange(items);
     }
 
     public void DropItems()

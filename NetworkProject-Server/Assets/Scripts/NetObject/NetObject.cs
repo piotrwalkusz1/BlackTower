@@ -95,6 +95,20 @@ public abstract class NetObject : MonoBehaviour
         _sendMessageUpdateEvent += function;
     }
 
+    public void SendDeadMessage()
+    {
+        var request = new Dead(IdNet);
+
+        GenerateSendFunctionAndAddToUpdateEvent(request);
+    }
+
+    public void SendRespawnMessage()
+    {
+        var request = new Respawn(IdNet);
+
+        GenerateSendFunctionAndAddToUpdateEvent(request);
+    }
+
     protected void SetVisionFunction(Func<Vision, bool> function)
     {
         _isVisible = function;
@@ -149,6 +163,16 @@ public abstract class NetObject : MonoBehaviour
     protected void SetVisionFunctionToDefault()
     {
         SetVisionFunction(DefaultVisionFunction);
+    }
+
+    protected void GenerateSendFunctionAndAddToUpdateEvent(INetworkRequest request)
+    {
+        Action<IConnectionMember> function = delegate(IConnectionMember address)
+        {
+            Server.SendRequestAsMessage(request, address);
+        };
+
+        _sendMessageUpdateEvent += function;
     }
 
     private bool DefaultVisionFunction(Vision vision)

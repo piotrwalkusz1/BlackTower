@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Linq;
 using NetworkProject;
 using NetworkProject.Connection;
 
@@ -10,7 +12,12 @@ public static class AccountRepository
 
     static AccountRepository()
     {
-        _accountRepository = Standard.IoC.GetImplementationAccountsRepository();
+        _accountRepository = Standard.IoC.GetAccountRepository();
+    }
+
+    public static void Set(IAccountRepository repository)
+    {
+        _accountRepository = repository;
     }
 
     public static OnlineAccount LoginAccount(string login, string password, IConnectionMember address)
@@ -19,7 +26,7 @@ public static class AccountRepository
 
         if (registerAccount.CheckPassword(password))
         {
-            return LoginAccount(registerAccount.IdAccount, address);
+            return LoginAccount(registerAccount, address);
         }
         else
         {
@@ -27,9 +34,9 @@ public static class AccountRepository
         }
     }
 
-    public static OnlineAccount LoginAccount(int idAccount, IConnectionMember address)
+    public static OnlineAccount LoginAccount(RegisterAccount account, IConnectionMember address)
     {
-        return _accountRepository.LoginAccount(idAccount, address);
+        return _accountRepository.LoginAccount(account, address);
     }
 
     public static OnlineCharacter LoginCharacter(OnlineAccount account, int characterSlotInAccount)
@@ -49,37 +56,52 @@ public static class AccountRepository
 
     public static RegisterAccount GetAccountById(int id)
     {
-        return _accountRepository.GetAccountById(id);
+        return _accountRepository.GetAccounts().First(x => x.IdAccount == id);
     }
 
     public static RegisterAccount GetAccountByLogin(string login)
     {
-        return _accountRepository.GetAccountByLogin(login);
+        return _accountRepository.GetAccounts().First(x => x.Login == login);
     }
 
     public static OnlineAccount GetOnlineAccountByAddress(IConnectionMember address)
     {
-        return _accountRepository.GetOnlineAccountByAddress(address);
+        return _accountRepository.GetOnlineAccounts().First(x => x.Address.Equals(address));
     }
 
     public static OnlineAccount GetOnlineAccountByLogin(string login)
     {
-        return _accountRepository.GetOnlineAccountByLogin(login);
+        RegisterAccount account = GetAccountByLogin(login);
+
+        return _accountRepository.GetOnlineAccounts().First(x => x.IdAccount == account.IdAccount);
     }
 
     public static OnlineAccount GetOnlineAccountByIdAccount(int id)
     {
-        return _accountRepository.GetOnlineAccountByIdAccount(id);
+        return _accountRepository.GetOnlineAccounts().First(x => x.IdAccount == id);
     }
 
-    public static RegisterCharacter GetCharacterById(int idPlayer)
+    public static RegisterCharacter GetCharacterById(int id)
     {
-        return _accountRepository.GetCharacterByIdCharacter(idPlayer);
+        foreach (var account in _accountRepository.GetAccounts())
+        {
+            foreach (var character in account.Characters)
+            {
+                if (character.IdCharacter == id)
+                {
+                    return character;
+                }
+            }
+        }
+
+        return null;
     }
 
     public static OnlineCharacter GetOnlineCharacterByAddress(IConnectionMember address)
     {
-        return _accountRepository.GetOnlineCharacterByAddress(address);
+        OnlineAccount account = GetOnlineAccountByAddress(address);
+
+        return account.OnlineCharacter;
     }
 
     public static void UpdateRegisterCharacter(int idCharacter, GameObject player)
@@ -87,5 +109,36 @@ public static class AccountRepository
         var character = GetCharacterById(idCharacter);
 
         character.Update(player);
+    }
+
+    public static NetPlayer FindNetPlayerByAddress(IConnectionMember address)
+    {
+        OnlineCharacter onlineCharacter = AccountRepository.GetOnlineCharacterByAddress(address);
+
+        return onlineCharacter.Instantiate.GetComponent<NetPlayer>();
+    }
+
+    public static NetPlayer FindAliveNetPlayerByAddress(IConnectionMember address)
+    {
+        var player = FindNetPlayerByAddress(address);
+
+        if (player.GetComponent<PlayerHealthSystem>().IsDead())
+        {
+            throw new Exception("Gracz jest martwy!");
+        }
+
+        return player;
+    }
+
+    public static NetPlayer FindDeadNetPlayerByAddress(IConnectionMember address)
+    {
+        var player = FindNetPlayerByAddress(address);
+
+        if (!player.GetComponent<PlayerHealthSystem>().IsDead())
+        {
+            throw new Exception("Gracz jest żywy!");
+        }
+
+        return player;
     }
 }

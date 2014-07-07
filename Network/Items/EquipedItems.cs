@@ -5,8 +5,8 @@ using System.Text;
 
 namespace NetworkProject.Items
 {
-    public class EquipedItems
+    public abstract class EquipedItems
     {
-
+        public abstract void ApplyToStats(IEquipableStats stats);
     }
 }

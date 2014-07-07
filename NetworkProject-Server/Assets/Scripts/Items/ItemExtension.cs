@@ -4,67 +4,28 @@ using System.Linq;
 using System.Text;
 using NetworkProject;
 using NetworkProject.BodyParts;
+using NetworkProject.Items;
 
 public static class ItemExtension
 {
     public static bool CanBeEquipedByPlayer(this Item item, NetPlayer player)
     {
-        ItemInfo itemInfo = ItemRepository.GetAnyItem(item.IdItem);
+        EquipableItemData itemData = (EquipableItemData)ItemRepository.GetItemByIdItem(item.IdItem);
 
-        foreach (ItemRequirement requirement in itemInfo.GetRequirement())
-        {
-            Func<NetPlayer, object, bool> func = ChooseMethodCheckRequirement(requirement._type);
-            if (!func(player, requirement._value))
-            {
-                return false;
-            }
-        }
-
-        return true;
+        return itemData.CanEquipe(player.GetComponent<PlayerStats>());
     }
 
-    public static bool CanBeEquipedByPlayerOnThisBodyPart(this Item item, NetPlayer player, BodyPartSlot bodyPart)
+    public static bool CanBeEquipedByPlayerOnThisBodyPart(this Item item, NetPlayer player, int bodyPartSlot)
     {
-        ItemInfo itemInfo = ItemRepository.GetAnyItem(item.IdItem);
+        EquipableItemData itemData = (EquipableItemData)ItemRepository.GetItemByIdItem(item.IdItem);
 
-        if (!IsProperType(itemInfo, bodyPart))
+        BodyPart bodyPart = IoC.GetBodyPart(bodyPartSlot);
+
+        if(!bodyPart.CanEquipeItemOnThisBodyPart(itemData))
         {
             return false;
         }
 
-        foreach (ItemRequirement requirement in itemInfo.GetRequirement())
-        {
-            Func<NetPlayer, object, bool> func = ChooseMethodCheckRequirement(requirement._type);
-            if (!func(player, requirement._value))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private static bool IsProperType(ItemInfo itemInfo, BodyPartSlot bodyPartType)
-    {
-        BodyPart bodyPart = IoC.GetBodyPart(bodyPartType);
-
-        return bodyPart.CanEquipeItemOnThisBodyPart(itemInfo);
-    }
-
-    private static Func<NetPlayer, object, bool> ChooseMethodCheckRequirement(ItemRequirementType type)
-    {
-        switch (type)
-        {
-            case ItemRequirementType.Lvl:
-                return CheckLvlRequirement;
-            default:
-                throw new Exception("Nie ma takiego wymagania : " + type.ToString());
-
-        }
-    }
-
-    private static bool CheckLvlRequirement(NetPlayer player, object lvlRquired)
-    {
-        return (player.GetComponent<PlayerExperience>().Lvl >= (int)lvlRquired);
+        return itemData.CanEquipe(player.GetComponent<PlayerStats>());
     }
 }

@@ -86,13 +86,32 @@ public class HealthSystem : MonoBehaviour
         CheckWhetherIsDead();
     }
 
-    public virtual void Die()
+    public virtual void DieAndSendUpdate()
     {
         SendMessage("OnDead");
+
+        NetObject netObject = GetComponent<NetObject>();
+
+        if (netObject!= null)
+        {
+            netObject.SendDeadMessage();
+        }
 
         transform.position = new Vector3(1000000, 1000000, 1000000);
 
         Destroy(gameObject, 1f);
+    }
+
+    public virtual void SendUpdateHP()
+    {
+        SendUpdateHPToOthers();
+    }
+
+    public void SendUpdateHPToOthers()
+    {
+        NetObject netObject = GetComponent<NetObject>();
+
+        netObject.SendChangeHpMessage();
     }
 
     public void Recuparate()
@@ -104,7 +123,7 @@ public class HealthSystem : MonoBehaviour
     {
         if (IsDead())
         {
-            Die();
+            DieAndSendUpdate();
         }
     }
 
@@ -113,14 +132,5 @@ public class HealthSystem : MonoBehaviour
         float hpIncrease = HPRegenerationPerSecond * Time.deltaTime;
 
         IncreaseHP(hpIncrease);
-    }
-
-    public virtual void SendHpUpdating()
-    {
-        NetObject netObject = GetComponent<NetObject>();
-        if (netObject != null)
-        {
-            netObject.SendChangeHpMessage();
-        }       
-    }
+    } 
 }

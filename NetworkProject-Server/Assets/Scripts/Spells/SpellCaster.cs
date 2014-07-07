@@ -1,8 +1,13 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using NetworkProject;
+using NetworkProject.Spells;
+using NetworkProject.Connection;
+using NetworkProject.Connection.ToClient;
 
+[CLSCompliant(false)]
 public class SpellCaster : MonoBehaviour, ISpellCaster
 {
     public int Lvl
@@ -25,6 +30,13 @@ public class SpellCaster : MonoBehaviour, ISpellCaster
         get
         {
             return transform.eulerAngles.y;
+        }
+    }
+    public ISpellCasterStats Stats
+    {
+        get
+        {
+            return GetComponent<SpellCasterStats>();
         }
     }
 
@@ -57,74 +69,32 @@ public class SpellCaster : MonoBehaviour, ISpellCaster
 
     #region CastSpell
 
-    public bool CastSpell(int idSpell)
+    public bool TryCastSpellFromSpellBook(int idSpell, params ISpellCastOption[] options)
     {
-        string reason = "";
-        return CastSpell(idSpell, out reason, new ISpellCastOption[0]);
-    }
+        Spell spell = _spells.Find(x => x.IdSpell == idSpell);
 
-    public bool CastSpell(int idSpell, params ISpellCastOption[] options)
-    {
-        string reason = "";
-        return CastSpell(idSpell, out reason, options);
-    }
+        ISpellCasterStats stats = Stats;
 
-    public bool CastSpell(int idSpell, out string reason)
-    {
-        return CastSpell(idSpell, out reason, new ISpellCastOption[0]);
-    }
-
-    public bool CastSpell(int idSpell, out string reason, params ISpellCastOption[] options)
-    {
-        Spell spell = GetSpellById(idSpell);
-
-        if (spell == null)
+        if(spell == null || !spell.CanUseSpell(stats))
         {
-            reason = "Caster hasn't this skill.";
             return false;
         }
+        else
+        {
+            SpellActionData spellData = (SpellActionData)SpellRepository.GetSpell(idSpell);
 
-        return CastSpell(spell, out reason, options);
-    }
+            spellData.CastSpell(stats, options);
 
-    public bool CastSpell(Spell spell)
-    {
-        return spell.UseSpell(this);
-    }
-
-    public bool CastSpell(Spell spell, params ISpellCastOption[] options)
-    {
-        return spell.UseSpell(this, options);
-    }
-
-    public bool CastSpell(Spell spell, out string reason)
-    {
-        return spell.UseSpell(this, out reason);
-    }
-
-    public bool CastSpell(Spell spell, out string reason, params ISpellCastOption[] options)
-    {
-        return spell.UseSpell(this, out reason, options);
+            return true;
+        }    
     }
 
     #endregion
 
     public void SendUpdateSpells()
     {
-        var package = GetSpellsPackage();
-        Server.SendMessageUpdateYourSpells(package, GetComponent<NetPlayer>().Address);
-    }
-
-    public ListPackage<SpellPackage> GetSpellsPackage()
-    {
-        var spells = new ListPackage<SpellPackage>();
-
-        foreach (Spell spell in _spells)
-        {
-            spells.Add(new SpellPackage(spell.IdSpell, spell.WhenCanUseSkill()));
-        }
-
-        return spells;
+        int idNet = GetComponent<NetObject>().IdNet;
+        var request = new UpdateAllSpells(idNet, _spells);
     }
 }
 

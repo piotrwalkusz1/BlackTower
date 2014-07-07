@@ -12,8 +12,8 @@ namespace NetworkProject.Items
     [Serializable]
     public abstract class EquipableItemData : ItemData
     {
-        protected List<Benefit> _benefits = new List<Benefit>();
-        protected List<Requirement> _requirements = new List<Requirement>();
+        protected List<IEquipeBenefit> _benefits = new List<IEquipeBenefit>();
+        protected List<IEquipeRequirement> _requirements = new List<IEquipeRequirement>();
 
         public EquipableItemData()
         {
@@ -25,65 +25,47 @@ namespace NetworkProject.Items
             IdItem = idItem;
         }
 
-        public void ApplyToStats(IStats stats)
+        public void ApplyToStats(IEquipableStats stats)
         {
             ApplyItemStats(stats);
             ApplyBenefits(stats);
         }
 
-        public abstract void ApplyItemStats(IStats stats);
+        protected abstract void ApplyItemStats(IEquipableStats stats);
 
-        public void SetBenefits(XmlNodeList benefits)
-        {
-            _benefits = new List<Benefit>();
-
-            foreach (XmlNode benefit in benefits)
-            {
-                AddBenefit(benefit);
-            }
-        }
-
-        public void SetRequirements(XmlNodeList requirements)
-        {
-            foreach (XmlNode requirement in requirements)
-            {
-                AddRequirement(requirement);
-            }
-        }     
-
-        public void AddBenefit(Benefit benefit)
+        public void AddBenefit(IEquipeBenefit benefit)
         {
             _benefits.Add(benefit);
         }
 
-        public void AddBenefit(Benefit[] benefits)
+        public void AddBenefit(IEquipeBenefit[] benefits)
         {
             _benefits.AddRange(benefits);
         }
 
-        public void AddRequirement(Requirement requirement)
+        public void AddRequirement(IEquipeRequirement requirement)
         {
             _requirements.Add(requirement);
         }
 
-        public void AddRequirement(Requirement[] requirements)
+        public void AddRequirement(IEquipeRequirement[] requirements)
         {
             _requirements.AddRange(requirements);
         }
 
-        public Benefit[] GetBenefits()
+        public IEquipeBenefit[] GetBenefits()
         {
             return _benefits.ToArray();
         }
 
-        public Requirement[] GetRequirement()
+        public IEquipeRequirement[] GetRequirement()
         {
             return _requirements.ToArray();
         }
 
-        public bool CanEquipe(IStats stats)
+        public bool CanEquipe(IEquipableStats stats)
         {
-            foreach(Requirement req in _requirements)
+            foreach(IEquipeRequirement req in _requirements)
             {
                 if (!req.IsRequirementSatisfy(stats))
                 {
@@ -94,31 +76,12 @@ namespace NetworkProject.Items
             return true;
         }
 
-        private void ApplyBenefits(IStats stats)
+        private void ApplyBenefits(IEquipableStats stats)
         {
-            foreach (Benefit benefit in _benefits)
+            foreach (IEquipeBenefit benefit in _benefits)
             {
                 benefit.ApplyToStats(stats);
             }
-        }
-
-        private void AddBenefit(XmlNode benefitNode)
-        {
-            BenefitType benefitType = (BenefitType)Enum.Parse(typeof(BenefitType), benefitNode.Name, true);
-
-            Benefit benefit = IoC.GetBenefit(benefitType, benefitNode.InnerText);
-
-            _benefits.Add(benefit);
-        }
-
-        private void AddRequirement(XmlNode requirementNode)
-        {
-            RequirementType requirementType = (RequirementType)Enum.Parse(typeof(RequirementType), requirementNode.Name, true);
-
-            Requirement requirement = IoC.GetRequirement(requirementType, requirementNode.InnerText);
-
-
-            _requirements.Add(requirement);
         }
     }
 }

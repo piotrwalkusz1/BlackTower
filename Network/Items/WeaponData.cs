@@ -22,9 +22,11 @@ namespace NetworkProject.Items
             IdItem = idItem;
         }
 
-        public override void ApplyItemStats(IStats stats)
+        protected override void ApplyItemStats(IEquipableStats stats)
         {
-            stats.AttackSpeed += stats.AttackSpeed;
+            IEquipableStats equipableStats = (IEquipableStats)stats;
+
+            equipableStats.AttackSpeed += equipableStats.AttackSpeed;
         }
     }
 }

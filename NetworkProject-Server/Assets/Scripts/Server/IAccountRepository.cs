@@ -7,19 +7,11 @@ using NetworkProject.Connection;
 public interface IAccountRepository 
 {
     void RegisterAccount(RegisterAccount registerAccount);
-    void RegisterCharacter(int idAccount, RegisterCharacter registerCharacter);
-    OnlineAccount LoginAccount(int idAccount, IConnectionMember address);
+    void RegisterCharacter(RegisterAccount acount, RegisterCharacter registerCharacter);
+    OnlineAccount LoginAccount(RegisterAccount account, IConnectionMember address);
     OnlineCharacter LoginCharacter(OnlineAccount account, int characterSlotInAccount);
     void LogoutAccount(OnlineAccount account);
     void LogoutAndDeleteCharacter(OnlineCharacter character);
-    RegisterAccount GetAccountByLogin(string login);
-    RegisterAccount GetAccountById(int id);
-    OnlineAccount GetOnlineAccountByAddress(IConnectionMember address);
-    OnlineAccount GetOnlineAccountByLogin(string login);
-    OnlineAccount GetOnlineAccountByIdAccount(int id);
-    OnlineAccount GetOnlineAccountByIdCharacter(int id);
-    RegisterCharacter GetCharacterByIdCharacter(int idPlayer);
-    RegisterCharacter GetCharacterByName(string name);
-    OnlineCharacter GetOnlineCharacterByIdNet(int netPlayerObjectId);
-    OnlineCharacter GetOnlineCharacterByAddress(IConnectionMember address);
+    RegisterAccount[] GetAccounts();
+    OnlineAccount[] GetOnlineAccounts();
 }

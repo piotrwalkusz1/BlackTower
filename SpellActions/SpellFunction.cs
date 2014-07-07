@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using NetworkProject.Spells;
 
-namespace NetworkProject.SpellActions
+namespace NetworkProject.Spells
 {
-    public delegate void SpellFunction(ISpellCaster spellCaster, params ISpellCastOption[] options);
+    public delegate void SpellFunction(ISpellCasterStats spellCaster, params ISpellCastOption[] options);
 }

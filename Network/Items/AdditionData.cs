@@ -19,7 +19,7 @@ namespace NetworkProject.Items
             IdItem = int.Parse(data[0].InnerText);
         }   
        
-        public override void ApplyItemStats(IStats stats)
+        protected override void ApplyItemStats(IEquipableStats stats)
         {
  	        
         }

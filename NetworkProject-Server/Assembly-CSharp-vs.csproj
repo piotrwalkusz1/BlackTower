@@ -149,7 +149,10 @@
     <Compile Include="Assets\Scripts\Other\BulletInfo.cs" />
     <Compile Include="Assets\Scripts\Other\Damage.cs" />
     <Compile Include="Assets\Scripts\Other\Experience.cs" />
+    <Compile Include="Assets\Scripts\Other\GameObjectRepository.cs" />
+    <Compile Include="Assets\Scripts\Other\GameObjectRepositoryByFind.cs" />
     <Compile Include="Assets\Scripts\Other\IAttacker.cs" />
+    <Compile Include="Assets\Scripts\Other\IGameObjectRepository.cs" />
     <Compile Include="Assets\Scripts\Other\IoC.cs" />
     <Compile Include="Assets\Scripts\Other\SceneBuilder.cs" />
     <Compile Include="Assets\Scripts\Other\Settings.cs" />
@@ -160,7 +163,7 @@
     <Compile Include="Assets\Scripts\Player\PlayerEquipment.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerExperience.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerRespawn.cs" />
-    <Compile Include="Assets\Scripts\Player\PlayerStats.cs" />
+    <Compile Include="Assets\Scripts\Stats\PlayerStats.cs" />
     <Compile Include="Assets\Scripts\Server\AccountRepositoryException.cs" />
     <Compile Include="Assets\Scripts\Server\AccountRepositoryExceptionCode.cs" />
     <Compile Include="Assets\Scripts\Server\AccountRepository.cs" />
@@ -178,9 +181,7 @@
     <Compile Include="Assets\Scripts\Server\ServerController.cs" />
     <Compile Include="Assets\Scripts\Spells\ISpellCaster.cs" />
     <Compile Include="Assets\Scripts\Spells\SpellCaster.cs" />
-    <Compile Include="Assets\Scripts\Spells\SpellData.cs" />
-    <Compile Include="Assets\Scripts\Spells\SpellExtension.cs" />
-    <Compile Include="Assets\Scripts\Spells\SpellRepository.cs" />
+    <Compile Include="Assets\Scripts\Stats\SpellCasterStats.cs" />
     <Compile Include="Assets\Test\Test.cs" />
     <None Include="Assets\Resources\spells.xml" />
     <None Include="Assets\Resources\monsters.xml" />
@@ -190,6 +191,10 @@
     <ProjectReference Include="..\Network\NetworkProject.csproj">
       <Project>{aaa6a575-be26-4699-b4ca-4b5afe80e502}</Project>
       <Name>NetworkProject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SpellActions\SpellActions.csproj">
+      <Project>{21f651fc-53f9-4c99-ab9e-6d5a49da3403}</Project>
+      <Name>SpellActions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

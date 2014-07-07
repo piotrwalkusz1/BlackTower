@@ -2,15 +2,17 @@
 using System.Collections;
 using NetworkProject;
 using NetworkProject.Connection;
-using NetworkProject.Connection.ToServer;
+using NetworkProject.Connection.ToClient;
 
 public class NetVisualObject : NetObject
 {
-    public VisualObjectType _modelType;
+    public int IdVisualObject { get; set; }
 
     public override void SendMessageAppeared(IConnectionMember address)
     {
-        var request = new
+        var request = new CreateVisualObject(IdNet, transform.position, transform.eulerAngles.y, IdVisualObject);
+
+        Server.SendRequestAsMessage(request, address);
     }
 
     public override void SendMessageUpdate(IConnectionMember address)

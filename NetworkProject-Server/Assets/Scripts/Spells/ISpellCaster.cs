@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using NetworkProject;
+using NetworkProject.Spells;
 
 [System.CLSCompliant(false)]
 public interface ISpellCaster
@@ -12,15 +13,12 @@ public interface ISpellCaster
     int Mana { get; }
     Vector3 Position { get; }
     float Rotation { get; }
+    ISpellCasterStats Stats { get; }
 
     void AddSpell(Spell spell);
 
     Spell[] GetSpells();
 
-    void CastSpell(Spell spell);
-
-    void CastSpell(Spell spell, params ISpellCastOption[] options);
-
-    void CastSpell(Spell spell, out string reason, params ISpellCastOption[] options);
+    bool TryCastSpellFromSpellBook(int idSpell, params ISpellCastOption[] options);
 }
 

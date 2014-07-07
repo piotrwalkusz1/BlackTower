@@ -69,6 +69,11 @@ public class Equipment : MonoBehaviour
         return _items[numberPlace] == null;
     }
 
+    public virtual void ApplyToStats(IEquipableStats stats)
+    {
+        //this class doesn't have any equiped items
+    }
+
     private int FindFirstFreePlace()
     {
         for (int i = 0; i < _items.Count; i++)

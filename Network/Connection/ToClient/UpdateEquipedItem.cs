@@ -11,10 +11,10 @@ namespace NetworkProject.Connection.ToClient
     public class UpdateEquipedItem : INetworkRequest
     {
         public int IdNet { get; set; }
-        public BodyPartSlot Slot { get; set; }
+        public int Slot { get; set; }
         public Item Item { get; set; }
 
-        public UpdateEquipedItem(int idNet, BodyPartSlot slot, Item item)
+        public UpdateEquipedItem(int idNet, int slot, Item item)
         {
             IdNet = idNet;
             Slot = slot;

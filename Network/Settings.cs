@@ -24,9 +24,14 @@ namespace NetworkProject
         public const int basicPlayerMaxExp = 100;
         public const int additionalMaxExpPerLvl = 50;
 
-        public static int MaxExpInLvl(int lvl)
+        public static int GetMaxExpInLvl(int lvl)
         {
             return basicPlayerMaxExp + (lvl - 1) * additionalMaxExpPerLvl;
+        }
+
+        public static float GetTimeBetweenAttacks(float attackSpeed)
+        {
+            return 50f / attackSpeed;
         }
     }
 }

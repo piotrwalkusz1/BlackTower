@@ -4,6 +4,7 @@ using NetworkProject;
 using NetworkProject.Combat;
 using NetworkProject.Monsters;
 using NetworkProject.Connection;
+using NetworkProject.Items;
 
 [System.CLSCompliant(false)]
 public static class SceneBuilder
@@ -37,21 +38,21 @@ public static class SceneBuilder
         return instantiate;
     }
 
-    public static GameObject CreateMonster(MonsterName monsterName, Vector3 position, float rotation)
+    public static GameObject CreateMonster(int idMonster, Vector3 position, float rotation)
     {
-        GameObject instantiate = StaticRepository.Prefabs.GetMonster(monsterName);
+        GameObject instantiate = StaticRepository.Prefabs.GetMonster(idMonster);
 
         instantiate = GameObject.Instantiate(instantiate, position, Quaternion.Euler(0, rotation, 0)) as GameObject;
 
-        Monster monsterInfo = MonsterRepository.GetMonster(monsterName);
+        Monster monsterInfo = MonsterRepository.GetMonster(idMonster);
 
         NetMonster netMonster = instantiate.GetComponent<NetMonster>();
         netMonster.IdNet = GetNextIdNet();
 
         MonsterStats stats = instantiate.GetComponent<MonsterStats>();
-        stats.MaxHp = monsterInfo._maxHp;
+        stats.MaxHP = monsterInfo._maxHp;
         stats.HP = monsterInfo._maxHp;
-        stats.MovingSpeed = monsterInfo._movingSpeed;
+        stats.MovementSpeed = monsterInfo._movingSpeed;
 
         return instantiate;
     }
@@ -67,11 +68,13 @@ public static class SceneBuilder
         return item;
     }
 
-    public static GameObject CreateVisualObject(VisualObjectType visualObject, Vector3 position, float rotation)
+    public static GameObject CreateVisualObject(int idVisualObject, Vector3 position, float rotation)
     {
         GameObject instantiate = GameObject.Instantiate(StaticRepository.Prefabs._visualObject, position, Quaternion.Euler(0, rotation, 0)) as GameObject;
 
-        instantiate.GetComponent<NetVisualObject>()._modelType = visualObject;
+        NetVisualObject netVisualObject = instantiate.GetComponent<NetVisualObject>();
+        netVisualObject.IdNet = GetNextIdNet();
+        netVisualObject.IdVisualObject = idVisualObject;       
 
         return instantiate;
     }
@@ -80,9 +83,9 @@ public static class SceneBuilder
     {
         respawnedPlayer.transform.position = respawn.transform.position;
 
-        Server.SendMessageYourRespawn(respawn.transform.position, respawnedPlayer.Address);
+        var request = new NetworkProject.Connection.ToClient.Respawn(respawnedPlayer.IdNet);
 
-        respawnedPlayer.GetComponent<PlayerHealthSystem>().RecuperateAndSendHpUpdating();
+        respawnedPlayer.GetComponent<PlayerHealthSystem>().RecuperateAndSendHPUpdate();
     }
 
     public static void DeletePlayer(OnlineCharacter onlineCharacter)

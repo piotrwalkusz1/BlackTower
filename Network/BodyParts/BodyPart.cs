@@ -19,6 +19,13 @@ namespace NetworkProject.BodyParts
         }
 
         public abstract bool CanEquipeItemOnThisBodyPart(ItemData item);
+
+        public void ApplyEquipedItemToStats(IEquipableStats stats)
+        {
+            EquipableItemData item = (EquipableItemData)ItemRepository.GetItemByIdItem(EquipedItem.IdItem);
+
+            item.ApplyToStats(stats);
+        }
     }
 }
 

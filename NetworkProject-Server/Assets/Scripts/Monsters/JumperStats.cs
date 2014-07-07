@@ -16,7 +16,7 @@ public class JumperStats : MonsterStats
         }
     }
 
-    public override int MaxHp
+    public override int MaxHP
     {
         get
         {
@@ -28,7 +28,7 @@ public class JumperStats : MonsterStats
         }
     }
 
-    public override float MovingSpeed
+    public override float MovementSpeed
     {
         get
         {
