@@ -4,13 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NetworkProject;
+using NetworkProject.Connection;
+using NetworkProject.Connection.ToClient;
+using NetworkProject.Connection.ToServer;
+using NetworkProject.Items;
 using UnityEngine;
+using Standard;
 
 [System.CLSCompliant(false)]
 public static class Client
 {
-    private delegate void ReceiveMessageMethod(IncomingMessage message);
-
     public static ClientStatus Status
     {
         get
@@ -44,24 +47,23 @@ public static class Client
 
     public static void Listen()
     {
-        IncomingMessage m;
+        IncomingMessageFromServer m;
         while ((m = _client.ReadMessage()) != null)
         {
             ReceiveMessage(m);
         }
     }
 
-    public static void ExecuteMessage(IncomingMessage message)
+    public static void ExecuteMessage(IncomingMessageFromServer message)
     {
         ReceiveMessage(message);
     }
 
-    private static void ReceiveMessage(IncomingMessage message)
+    private static void ReceiveMessage(IncomingMessageFromServer message)
     {
         try
         {
-            MessageToClientType type = (MessageToClientType)message.ReadInt();
-            ReceiveMessageMethod method = ChooseReceiveMessageMethod(type);
+            Action<IncomingMessageFromServer> method = ChooseReceiveMessageMethod(message.Request);
             method(message);
         }
         catch (Exception ex)
@@ -70,71 +72,53 @@ public static class Client
         }
     }
 
-    private static ReceiveMessageMethod ChooseReceiveMessageMethod(MessageToClientType type)
+    private static Action<IncomingMessageFromServer> ChooseReceiveMessageMethod(INetworkRequest request)
     {
-        switch (type)
-        {
-            case MessageToClientType.WrongLoginOrPassword:
-                return ReceiveMessageWrongLoginOrPassword;
-            case MessageToClientType.GoToChoiceCharacterMenu:
-                return ReceiveMessageGoToChoiceCharacterMenu;
-            case MessageToClientType.GoIntoWorld:
-                return ReceiveMessageGoIntoWorld;
-            case MessageToClientType.CreateYourOwnPlayer:
-                return ReceiveMessageCreateYourOwnPlayer;
-            case MessageToClientType.MoveOtherPlayer:
-                return ReceiveMessageMoveOtherPlayer;
-            case MessageToClientType.RotationOtherPlayer:
-                return ReceiveMessageRotationOtherPlayer;
-            case MessageToClientType.JumpOtherPlayer:
-                return ReceiveMessageJumpOtherPlayer;
-            case MessageToClientType.CreateOtherPlayer:
-                return ReceiveMessageCreateOtherPlayer;
-            case MessageToClientType.UpdateItemInEquipment:
-                return ReceiveMessageUpdateItemInEquipment;
-            case MessageToClientType.UpdateEquipedItem:
-                return ReceiveMessageUpdateEquipedItem;
-            case MessageToClientType.NewPosition:
-                return ReceiveMessageNewPosition;
-            case MessageToClientType.NewRotation:
-                return ReceiveMessageNewRotation;
-            case MessageToClientType.Jump:
-                return ReceiveMessageJump;
-            case MessageToClientType.CreateBullet:
-                return ReceiveMessageCreateBullet;
-            case MessageToClientType.CreateMonster:
-                return ReceiveMessageCreateMonster;
-            case MessageToClientType.CreateItemObject:
-                return ReceiveMessageCreateItemObject;
-            case MessageToClientType.CreateVisualObject:
-                return ReceiveMessageCreateVisualObject;
-            case MessageToClientType.DeleteObject:
-                return ReceiveMessageDeleteObject;
-            case MessageToClientType.PlayerAttack:
-                return ReceiveMessagePlayerAttack;
-            case MessageToClientType.MonsterAttackTarget:
-                return ReceiveMessageMonsterAttackTartget;
-            case MessageToClientType.YouAreDead:
-                return ReceiveMessageYouAreDead;
-            case MessageToClientType.YourRespawn:
-                return ReceiveMessageYourRespawn;
-            case MessageToClientType.UpdateOtherHp:
-                return ReceiveMessageUpdateOtherHp;
-            case MessageToClientType.UpdateOtherAllStats:
-                return ReceiveMessageUpdateOtherAllStats;
-            case MessageToClientType.UpdateYourHp:
-                return ReceiveMessageUpdateYourHp;
-            case MessageToClientType.UpdateYourAllStats:
-                return ReceiveMessageUpdateYourAllStats;
-            case MessageToClientType.UpdateYourSpells:
-                return ReceiveMessageUpdateYourSpells;
-            case MessageToClientType.UpdateYourExperience:
-                return ReceiveMessageUpdateYourExperience;
-            case MessageToClientType.UpdateOtherEquipedItmes:
-                return ReceiveMessageUpdateOtherEquipedItems;
-            default:
-                throw new NotImplementedException("Brak obsługi podanego typu wiadomości : " + type.ToString());
-        }
+        if(request is ErrorMessageToClient)
+            return ReceiveMessageErrorMessage;
+        else if(request is GoToChoiceCharacterMenuToClient)
+            return ReceiveMessageGoToChoiceCharacterMenu;
+        else if(request is GoIntoWorldToClient)
+            return ReceiveMessageGoIntoWorld;
+        else if(request is CreateOwnPlayerToClient)
+            return ReceiveMessageCreateOwnPlayer;
+        else if(request is CreateOtherPlayerToClient)
+            return ReceiveMessageCreateOtherPlayer;
+        else if(request is CreateBulletToClient)
+            return ReceiveMessageCreateBullet;
+        else if(request is CreateItemToClient)
+            return ReceiveMessageCreateItemObject;
+        else if(request is CreateMonsterToClient)
+            return ReceiveMessageCreateMonster;
+        else if(request is CreateVisualObjectToClient)
+            return ReceiveMessageCreateVisualObject;
+        else if(request is DeleteObjectToClient)
+            return ReceiveMessageDeleteObject;
+        else if(request is MoveToClient)
+            return ReceiveMessageMove;
+        else if(request is RotateToClient)
+            return ReceiveMessageRotate;
+        else if(request is NewPositionToClient)
+            return ReceiveMessageNewPosition;
+        else if(request is UpdateItemInEquipmentToClient)
+            return ReceiveMessageUpdateItemInEquipment;
+        else if(request is UpdateEquipedItemToClient)
+            return ReceiveMessageUpdateEquipedItem;
+        else if(request is AttackToClient)
+            return ReceiveMessageAttack;
+        else if(request is DeadToClient)
+            return ReceiveMessageDead;
+        else if(request is RespawnToClient)
+            return ReceiveMessageRespawn;
+        else if(request is UpdateAllSpellsToClient)
+            throw new NotImplementedException();
+        else if(request is UpdateAllStatsToClient)
+            return ReceiveMessageUpdateAllStats;
+        else if(request is UpdateHPToClient)
+            return ReceiveMessageUpdateHP;
+        else if(request is UpdateExpToClient)
+            return ReceiveMessageUpdateExp;
+        else throw new NotImplementedException("Brak obsługi podanego typu wiadomości : " + request.GetType().ToString());
     }
 
     public static void SetNetOwnPlayer(NetOwnPlayer player)
@@ -152,30 +136,47 @@ public static class Client
         return _netOwnPlayer;
     }
 
+    public static void SendRequestAsMessage(INetworkRequest request)
+    {
+        var message = new OutgoingMessage(request);
+
+        Send(message);
+    }
+
+    public static void Send(OutgoingMessage message)
+    {
+        _client.Send(message);
+    }
+
     #region ToClient
 
-    private static void ReceiveMessageWrongLoginOrPassword(IncomingMessage message)
+    private static void ReceiveMessageErrorMessage(IncomingMessageFromServer message)
     {
-        GUIController.ShowFreezingWindow("Error", "Wrong login or password");
+        var request = (ErrorMessageToClient)message.Request;
+
+        string errorText = Languages.GetErrorText((int)request.ErrorCode);
+
+        GUIController.ShowWindow(Languages.GetSentence("error"), errorText);
     }
 
-    private static void ReceiveMessageGoToChoiceCharacterMenu(IncomingMessage message)
+    private static void ReceiveMessageGoToChoiceCharacterMenu(IncomingMessageFromServer message)
     {
-        ApplicationControler.GoToChoiceCharacterMenu(message.Read<CharacterChoiceMenuPackage>());
+        ApplicationControler.GoToChoiceCharacterMenu((GoToChoiceCharacterMenuToClient)message.Request);
     }
 
-    private static void ReceiveMessageCreateYourOwnPlayer(IncomingMessage message)
+    private static void ReceiveMessageCreateOwnPlayer(IncomingMessageFromServer message)
     {
         if (IfNewSceneLoadedDelayExecutionMessage(message))
         {
             return;
         }
 
-        OwnPlayerPackage ownPlayer = message.Read<OwnPlayerPackage>();
-        SceneBuilder.CreateOwnPlayer(ownPlayer);
-    }   
+        var request = (CreateOwnPlayerToClient)message.Request;
 
-    private static void ReceiveMessageMoveOtherPlayer(IncomingMessage message)
+        SceneBuilder.CreateOwnPlayer(request);
+    }
+
+    private static void ReceiveMessageMove(IncomingMessageFromServer message)
     {
         int id = message.ReadInt();
         Vector3 newPosition = message.ReadVector3();
@@ -183,7 +184,7 @@ public static class Client
         player.Movement.SetNewTargetPosition(newPosition);
     }
 
-    private static void ReceiveMessageRotationOtherPlayer(IncomingMessage message)
+    private static void ReceiveMessageRotate(IncomingMessageFromServer message)
     {
         int id = message.ReadInt();
         float newRotation = message.ReadFloat();
@@ -191,7 +192,7 @@ public static class Client
         player.Movement.SetNewRotation(newRotation);
     }
 
-    private static void ReceiveMessageJumpOtherPlayer(IncomingMessage message)
+    private static void ReceiveMessageJump(IncomingMessageFromServer message)
     {
         int id = message.ReadInt();
         Vector3 position = message.ReadVector3();
@@ -200,19 +201,19 @@ public static class Client
         player.Movement.Jump(position, direction);
     }
 
-    private static void ReceiveMessageGoIntoWorld(IncomingMessage message)
+    private static void ReceiveMessageGoIntoWorld(IncomingMessageFromServer message)
     {
         WorldInfoPackage worldInfo = message.Read<WorldInfoPackage>();
         ApplicationControler.GoToWorld(worldInfo);
     }
 
-    private static void ReceiveMessageCreateOtherPlayer(IncomingMessage message)
+    private static void ReceiveMessageCreateOtherPlayer(IncomingMessageFromServer message)
     {
         OtherPlayerPackage otherPlayer = message.Read<OtherPlayerPackage>();
         SceneBuilder.CreateOtherPlayer(otherPlayer);
     }
 
-    private static void ReceiveMessageUpdateItemInEquipment(IncomingMessage message)
+    private static void ReceiveMessageUpdateItemInEquipment(IncomingMessageFromServer message)
     {
         if (_netOwnPlayer == null)
         {
@@ -230,7 +231,7 @@ public static class Client
         GUIController.IsActiveEquipmentRefresh();
     }
 
-    private static void ReceiveMessageUpdateEquipedItem(IncomingMessage message)
+    private static void ReceiveMessageUpdateEquipedItem(IncomingMessageFromServer message)
     {
         var item = message.Read<ItemInEquipmentPackage>();
         ItemEquipableType type = (ItemEquipableType)message.ReadInt();
@@ -244,7 +245,7 @@ public static class Client
         GUIController.IsActiveCharacterGUIRefresh();
     }
 
-    private static void ReceiveMessageNewPosition(IncomingMessage message)
+    private static void ReceiveMessageNewPosition(IncomingMessageFromServer message)
     {
         int idNet = message.ReadInt();
 
@@ -255,7 +256,7 @@ public static class Client
         netObject.GetComponent<Movement>().SetNewTargetPosition(position);
     }
 
-    private static void ReceiveMessageNewRotation(IncomingMessage message)
+    private static void ReceiveMessageNewRotation(IncomingMessageFromServer message)
     {
         int idNet = message.ReadInt();
         float rotation = message.ReadFloat();
@@ -265,18 +266,7 @@ public static class Client
         netObject.GetComponent<Movement>().SetNewRotation(rotation);
     }
 
-    private static void ReceiveMessageJump(IncomingMessage message)
-    {
-        int idNet = message.ReadInt();
-        Vector3 position = message.ReadVector3();
-        Vector3 direction = message.ReadVector3();
-
-        NetObject netObject = FindNetObjectByNetId(idNet);
-
-        netObject.GetComponent<Movement>().Jump(position, direction);
-    }
-
-    private static void ReceiveMessageCreateBullet(IncomingMessage message)
+    private static void ReceiveMessageCreateBullet(IncomingMessageFromServer message)
     {
         if (IfNewSceneLoadedDelayExecutionMessage(message))
         {
@@ -288,7 +278,7 @@ public static class Client
         SceneBuilder.CreateBullet(bullet);      
     }
 
-    private static void ReceiveMessageCreateMonster(IncomingMessage message)
+    private static void ReceiveMessageCreateMonster(IncomingMessageFromServer message)
     {
         if (IfNewSceneLoadedDelayExecutionMessage(message))
         {
@@ -300,7 +290,7 @@ public static class Client
         SceneBuilder.CreateMonster(monster);
     }
 
-    private static void ReceiveMessageCreateItemObject(IncomingMessage message)
+    private static void ReceiveMessageCreateItemObject(IncomingMessageFromServer message)
     {
         if (IfNewSceneLoadedDelayExecutionMessage(message))
         {
@@ -312,14 +302,14 @@ public static class Client
         SceneBuilder.CreateItem(item);
     }
 
-    private static void ReceiveMessageCreateVisualObject(IncomingMessage message)
+    private static void ReceiveMessageCreateVisualObject(IncomingMessageFromServer message)
     {
         var visualObjectPackage = message.Read<VisualObjectPackage>();
 
         SceneBuilder.CreateVisualObject(visualObjectPackage);
     }
 
-    private static void ReceiveMessageDeleteObject(IncomingMessage message)
+    private static void ReceiveMessageDeleteObject(IncomingMessageFromServer message)
     {
         int idObject = message.ReadInt();
 
@@ -334,7 +324,7 @@ public static class Client
         GameObject.Destroy(netObject.gameObject);
     }
 
-    private static void ReceiveMessagePlayerAttack(IncomingMessage message)
+    private static void ReceiveMessageAttack(IncomingMessageFromServer message)
     {
         int idNetPlayer = message.ReadInt();
 
@@ -343,31 +333,21 @@ public static class Client
         player.Combat.Attack();
     }
 
-    private static void ReceiveMessageMonsterAttackTartget(IncomingMessage message)
-    {
-        int idAttacker = message.ReadInt();
-        int idVictim = message.ReadInt();
-
-        NetMonster monster = FindNetObjectByNetId(idAttacker) as NetMonster;
-
-        monster.Combat.AttackTarget(FindNetObjectByNetId(idVictim));
-    }
-
-    private static void ReceiveMessageYouAreDead(IncomingMessage message)
+    private static void ReceiveMessageDead(IncomingMessageFromServer message)
     {
         OwnDeadEventPackage deadInfo = message.Read<OwnDeadEventPackage>();
 
         _netOwnPlayer.Dead(deadInfo);
     }
 
-    private static void ReceiveMessageYourRespawn(IncomingMessage message)
+    private static void ReceiveMessageRespawn(IncomingMessageFromServer message)
     {
         Vector3 position = message.ReadVector3();
 
         _netOwnPlayer.transform.position = position;
     }
 
-    private static void ReceiveMessageUpdateOtherHp(IncomingMessage message)
+    private static void ReceiveMessageUpdateHP(IncomingMessageFromServer message)
     {
         int idObject = message.ReadInt();      
 
@@ -383,7 +363,7 @@ public static class Client
         netObject.GetComponent<HP>()._hp = hp;  
     }
 
-    private static void ReceiveMessageUpdateOtherAllStats(IncomingMessage message)
+    private static void ReceiveMessageUpdateAllStats(IncomingMessageFromServer message)
     {
         int netId = message.ReadInt();
 
@@ -397,7 +377,7 @@ public static class Client
         netObject.GetComponent<Stats>().Set(message);
     }
 
-    private static void ReceiveMessageUpdateOtherEquipedItems(IncomingMessage message)
+    private static void ReceiveMessageUpdateEquipedItems(IncomingMessageFromServer message)
     {
         int netId = message.ReadInt();
 
@@ -420,27 +400,7 @@ public static class Client
         }
     }
 
-    private static void ReceiveMessageUpdateYourHp(IncomingMessage message)
-    {
-        if (_netOwnPlayer == null)
-        {
-            BufferMessages.DelayExecutionMessage(message);
-            return;
-        }
-
-        _netOwnPlayer.GetComponent<HP>()._hp = message.ReadInt();
-
-        GUIController.IsActiveCharacterGUIRefresh();
-    }
-
-    private static void ReceiveMessageUpdateYourAllStats(IncomingMessage message)
-    {
-        _netOwnPlayer.GetComponent<OwnPlayerStats>().Set(message);
-
-        GUIController.IsActiveCharacterGUIRefresh();
-    }
-
-    private static void ReceiveMessageUpdateYourSpells(IncomingMessage message)
+    private static void ReceiveMessageUpdateSpells(IncomingMessageFromServer message)
     {
         if (_netOwnPlayer == null)
         {
@@ -453,7 +413,7 @@ public static class Client
         _netOwnPlayer.GetComponent<SpellCaster>().Set(spells);
     }
 
-    private static void ReceiveMessageUpdateYourExperience(IncomingMessage message)
+    private static void ReceiveMessageUpdateExp(IncomingMessageFromServer message)
     {
         if (_netOwnPlayer == null)
         {
@@ -468,120 +428,6 @@ public static class Client
     }
 
     #endregion
-
-    #region ToServer
-
-    public static void SendMessageLogin(string login, string password)
-    {
-        OutgoingMessage message = new OutgoingMessage((int)MessageToServerType.Login);
-        message.Write(login);
-        message.Write(password);
-        Send(message);
-    }
-
-    public static void SendMessageGoIntoWorld(int characterIndex)
-    {
-        OutgoingMessage message = new OutgoingMessage((int)MessageToServerType.GoIntoWorld);
-        message.Write(characterIndex);
-        Send(message);
-    }
-
-    public static void SendMessagePlayerMove(Vector3 position)
-    {
-        OutgoingMessage message = new OutgoingMessage();
-        message.Write((int)MessageToServerType.PlayerMove);
-        message.Write(position);
-        Send(message);
-    }
-
-    public static void SendMessageAskForImage(int idImage)
-    {
-        OutgoingMessage message = new OutgoingMessage();
-        message.Write((int)MessageToServerType.AskForImage);
-        message.Write(idImage);
-        Send(message);
-    }
-
-    public static void SendMessageAskForItem(int idItem)
-    {
-        OutgoingMessage message = new OutgoingMessage();
-        message.Write((int)MessageToServerType.AskForItem);
-        message.Write(idItem);
-        Send(message);
-    }
-
-    public static void SendMessageAttack(Vector3 direction)
-    {
-        OutgoingMessage message = new OutgoingMessage((int)MessageToServerType.Attack);
-        message.Write(direction);
-        Send(message);
-    }
-
-    public static void SendMessagePlayerRotation(float newRotation)
-    {
-        OutgoingMessage message = new OutgoingMessage((int)MessageToServerType.PlayerRotation);
-        message.Write(newRotation);
-        Send(message);
-    }
-
-    public static void SendMessagePlayerJump(Vector3 position, Vector3 direction)
-    {
-        OutgoingMessage message = new OutgoingMessage((int)MessageToServerType.PlayerJump);
-        message.Write(position);
-        message.Write(direction);
-        Send(message);
-    }
-
-    public static void SendMessageRespawn()
-    {
-        var message = new OutgoingMessage((int)MessageToServerType.Respawn);
-        Send(message);
-    }
-
-    public static void SendMessagePickItem(int idObjectItem)
-    {
-        var message = new OutgoingMessage((int)MessageToServerType.PickItem);
-        message.Write(idObjectItem);
-        Send(message);
-    }
-
-    public static void SendMessageChangeItemsInEquipment(int slot1, int slot2)
-    {
-        var message = new OutgoingMessage((int)MessageToServerType.ChangeItemsInEquipment);
-        message.Write(slot1);
-        message.Write(slot2);
-        Send(message);
-    }
-
-    public static void SendMessageChangeEquipedItem(int slot, ItemEquipableType place)
-    {
-        var message = new OutgoingMessage(MessageToServerType.ChangeEquipedItem);
-        message.Write(slot);
-        message.Write((int)place);
-        Send(message);
-    }
-
-    public static void SendMessageChangeEquipedItems(ItemEquipableType place1, ItemEquipableType place2)
-    {
-        var message = new OutgoingMessage(MessageToServerType.ChangeEquipedItems);
-        message.Write((int)place1);
-        message.Write((int)place2);
-        Send(message);
-    }
-
-    public static void SendMessageUseSpell(SpellCastPackage spellCastInfo)
-    {
-        var message = new OutgoingMessage(MessageToServerType.UseSpell);
-        message.Write(spellCastInfo);
-        Send(message);
-    }
-
-    #endregion
-
-    private static void Send(OutgoingMessage message)
-    {
-        _client.Send(message);
-    }
 
     private static string[] BitsToStrings(byte[] bytes, int length, char separator)
     {
@@ -603,7 +449,7 @@ public static class Client
     {
         foreach (NetObject netObject in GameObject.FindObjectsOfType(typeof(NetObject)) as NetObject[])
         {
-            if (netObject.IdObject == netId)
+            if (netObject.IdNet == netId)
             {
                 return netObject;
             }
@@ -616,7 +462,7 @@ public static class Client
     {
         foreach(NetOtherPlayer player in GameObject.FindObjectsOfType(typeof(NetOtherPlayer))  as NetOtherPlayer[])
         {
-            if (player.IdObject == netId)
+            if (player.IdNet == netId)
             {
                 return player;
             }
@@ -624,7 +470,7 @@ public static class Client
         return null;
     }
 
-    private static bool IfNewSceneLoadedDelayExecutionMessage(IncomingMessage message)
+    private static bool IfNewSceneLoadedDelayExecutionMessage(IncomingMessageFromServer message)
     {
         if (SceneBuilder.SceneIsLoadind())
         {
@@ -635,19 +481,7 @@ public static class Client
         return false;
     }
 
-    private static Item ItemInEquipmentPackageToItem(ItemInEquipmentPackage itemPackage)
-    {
-        if (itemPackage.IdItem == -1)
-        {
-            return null;
-        }
-        else
-        {
-            return new Item(itemPackage.IdItem);
-        }
-    }
-
-    private static bool IfNullDelayMessage(object flag, IncomingMessage message)
+    private static bool IfNullDelayMessage(object flag, IncomingMessageFromServer message)
     {
         if (flag == null)
         {

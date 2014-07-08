@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NetworkProject;
+using NetworkProject.Connection;
 
 public enum ClientStatus
 {
@@ -20,7 +21,7 @@ public interface IClient
     void Start(ClientConfig config);
     void Connect(string host, int port);
     void Send(OutgoingMessage message);
-    IncomingMessage ReadMessage();
+    IncomingMessageFromServer ReadMessage();
     void Disconnect();
     void Close();
 }

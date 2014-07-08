@@ -7,7 +7,7 @@ namespace NetworkProject
 {
     public struct BreedAndGender
     {
-        public Breed Breed
+        public int Breed
         {
             get
             {
@@ -22,10 +22,10 @@ namespace NetworkProject
             }
         }
 
-        private Breed _breed;
+        private int _breed;
         private bool _isMale;
 
-        public BreedAndGender(Breed breed, bool isMale)
+        public BreedAndGender(int breed, bool isMale)
         {
             _breed = breed;
             _isMale = isMale;

@@ -6,17 +6,19 @@ using System.Diagnostics;
 using NetworkProject;
 using NetworkProject.Items;
 using NetworkProject.Monsters;
+using NetworkProject.Spells;
 
 [System.CLSCompliant(false)]
 public class ApplicationController : MonoBehaviour
 {
-    private static List<Vision> _visions;
-    private static List<NetObject> _netObjects;
+    private static List<Vision> _visions = new List<Vision>();
+    private static List<NetObject> _netObjects = new List<NetObject>();
 
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
 
+        SpellRepository.Set(Standard.IoC.GetSpellRepository());
         ItemRepository.LoadItemsFromResources();
         MonsterRepository.LoadMonstersFromResources();
 

@@ -13,7 +13,6 @@ public class Prefabs : MonoBehaviour
     public GameObject _playerOther;
     public GameObject _bullet;
     public List<GameObject> _monsters;
-    public List<GameObject> _playerModels;
     public List<GameObject> _items;
     public List<GameObject> _visualObjects;
 
@@ -82,17 +81,6 @@ public class Prefabs : MonoBehaviour
             _prefabs._monsters = value;
         }
     }
-    public static List<GameObject> PlayerModels
-    {
-        get
-        {
-            return _prefabs._playerModels;
-        }
-        set
-        {
-            _prefabs._playerModels = value;
-        }
-    }
     public static List<GameObject> Items
     {
         get
@@ -124,18 +112,13 @@ public class Prefabs : MonoBehaviour
         _prefabs = this;
     }
 
-    public static GameObject GetPlayerModel(Breed breed)
+    public static GameObject GetMonsterModel(int id)
     {
-        return PlayerModels[(int)breed];
+        return Monsters[id];
     }
 
-    public static GameObject GetMonsterModel(MonsterType monster)
+    public static GameObject GetVisualObject(int id)
     {
-        return Monsters[(int)monster];
-    }
-
-    public static GameObject GetVisualObject(VisualObjectType type)
-    {
-        return _prefabs._visualObjects[(int)type];
+        return _prefabs._visualObjects[id];
     }
 }

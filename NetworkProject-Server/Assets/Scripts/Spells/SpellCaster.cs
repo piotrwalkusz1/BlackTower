@@ -94,7 +94,7 @@ public class SpellCaster : MonoBehaviour, ISpellCaster
     public void SendUpdateSpells()
     {
         int idNet = GetComponent<NetObject>().IdNet;
-        var request = new UpdateAllSpells(idNet, _spells);
+        var request = new UpdateAllSpellsToClient(idNet, _spells);
     }
 }
 

@@ -5,34 +5,11 @@ using NetworkProject;
 
 public class MeshRepository : MonoBehaviour
 {
-    public List<Mesh> _charactersCorps;
-    public List<Material> _characterCorpMaterial;
+    public List<Mesh> ItemsMesh;
+    public List<Material> ItemsMaterials;
 
-    public List<Mesh> _itemsOnTroll;
-    public List<Material> _itemMaterials;
-
-    public static List<Mesh> ItemsOnTroll
-    {
-        get
-        {
-            return _repository._itemsOnTroll;
-        }
-        set
-        {
-            _repository._itemsOnTroll = value;
-        }
-    }
-    public static List<Material> ItemMaterials
-    {
-        get
-        {
-            return _repository._itemMaterials;
-        }
-        set
-        {
-            _repository._itemMaterials = value;
-        }
-    }
+    public List<Mesh> TrollCorpMesh;
+    public List<Material> TrollCorpMaterials;
 
     private static MeshRepository _repository;
 
@@ -41,24 +18,35 @@ public class MeshRepository : MonoBehaviour
         _repository = this;
     }
 
-    public static Mesh GetItemMeshByBreed(Breed breed, int idPrefab)
+    public static Mesh GetItemMesh(int id)
     {
-        switch (breed)
+        return _repository.ItemsMesh[id];
+    }
+
+    public static Material GetItemMaterial(int id)
+    {
+        return _repository.ItemsMaterials[id];
+    }
+
+    public static Mesh GetCorpMesh(BreedAndGender breedAndGender, int id)
+    {
+        switch (breedAndGender.Breed)
         {
-            case Breed.Troll:
-                return ItemsOnTroll[idPrefab];
+            case 0:
+                return _repository.TrollCorpMesh[id];
             default:
                 throw new System.Exception("Nie ma takiej rasy.");
         }
     }
 
-    public static Mesh GetCorpMeshByBreed(Breed breed)
+    public static Material GetCorpMaterial(BreedAndGender breedAndGender, int id)
     {
-        return _repository._charactersCorps[(int)breed];
-    }
-
-    public static Material GetCorpMaterialByBreed(Breed breed)
-    {
-        return _repository._characterCorpMaterial[(int)breed];
+        switch (breedAndGender.Breed)
+        {
+            case 0:
+                return _repository.TrollCorpMaterials[id];
+            default:
+                throw new System.Exception("Nie ma takiej rasy.");
+        }
     }
 }

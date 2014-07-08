@@ -36,5 +36,10 @@ namespace Standard
         {
             return _dictionary["spellDescription" + idSpell.ToString()];
         }
+
+        public string GetErrorText(int errorId)
+        {
+            return _dictionary["errorText" + errorId.ToString()];
+        }
     }
 }

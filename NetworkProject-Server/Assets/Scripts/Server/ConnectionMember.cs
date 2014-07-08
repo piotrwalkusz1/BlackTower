@@ -23,13 +23,6 @@ public class ConnectionMember : IConnectionMember
 
     public bool Equals(IConnectionMember conectionMember)
     {
-        if (RemoteEndPoint.Equals(conectionMember.RemoteEndPoint))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return RemoteEndPoint.Equals(conectionMember.RemoteEndPoint);
     }
 }

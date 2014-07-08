@@ -23,7 +23,7 @@ public class PlayerHealthSystem : HealthSystem
 
         NetPlayer player = GetComponent<NetPlayer>();
 
-        var request = new Dead(player.IdNet);
+        var request = new DeadToClient(player.IdNet);
 
         Server.SendRequestAsMessage(request, player.OwnerAddress);
     }
@@ -39,7 +39,7 @@ public class PlayerHealthSystem : HealthSystem
     {
         NetPlayer netPlayer = GetComponent<NetPlayer>();
 
-        var request = new UpdateHP(netPlayer.IdNet, HP);
+        var request = new UpdateHPToClient(netPlayer.IdNet, HP);
 
         Server.SendRequestAsMessage(request, netPlayer.OwnerAddress);
     }

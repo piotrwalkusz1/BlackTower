@@ -29,7 +29,7 @@ public class PlayerExperience : Experience
     {
         NetPlayer netPlayer = GetComponent<NetPlayer>();
 
-        var request = new UpdateExperience(netPlayer.IdNet, Exp);
+        var request = new UpdateExpToClient(netPlayer.IdNet, Exp);
 
         Server.SendRequestAsMessage(request, netPlayer.OwnerAddress);
     }

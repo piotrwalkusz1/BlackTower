@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Xml;
-using System.Xml.XPath;
+using System.IO;
+using System.Xml.Serialization;
+using System.Runtime.Serialization.Formatters;
 using UnityEngine;
 
 namespace Standard
@@ -37,6 +38,11 @@ namespace Standard
             return _currentLanguage.GetSpellDescription(idSpell);
         }
 
+        public static string GetErrorText(int idError)
+        {
+            return _currentLanguage.GetErrorText(idError);
+        }
+
         public static void SetLanguageByName(string name)
         {
             _currentLanguage = LoadLanguageByName(name);
@@ -52,10 +58,7 @@ namespace Standard
             TextAsset textAsset = (TextAsset)Resources.Load(Settings.pathToLanguagesInResources + name, typeof(TextAsset));
             if (textAsset != null)
             {
-                XmlDocument document = new XmlDocument();
-                document.LoadXml(textAsset.text);
-
-                return LoadLanguageByXmlDocument(document);
+                return LoadLanguageByString(textAsset.text);
             }
             else
             {
@@ -65,25 +68,17 @@ namespace Standard
 
         public static Language LoadLanguageByPath(string path)
         {
-            XmlDocument document = new XmlDocument();
+            string text = File.ReadAllText(path);
 
-            document.Load(path);
-
-            return LoadLanguageByXmlDocument(document);
+            return LoadLanguageByString(text);
         }
 
-        private static Language LoadLanguageByXmlDocument(XmlDocument document)
+        private static Language LoadLanguageByString(string text)
         {
-            XmlNodeList expressions = document.GetElementsByTagName("language").Item(0).ChildNodes;
+            var serializer = new XmlSerializer(typeof(Language));
+            var stream = new StringReader(text);
 
-            var dictionary = new Dictionary<string, string>();
-
-            foreach (XmlNode expression in expressions)
-            {
-                dictionary.Add(expression.Name, expression.InnerText);
-            }
-
-            return new Language(dictionary);
+            return (Language)serializer.Deserialize(stream);
         }
     }
 }

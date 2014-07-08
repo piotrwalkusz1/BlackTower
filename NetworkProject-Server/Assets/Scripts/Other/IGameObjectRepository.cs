@@ -12,4 +12,6 @@ public interface IGameObjectRepository
     NetPlayer[] GetNetPlayers();
 
     PlayerRespawn[] GetPlayerRespawns();
+
+    NetObject[] GetNetObjects();
 }

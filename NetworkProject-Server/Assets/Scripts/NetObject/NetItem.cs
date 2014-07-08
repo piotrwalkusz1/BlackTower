@@ -12,7 +12,7 @@ public class NetItem : NetObject
 
     public override void SendMessageAppeared(IConnectionMember address)
     {
-        var request = new CreateItem(IdNet, transform.position, transform.eulerAngles.y, Item.IdItem);
+        var request = new CreateItemToClient(IdNet, transform.position, transform.eulerAngles.y, Item.IdItem);
         var message = new OutgoingMessage(request);
 
 

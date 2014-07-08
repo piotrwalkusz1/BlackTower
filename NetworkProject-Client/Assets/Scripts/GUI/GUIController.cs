@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using NetworkProject;
+using NetworkProject.Connection.ToClient;
 
 enum Place
 {
@@ -231,13 +232,13 @@ public class GUIController : MonoBehaviour
         _infoAboutCurrentPlace = info;
     }
 
-    static public void SwitchChoiceCharacterMenuGUI(CharacterChoiceMenuPackage info)
+    static public void SwitchChoiceCharacterMenuGUI(GoToChoiceCharacterMenuToClient info)
     {
         _place = Place.ChoiceCharacterMenu;
         _infoAboutCurrentPlace = info;
     }
 
-    static public void SwitchWorldGUI(WorldInfoPackage info)
+    static public void SwitchWorldGUI(GoIntoWorldToClient info)
     {
         _place = Place.World;
         _infoAboutCurrentPlace = info;
@@ -245,7 +246,8 @@ public class GUIController : MonoBehaviour
 
     static private void DrawChoiceCharacterMenuGUI()
     {
-        CharacterChoiceMenuPackage info = (CharacterChoiceMenuPackage)_infoAboutCurrentPlace;
+        var info = (GoToChoiceCharacterMenuToClient)_infoAboutCurrentPlace;
+
         if (info != null && info.Characters[0] != null)
         {
             if (GUI.Button(new Rect(10, 10, 100, 20), info.Characters[0].Name))
@@ -264,7 +266,7 @@ public class GUIController : MonoBehaviour
 
         if(GUI.Button(new Rect(10, 70, 150, 20), "Login"))
         {
-            Client.SendMessageLogin(info.Login, info.Password);
+            vassd
         }
     }
 

@@ -7,6 +7,7 @@ using NetworkProject;
 using NetworkProject.BodyParts;
 using NetworkProject.Connection;
 using NetworkProject.Connection.ToServer;
+using NetworkProject.Connection.ToClient;
 using NetworkProject.Items;
 using UnityEngine;
 
@@ -85,7 +86,7 @@ public static class Server
 
     public static void SendErrorMessage(ErrorCode errorCode, IConnectionMember address)
     {
-        var request = new NetworkProject.Connection.ToClient.ErrorMessage(errorCode);
+        var request = new NetworkProject.Connection.ToClient.ErrorMessageToClient(errorCode);
         var message = new OutgoingMessage(request);
 
         Send(message, address);
@@ -101,17 +102,17 @@ public static class Server
     private static Action<IncomingMessage> ChooseMethodReceiveMessage(INetworkRequest request)
     {
         if (request is LoginToGame) return ReceiveMessageLogin;
-        else if (request is GoIntoWorld) return ReceiveMessageGoIntoWorld;
-        else if (request is PlayerMove) return ReceiveMessagePlayerMove;
-        else if (request is PlayerJump) return ReceiveMessagePlayerJump;
-        else if (request is PlayerRotation) return ReceiveMessagePlayerRotation;
-        else if (request is PickItem) return ReceiveMessagePickItem;
-        else if (request is Attack) return ReceiveMessageAttack;
-        else if (request is Respawn) return ReceiveMessageRespawn;
-        else if (request is ChangeItemsInEquipment) return ReceiveMessageChangeItemsInEquipment;
-        else if (request is ChangeEquipedItem) return ReceiveMessageChangeEquipedItem;
-        else if (request is ChangeEquipedItems) return ReceiveMessageChangeEquipedItems;
-        else if (request is UseSpell) return ReceiveMessageUseSpell;
+        else if (request is GoIntoWorldToServer) return ReceiveMessageGoIntoWorld;
+        else if (request is PlayerMoveToServer) return ReceiveMessagePlayerMove;
+        else if (request is PlayerJumpToServer) return ReceiveMessagePlayerJump;
+        else if (request is PlayerRotationToServer) return ReceiveMessagePlayerRotation;
+        else if (request is PickItemToServer) return ReceiveMessagePickItem;
+        else if (request is AttackToServer) return ReceiveMessageAttack;
+        else if (request is RespawnToServer) return ReceiveMessageRespawn;
+        else if (request is ChangeItemsInEquipmentToServer) return ReceiveMessageChangeItemsInEquipment;
+        else if (request is ChangeEquipedItemToServer) return ReceiveMessageChangeEquipedItem;
+        else if (request is ChangeEquipedItemsToServer) return ReceiveMessageChangeEquipedItems;
+        else if (request is UseSpellToServer) return ReceiveMessageUseSpell;
         else throw new Exception("Nie ma takiego typu żądania!");
     }
 
@@ -125,7 +126,7 @@ public static class Server
 
             OnlineAccount account = AccountRepository.LoginAccount(loginData.Login, loginData.Password, message.Sender);
 
-            var requestToClient = new NetworkProject.Connection.ToClient.GoToChoiceCharacterMenu();
+            var requestToClient = new NetworkProject.Connection.ToClient.GoToChoiceCharacterMenuToClient();
 
             foreach (RegisterCharacter character in account.GetCharacters())
             {
@@ -158,7 +159,7 @@ public static class Server
     private static void ReceiveMessageGoIntoWorld(IncomingMessage message)
     {
         OnlineAccount account = AccountRepository.GetOnlineAccountByAddress(message.Sender);
-        GoIntoWorld requestData = (GoIntoWorld)message.Request;
+        var requestData = (GoIntoWorldToServer)message.Request;
 
         if (account.IsLoggedCharacter())
         {
@@ -171,13 +172,13 @@ public static class Server
             player.CreatePlayerInstantiate();
 
             int map = Standard.Settings.GetMap(player.Instantiate.transform.position);
-            var goIntoWorldRequest = new NetworkProject.Connection.ToClient.GoIntoWorld(map);
+            var goIntoWorldRequest = new NetworkProject.Connection.ToClient.GoIntoWorldToClient(map);
             var goInfoWorldMessage = new OutgoingMessage(goIntoWorldRequest);
 
             var netPlayer = player.Instantiate.GetComponent<NetPlayer>();
             var tran = player.Instantiate.transform;
             var stats = player.Instantiate.GetComponent<PlayerStats>();
-            var createOwnPlayerRequest = new NetworkProject.Connection.ToClient.CreateOwnPlayer(netPlayer.IdNet, tran.position, tran.eulerAngles.y, stats);
+            var createOwnPlayerRequest = new CreateOwnPlayerToClient(netPlayer.IdNet, tran.position, tran.eulerAngles.y, stats, netPlayer.Name);
             var createOwnPlayerMessage = new OutgoingMessage(createOwnPlayerRequest);
 
             Send(goInfoWorldMessage, message.Sender);
@@ -187,8 +188,8 @@ public static class Server
 
     private static void ReceiveMessagePlayerMove(IncomingMessage message)
     {
-        var request = (PlayerMove)message.Request;
-        var netPlayer = FindAliveNetPlayerByAddress(message.Sender);
+        var request = (PlayerMoveToServer)message.Request;
+        var netPlayer = AccountRepository.FindAliveNetPlayerByAddress(message.Sender);
 
         netPlayer.GetComponent<PlayerMovement>().SetNewPosition(request.NewPosition);
     }
@@ -197,52 +198,52 @@ public static class Server
     {
         //narazie niepotrzebne
         //var request = (PlayerJump)message.Request;
-        var netPlayer = FindAliveNetPlayerByAddress(message.Sender);
+        var netPlayer = AccountRepository.FindAliveNetPlayerByAddress(message.Sender);
 
         netPlayer.GetComponent<PlayerMovement>().JumpAndSendMessage();
     }
 
     private static void ReceiveMessagePlayerRotation(IncomingMessage message)
     {
-        var request = (PlayerRotation)message.Request;
-        var netPlayer = FindAliveNetPlayerByAddress(message.Sender);
+        var request = (PlayerRotationToServer)message.Request;
+        var netPlayer = AccountRepository.FindAliveNetPlayerByAddress(message.Sender);
 
         netPlayer.GetComponent<PlayerMovement>().SetNewRotation(request.NewRotation);
     }
 
     private static void ReceiveMessagePickItem(IncomingMessage message)
     {
-        var request = (PickItem)message.Request;
+        var request = (PickItemToServer)message.Request;
 
-        var netItem = FindNetItemByIdObject(request.IdNetItem);
-        var player = FindAliveNetPlayerByAddress(message.Sender);
+        var netItem = GameObjectRepository.FindNetItemByIdNet(request.IdNetItem);
+        var player = AccountRepository.FindAliveNetPlayerByAddress(message.Sender);
 
         netItem.TryPickByPlayer(player);
     }
 
     private static void ReceiveMessageAttack(IncomingMessage message)
     {
-        var attackData = (Attack)message.Request;
+        var attackData = (AttackToServer)message.Request;
 
-        var player = FindAliveNetPlayerByAddress(message.Sender);
+        var netPlayer = AccountRepository.FindAliveNetPlayerByAddress(message.Sender);
 
-        player.GetComponent<PlayerCombat>().Attack(attackData.Direction);
+        netPlayer.GetComponent<PlayerCombat>().Attack(attackData);
     }
 
     private static void ReceiveMessageRespawn(IncomingMessage message)
     {
-        NetPlayer player = FindDeadNetPlayerByAddress(message.Sender);
+        NetPlayer player = AccountRepository.FindDeadNetPlayerByAddress(message.Sender);
 
-        PlayerRespawn respawn = FindNearestPlayerRespawnOnMap(player.GetMap(), player.transform.position);
+        PlayerRespawn respawn = GameObjectRepository.FindNearestPlayerRespawnOnMap(player.GetMap(), player.transform.position);
 
         respawn.Respawn(player);
     }
 
     private static void ReceiveMessageChangeItemsInEquipment(IncomingMessage message)
     {
-        var request = (ChangeItemsInEquipment)message.Request;
+        var request = (ChangeItemsInEquipmentToServer)message.Request;
 
-        NetPlayer netPlayer = FindAliveNetPlayerByAddress(message.Sender);
+        NetPlayer netPlayer = AccountRepository.FindAliveNetPlayerByAddress(message.Sender);
         Equipment eq = netPlayer.GetComponent<Equipment>();
 
         eq.ChangeItemInEquipment(request.Slot1, request.Slot2);
@@ -253,9 +254,9 @@ public static class Server
 
     private static void ReceiveMessageChangeEquipedItem(IncomingMessage message)
     {
-        var request = (ChangeEquipedItem)message.Request;
+        var request = (ChangeEquipedItemToServer)message.Request;
 
-        var player = FindAliveNetPlayerByAddress(message.Sender);
+        var player = AccountRepository.FindAliveNetPlayerByAddress(message.Sender);
         var eq = player.GetComponent<PlayerEquipment>();
 
         eq.TryEquipeItemInEquipmentOnThisBodyPart(request.SlotInEquipment, request.EquipedItemSlot);
@@ -263,8 +264,8 @@ public static class Server
         Item equipedItem = eq.GetEquipedItem(request.EquipedItemSlot);
         Item itemInEquipment = eq.GetItemBySlot(request.SlotInEquipment);
 
-        var updateEquipedItem = new NetworkProject.Connection.ToClient.UpdateEquipedItem(player.IdNet, request.EquipedItemSlot, equipedItem);
-        var updateItemInEquipment = new NetworkProject.Connection.ToClient.UpdateItemInEquipment(player.IdNet, request.SlotInEquipment, itemInEquipment);
+        var updateEquipedItem = new NetworkProject.Connection.ToClient.UpdateEquipedItemToClient(player.IdNet, request.EquipedItemSlot, equipedItem);
+        var updateItemInEquipment = new NetworkProject.Connection.ToClient.UpdateItemInEquipmentToClient(player.IdNet, request.SlotInEquipment, itemInEquipment);
 
         SendRequestAsMessage(updateEquipedItem, message.Sender);
         SendRequestAsMessage(updateItemInEquipment, message.Sender);
@@ -276,9 +277,9 @@ public static class Server
 
     private static void ReceiveMessageChangeEquipedItems(IncomingMessage message)
     {
-        var request = (ChangeEquipedItems)message.Request;
+        var request = (ChangeEquipedItemsToServer)message.Request;
 
-        var player = FindAliveNetPlayerByAddress(message.Sender);
+        var player = AccountRepository.FindAliveNetPlayerByAddress(message.Sender);
         var eq = player.GetComponent<PlayerEquipment>();
 
         eq.TryChangeEquipedItems(request.Slot1, request.Slot2);
@@ -286,8 +287,8 @@ public static class Server
         Item item1 = eq.GetEquipedItem(request.Slot1);
         Item item2 = eq.GetEquipedItem(request.Slot2);
 
-        var updateEquipedItem1 = new NetworkProject.Connection.ToClient.UpdateEquipedItem(player.IdNet, request.Slot1, item1);
-        var updateEquipedItem2 = new NetworkProject.Connection.ToClient.UpdateEquipedItem(player.IdNet, request.Slot2, item2);
+        var updateEquipedItem1 = new NetworkProject.Connection.ToClient.UpdateEquipedItemToClient(player.IdNet, request.Slot1, item1);
+        var updateEquipedItem2 = new NetworkProject.Connection.ToClient.UpdateEquipedItemToClient(player.IdNet, request.Slot2, item2);
 
         SendRequestAsMessage(updateEquipedItem1, message.Sender);
         SendRequestAsMessage(updateEquipedItem2, message.Sender);
@@ -300,9 +301,9 @@ public static class Server
 
     private static void ReceiveMessageUseSpell(IncomingMessage message)
     {
-        var request = (UseSpell)message.Request;
+        var request = (UseSpellToServer)message.Request;
 
-        var player = FindAliveNetPlayerByAddress(message.Sender);
+        var player = AccountRepository.FindAliveNetPlayerByAddress(message.Sender);
 
         bool success = player.GetComponent<SpellCaster>().TryCastSpellFromSpellBook(request.IdSpell);
 
@@ -313,79 +314,4 @@ public static class Server
     }
 
     #endregion
-
-    private static NetItem FindNetItemByIdObject(int idObject)
-    {
-        NetItem[] items = GameObject.FindObjectsOfType(typeof(NetItem)) as NetItem[];
-        foreach (NetItem item in items)
-        {
-            if (item.IdNet == idObject)
-            {
-                return item;
-            }
-        }
-
-        return null;
-    }
-
-    private static NetPlayer FindNetPlayerByAddress(IConnectionMember address)
-    {
-        OnlineCharacter onlineCharacter = AccountRepository.GetOnlineCharacterByAddress(address);
-        return onlineCharacter.Instantiate.GetComponent<NetPlayer>();
-    }
-
-    private static NetPlayer FindAliveNetPlayerByAddress(IConnectionMember address)
-    {
-        var player = FindNetPlayerByAddress(address);
-
-        if (player.GetComponent<PlayerHealthSystem>().IsDead())
-        {
-            throw new Exception("Gracz jest martwy!");
-        }
-
-        return player;
-    }
-
-    private static NetPlayer FindDeadNetPlayerByAddress(IConnectionMember address)
-    {
-        var player = FindNetPlayerByAddress(address);
-
-        if (!player.GetComponent<PlayerHealthSystem>().IsDead())
-        {
-            throw new Exception("Gracz jest żywy!");
-        }
-
-        return player;
-    }
-
-    private static PlayerRespawn FindNearestPlayerRespawnOnMap(int map, Vector3 position)
-    {
-        PlayerRespawn[] respawns = GameObject.FindObjectsOfType<PlayerRespawn>() as PlayerRespawn[];
-
-        float smallestSqrDistance = Mathf.Infinity;
-        PlayerRespawn nearestRespawn = null;
-
-        Vector3 distance;
-        float sqrDistance;
-
-        foreach (PlayerRespawn respawn in respawns)
-        {
-            if (respawn.GetMap() != map)
-            {
-                continue;
-            }
-
-            distance = position - respawn.transform.position;
-
-            sqrDistance = distance.sqrMagnitude;
-
-            if (sqrDistance < smallestSqrDistance)
-            {
-                nearestRespawn = respawn;
-                smallestSqrDistance = sqrDistance;
-            }
-        }
-
-        return nearestRespawn;
-    }
 }

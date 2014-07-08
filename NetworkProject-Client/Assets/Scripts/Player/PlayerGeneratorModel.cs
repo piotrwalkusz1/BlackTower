@@ -4,7 +4,7 @@ using NetworkProject;
 
 public class PlayerGeneratorModel : MonoBehaviour
 {
-    private Breed Breed
+    private int Breed
     {
         get
         {

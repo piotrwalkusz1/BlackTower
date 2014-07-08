@@ -2,13 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using NetworkProject;
+using NetworkProject.Items;
 
-[System.CLSCompliant(false)]
-public class Equipment : MonoBehaviour
+public class Equipment
 {
     private List<Item> _items;
 
-    void Awake()
+    public Equipment()
     {
         _items = new List<Item>();
 

@@ -42,11 +42,6 @@ namespace NetworkProject
             return bodyParts;
         }
 
-        public static ISpellRepository GetSpellRepository()
-        {
-            return new SpellRepositoryImp();
-        }
-
         private static void InitializeBodyParts()
         {
             _bodyParts = new List<BodyPart>();

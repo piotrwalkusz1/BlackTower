@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using NetworkProject;
+using NetworkProject.Connection.ToClient;
 
 [System.CLSCompliant(false)]
 public class NetOwnPlayer : NetPlayer
@@ -41,9 +42,9 @@ public class NetOwnPlayer : NetPlayer
         GUIController.ShowWindow(message);
     }
 
-    public void InitializePlayer(OwnPlayerPackage package)
+    public void InitializePlayer(CreateOwnPlayerToClient package)
     {
-        IdObject = package.IdObject;
+        IdNet = package.IdNet;
         Name = package.Name;
 
         var stats = GetComponent<OwnPlayerStats>();

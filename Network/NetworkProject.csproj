@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Moq">
+      <HintPath>..\NetworkProject-Server\packages\Moq.4.2.1402.2112\lib\net35\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,8 +52,10 @@
     <Compile Include="Combat\Bullet.cs" />
     <Compile Include="Combat\Bullets.cs" />
     <Compile Include="Combat\NormalBullet.cs" />
-    <Compile Include="Connection\ErrorCode.cs" />
-    <Compile Include="Connection\ToClient\ErrorMessage.cs" />
+    <Compile Include="Connection\ISpellCasterStatsPackage.cs" />
+    <Compile Include="ErrorCode.cs" />
+    <Compile Include="Connection\IncomingMessageFromServer.cs" />
+    <Compile Include="Connection\ToClient\ErrorMessageToClient.cs" />
     <Compile Include="Destroy.cs" />
     <Compile Include="IEquipableStats.cs" />
     <Compile Include="IMonsterStats.cs" />
@@ -67,7 +72,6 @@
     <Compile Include="BodyParts\LeftHand.cs" />
     <Compile Include="BodyParts\Other.cs" />
     <Compile Include="BodyParts\RightHand.cs" />
-    <Compile Include="Breed.cs" />
     <Compile Include="Items\EquipedItems.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="Items\EquipableItemData.cs" />
@@ -76,52 +80,55 @@
     <Compile Include="Items\VisualEquipableItemData.cs" />
     <Compile Include="Items\ItemRepository.cs" />
     <Compile Include="Items\VisualItemData.cs" />
-    <Compile Include="Connection\ToClient\Attack.cs" />
-    <Compile Include="Connection\ToClient\Create.cs" />
-    <Compile Include="Connection\ToClient\CreateBullet.cs" />
-    <Compile Include="Connection\ToClient\CreateItem.cs" />
-    <Compile Include="Connection\ToClient\CreateMonster.cs" />
-    <Compile Include="Connection\ToClient\CreateOtherPlayer.cs" />
-    <Compile Include="Connection\ToClient\CreateOwnPlayer.cs" />
-    <Compile Include="Connection\ToClient\CreateVisualObject.cs" />
-    <Compile Include="Connection\ToClient\Dead.cs" />
-    <Compile Include="Connection\ToClient\DeleteObject.cs" />
-    <Compile Include="Connection\ToClient\GoIntoWorld.cs" />
-    <Compile Include="Connection\ToClient\Jump.cs" />
-    <Compile Include="Connection\ToClient\Move.cs" />
-    <Compile Include="Connection\ToClient\NewPosition.cs" />
-    <Compile Include="Connection\ToClient\NewRotation.cs" />
-    <Compile Include="Connection\ToClient\Respawn.cs" />
-    <Compile Include="Connection\ToClient\Rotate.cs" />
-    <Compile Include="Connection\ToClient\UpdateAllSpells.cs" />
-    <Compile Include="Connection\ToClient\UpdateAllStats.cs" />
-    <Compile Include="Connection\ToClient\UpdateEquipedItem.cs" />
-    <Compile Include="Connection\ToClient\UpdateExperience.cs" />
-    <Compile Include="Connection\ToClient\UpdateHp.cs" />
-    <Compile Include="Connection\ToClient\UpdateItemInEquipment.cs" />
-    <Compile Include="Connection\ToClient\UpdateMaxExp.cs" />
-    <Compile Include="Connection\ToClient\UpdateMaxHP.cs" />
-    <Compile Include="Connection\ToClient\UpdateSpell.cs" />
-    <Compile Include="Connection\ToServer\Attack.cs" />
-    <Compile Include="Connection\ToServer\ChangeEquipedItem.cs" />
-    <Compile Include="Connection\ToServer\ChangeEquipedItems.cs" />
-    <Compile Include="Connection\ToServer\ChangeItemsInEquipment.cs" />
-    <Compile Include="Connection\ToServer\GoIntoWorld.cs" />
-    <Compile Include="Connection\ToServer\Login.cs" />
-    <Compile Include="Connection\ToServer\PickItem.cs" />
-    <Compile Include="Connection\ToServer\PlayerJump.cs" />
-    <Compile Include="Connection\ToServer\PlayerMove.cs" />
-    <Compile Include="Connection\ToServer\PlayerRotation.cs" />
-    <Compile Include="Connection\ToServer\Register.cs" />
-    <Compile Include="Connection\ToServer\Respawn.cs" />
-    <Compile Include="Connection\ToServer\UseSpell.cs" />
+    <Compile Include="Connection\ToClient\AttackToClient.cs" />
+    <Compile Include="Connection\ToClient\CreateToClient.cs" />
+    <Compile Include="Connection\ToClient\CreateBulletToClient.cs" />
+    <Compile Include="Connection\ToClient\CreateItemToClient.cs" />
+    <Compile Include="Connection\ToClient\CreateMonsterToClient.cs" />
+    <Compile Include="Connection\ToClient\CreateOtherPlayerToClient.cs" />
+    <Compile Include="Connection\ToClient\CreateOwnPlayerToClient.cs" />
+    <Compile Include="Connection\ToClient\CreateVisualObjectToClient.cs" />
+    <Compile Include="Connection\ToClient\DeadToClient.cs" />
+    <Compile Include="Connection\ToClient\DeleteObjectToClient.cs" />
+    <Compile Include="Connection\ToClient\GoIntoWorldToClient.cs" />
+    <Compile Include="Connection\ToClient\JumpToClient.cs" />
+    <Compile Include="Connection\ToClient\MoveToClient.cs" />
+    <Compile Include="Connection\ToClient\NewPositionToClient.cs" />
+    <Compile Include="Connection\ToClient\NewRotationToClient.cs" />
+    <Compile Include="Connection\ToClient\RespawnToClient.cs" />
+    <Compile Include="Connection\ToClient\RotateToClient.cs" />
+    <Compile Include="Connection\ToClient\UpdateAllSpellsToClient.cs" />
+    <Compile Include="Connection\ToClient\UpdateAllStatsToClient.cs" />
+    <Compile Include="Connection\ToClient\UpdateEquipedItemToClient.cs" />
+    <Compile Include="Connection\ToClient\UpdateExpToClient.cs" />
+    <Compile Include="Connection\ToClient\UpdateHPToClient.cs" />
+    <Compile Include="Connection\ToClient\UpdateItemInEquipmentToClient.cs" />
+    <Compile Include="Connection\ToClient\UpdateMaxExpToClient.cs" />
+    <Compile Include="Connection\ToClient\UpdateMaxHPToClient.cs" />
+    <Compile Include="Connection\ToClient\UpdateSpellToClient.cs" />
+    <Compile Include="Connection\ToServer\AttackToServer.cs" />
+    <Compile Include="Connection\ToServer\ChangeEquipedItemToServer.cs" />
+    <Compile Include="Connection\ToServer\ChangeEquipedItemsToServer.cs" />
+    <Compile Include="Connection\ToServer\ChangeItemsInEquipmentToServer.cs" />
+    <Compile Include="Connection\ToServer\GoIntoWorldToServer.cs" />
+    <Compile Include="Connection\ToServer\LoginToServer.cs" />
+    <Compile Include="Connection\ToServer\PickItemToServer.cs" />
+    <Compile Include="Connection\ToServer\PlayerJumpToServer.cs" />
+    <Compile Include="Connection\ToServer\PlayerMoveToServer.cs" />
+    <Compile Include="Connection\ToServer\PlayerRotationToServer.cs" />
+    <Compile Include="Connection\ToServer\RegisterToServer.cs" />
+    <Compile Include="Connection\ToServer\RespawnToServer.cs" />
+    <Compile Include="Connection\ToServer\UseSpellToServer.cs" />
+    <Compile Include="Connection\MonsterStatsPackage.cs" />
     <Compile Include="Monsters\MonsterRepository.cs" />
     <Compile Include="Movement\SimpleMovement.cs" />
+    <Compile Include="Connection\PlayerStatsPackage.cs" />
+    <Compile Include="Properter.cs" />
     <Compile Include="Requirements\IEquipeRequirement.cs" />
     <Compile Include="Requirements\ISpellCastRequirement.cs" />
     <Compile Include="Requirements\LvlRequirement.cs" />
-    <Compile Include="Connection\ToClient\GoToChoiceCharacterMenu.cs" />
-    <Compile Include="Connection\ToClient\TextMessage.cs" />
+    <Compile Include="Connection\ToClient\GoToChoiceCharacterMenuToClient.cs" />
+    <Compile Include="Connection\ToClient\TextMessageToClient.cs" />
     <Compile Include="Connection\CharacterInChoiceMenu.cs" />
     <Compile Include="Spells\ISpellCastOption.cs" />
     <Compile Include="Benefits\IBenefit.cs" />
@@ -143,11 +150,12 @@
     <Compile Include="IStats.cs" />
     <Compile Include="Spells\SpellData.cs" />
     <Compile Include="Spells\SpellRepository.cs" />
-    <Compile Include="Spells\SpellRepositoryImp.cs" />
     <Compile Include="Updating.cs" />
     <Compile Include="Items\WeaponData.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

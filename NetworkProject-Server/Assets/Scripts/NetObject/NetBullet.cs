@@ -11,7 +11,7 @@ public class NetBullet : NetObject
     public override void SendMessageAppeared(IConnectionMember address)
     {
         var bulletManager = GetComponent<BulletManager>();
-        var request = new CreateBullet(IdNet, transform.position, transform.eulerAngles, bulletManager.Bullet);
+        var request = new CreateBulletToClient(IdNet, transform.position, transform.eulerAngles, bulletManager.Bullet);
         var message = new OutgoingMessage(request);
 
         Server.Send(message, address);

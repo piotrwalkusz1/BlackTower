@@ -21,4 +21,9 @@ public class GameObjectRepositoryByFind : IGameObjectRepository
     {
         return GameObject.FindObjectsOfType<PlayerRespawn>() as PlayerRespawn[];
     }
+
+    public NetObject[] GetNetObjects()
+    {
+        return GameObject.FindObjectsOfType<NetObject>() as NetObject[];
+    }
 }

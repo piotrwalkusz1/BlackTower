@@ -52,4 +52,9 @@ public static class GameObjectRepository
 
         return nearestRespawn;
     }
+
+    public static NetObject FindNetObjectByIdNet(int idNet)
+    {
+        return _repository.GetNetObjects().First(x => x.IdNet == idNet);
+    }
 }

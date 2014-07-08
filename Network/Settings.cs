@@ -19,10 +19,10 @@ namespace NetworkProject
         public const string pathToMonstersInResources = "monsters";
         public const string pathToSpellsInResources = "spells";
         public const float gravitation = 10f;
-        public const float basicPlayerMovementSpeed = 4f;
+        public const float basicPlayerMovementSpeed = 4;
         public const int basicPlayerMaxHP = 100;
         public const int basicPlayerMaxExp = 100;
-        public const int additionalMaxExpPerLvl = 50;
+        public const int additionalMaxExpPerLvl = 5;
 
         public static int GetMaxExpInLvl(int lvl)
         {

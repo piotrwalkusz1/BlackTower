@@ -6,8 +6,8 @@ using NetworkProject;
 using NetworkProject.Connection;
 using NetworkProject.Connection.ToClient;
 
-[System.CLSCompliant(false)]
-public class PlayerStats : MonoBehaviour, IEquipableStats
+[Serializable]
+public class PlayerStats : MonoBehaviour, IPlayerStats
 {
     public virtual int Lvl
     {
@@ -38,7 +38,7 @@ public class PlayerStats : MonoBehaviour, IEquipableStats
             GetComponent<HealthSystem>().ChangeMaxHP(value);
         }
     }
-    public virtual float RegenerationHP
+    public virtual float HPRegeneration
     {
         get
         {
@@ -72,7 +72,17 @@ public class PlayerStats : MonoBehaviour, IEquipableStats
             GetComponent<PlayerHealthSystem>().Defense = value;
         }
     }
-    public virtual Breed Breed { get; set; }
+    public virtual BreedAndGender BreedAndGender
+    {
+        get
+        {
+            return GetComponent<NetPlayer>().BreadAndGender;
+        }
+        set
+        {
+            GetComponent<NetPlayer>().BreadAndGender = value;
+        }
+    }
     public virtual List<int> Damages
     {
         get
@@ -118,7 +128,7 @@ public class PlayerStats : MonoBehaviour, IEquipableStats
     public void SendUpdateToOwner()
     {
         var netPlayer = GetComponent<NetPlayer>();
-        var request = new UpdateAllStats(netPlayer.IdNet, this);
+        var request = new UpdateAllStatsToClient(netPlayer.IdNet, this);
         var message = new OutgoingMessage(request);
 
         Server.Send(message, netPlayer.OwnerAddress);
@@ -131,7 +141,7 @@ public class PlayerStats : MonoBehaviour, IEquipableStats
 
     public void Set(RegisterCharacter characterData)
     {
-        Breed = characterData.Breed;
+        BreedAndGender = characterData.BreedAndGender;
     }
 
     public virtual void CalculateStats()

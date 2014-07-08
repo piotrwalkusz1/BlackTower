@@ -4,9 +4,10 @@ using System.Collections;
 using NetworkProject;
 using NetworkProject.BodyParts;
 using NetworkProject.Combat;
+using NetworkProject.Connection.ToServer;
 
 [System.CLSCompliant(false)]
-public class PlayerCombat : MonoBehaviour
+public class PlayerCombat : Combat
 {
     public float AttackSpeed { get; set; }
     public int MinDmg { get; set; }
@@ -25,7 +26,7 @@ public class PlayerCombat : MonoBehaviour
         };
     }
     
-    public void Attack(Vector3 direction)
+    public void Attack(AttackToServer attack)
     {
         if (WeaponIsEquiped())
         {
@@ -38,7 +39,7 @@ public class PlayerCombat : MonoBehaviour
             bulletInfo.AttackInfo = attackInfo;
             bulletInfo.LiveTime = BulletLifeTime;
             bulletInfo.Position = BulletRespawn.position;
-            bulletInfo.Rotation = Quaternion.LookRotation(direction);
+            bulletInfo.Rotation = Quaternion.LookRotation(attack.Direction);
 
             SceneBuilder.CreateBullet(bulletInfo, gameObject);
 

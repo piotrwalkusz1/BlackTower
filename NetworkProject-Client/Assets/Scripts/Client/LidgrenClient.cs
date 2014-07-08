@@ -5,6 +5,7 @@ using System.Text;
 using System.Net;
 using Lidgren.Network;
 using NetworkProject;
+using NetworkProject.Connection;
 using UnityEngine;
 
 [System.CLSCompliant(false)]
@@ -54,11 +55,11 @@ public class LidgrenClient : IClient
     public void Send(OutgoingMessage message)
     {
         NetOutgoingMessage netMessage = _netClient.CreateMessage();
-        netMessage.Write(message.Data.ToArray());
+        netMessage.Write(message.GetBytes());
         _netClient.SendMessage(netMessage, _serverAddress, NetDeliveryMethod.ReliableOrdered);
     }
 
-    public IncomingMessage ReadMessage()
+    public IncomingMessageFromServer ReadMessage()
     {
         NetIncomingMessage m;
         while ((m = _netClient.ReadMessage()) != null)
@@ -71,7 +72,7 @@ public class LidgrenClient : IClient
             if (m.SenderEndPoint.Address.Equals(_serverAddress.RemoteEndPoint.Address))
             {
                 byte[] data = m.Data;
-                IncomingMessage message = new IncomingMessage(data);
+                var message = new IncomingMessageFromServer(data);
                 return message;
             }
             else

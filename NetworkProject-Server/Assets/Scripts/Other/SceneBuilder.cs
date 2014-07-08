@@ -4,6 +4,7 @@ using NetworkProject;
 using NetworkProject.Combat;
 using NetworkProject.Monsters;
 using NetworkProject.Connection;
+using NetworkProject.Connection.ToClient;
 using NetworkProject.Items;
 
 [System.CLSCompliant(false)]
@@ -16,7 +17,7 @@ public static class SceneBuilder
         Vector3 position = characterData.EndPosition;
         GameObject playerInstantiate = GameObject.Instantiate(StaticRepository.Prefabs._player, position, Quaternion.Euler(Vector3.zero)) as GameObject;
 
-        PlayerManager player = playerInstantiate.GetComponent<PlayerManager>();
+        NetPlayer player = playerInstantiate.GetComponent<NetPlayer>();
         player.Initialize(GetNextIdNet(), characterData, address);
 
         return playerInstantiate;
@@ -83,7 +84,7 @@ public static class SceneBuilder
     {
         respawnedPlayer.transform.position = respawn.transform.position;
 
-        var request = new NetworkProject.Connection.ToClient.Respawn(respawnedPlayer.IdNet);
+        var request = new RespawnToClient(respawnedPlayer.IdNet);
 
         respawnedPlayer.GetComponent<PlayerHealthSystem>().RecuperateAndSendHPUpdate();
     }

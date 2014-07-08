@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using NetworkProject;
+using NetworkProject.Connection.ToClient;
 
 [System.CLSCompliant(false)]
 public class NetOtherPlayer : NetPlayer
@@ -18,12 +19,12 @@ public class NetOtherPlayer : NetPlayer
         Combat = GetComponent<OtherPlayerCombat>();
     }
 
-    public void InitializePlayer(OtherPlayerPackage package)
+    public void InitializePlayer(CreateOtherPlayerToClient package)
     {
-        IdObject = package.IdObject;
+        IdNet = package.IdNet;
         Name = package.Name;
 
         var stats = GetComponent<OtherPlayerStats>();
-        stats.Set(package.Stats);
+        stats.Set(package.PlayerStats);
     }
 }

@@ -10,7 +10,7 @@ public class NetVisualObject : NetObject
 
     public override void SendMessageAppeared(IConnectionMember address)
     {
-        var request = new CreateVisualObject(IdNet, transform.position, transform.eulerAngles.y, IdVisualObject);
+        var request = new CreateVisualObjectToClient(IdNet, transform.position, transform.eulerAngles.y, IdVisualObject);
 
         Server.SendRequestAsMessage(request, address);
     }

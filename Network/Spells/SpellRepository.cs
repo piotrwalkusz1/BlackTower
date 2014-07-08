@@ -9,9 +9,9 @@ namespace NetworkProject.Spells
     {
         private static ISpellRepository _repository;
 
-        static SpellRepository()
+        public static void Set(ISpellRepository repository)
         {
-            _repository = IoC.GetSpellRepository();
+            _repository = repository;
         }
 
         public static SpellData GetSpell(int idSpell)

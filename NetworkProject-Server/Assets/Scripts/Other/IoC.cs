@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NetworkProject;
+using NetworkProject.Spells;
 
 namespace Standard
 {
@@ -27,6 +28,11 @@ namespace Standard
         public static IGameObjectRepository GetGameObjectRepository()
         {
             return new GameObjectRepositoryByFind();
+        }
+
+        public static ISpellRepository GetSpellRepository()
+        {
+            return new SpellRepositoryServer();
         }
     }
 }

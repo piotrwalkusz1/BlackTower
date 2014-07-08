@@ -62,7 +62,7 @@ public abstract class NetObject : MonoBehaviour
 
     public virtual void SendMessageDisappeared(IConnectionMember address)
     {
-        var request = new DeleteObject(IdNet);
+        var request = new DeleteObjectToClient(IdNet);
         var message = new OutgoingMessage(request);
         Server.Send(message, address);
     }
@@ -72,7 +72,7 @@ public abstract class NetObject : MonoBehaviour
         Action<IConnectionMember> function = delegate(IConnectionMember address)
         {
             int hp = GetComponent<HealthSystem>().HP;
-            var package = new UpdateHP(IdNet, hp);
+            var package = new UpdateHPToClient(IdNet, hp);
             var message = new OutgoingMessage(package);
 
             Server.Send(message, address);
@@ -86,7 +86,7 @@ public abstract class NetObject : MonoBehaviour
         Action<IConnectionMember> function = delegate(IConnectionMember address)
         {
             int maxHp = GetComponent<HealthSystem>().MaxHP;
-            var package = new UpdateMaxHP(IdNet, maxHp);
+            var package = new UpdateMaxHPToClient(IdNet, maxHp);
             var message = new OutgoingMessage(package);
 
             Server.Send(message, address);
@@ -97,14 +97,14 @@ public abstract class NetObject : MonoBehaviour
 
     public void SendDeadMessage()
     {
-        var request = new Dead(IdNet);
+        var request = new DeadToClient(IdNet);
 
         GenerateSendFunctionAndAddToUpdateEvent(request);
     }
 
     public void SendRespawnMessage()
     {
-        var request = new Respawn(IdNet);
+        var request = new RespawnToClient(IdNet);
 
         GenerateSendFunctionAndAddToUpdateEvent(request);
     }
@@ -118,7 +118,7 @@ public abstract class NetObject : MonoBehaviour
     {
         if (IsChangePosition())
         {
-            var package = new Rotate(IdNet, transform.eulerAngles.y);
+            var package = new RotateToClient(IdNet, transform.eulerAngles.y);
             var message = new OutgoingMessage(package);
 
             Server.Send(message, address);
@@ -129,7 +129,7 @@ public abstract class NetObject : MonoBehaviour
     {
         if (IsChangeRotation())
         {
-            var package = new Move(IdNet, transform.position);
+            var package = new MoveToClient(IdNet, transform.position);
             var message = new OutgoingMessage(package);
 
             Server.Send(message, address);

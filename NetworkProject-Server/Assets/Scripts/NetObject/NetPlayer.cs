@@ -1,16 +1,20 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using NetworkProject;
 using NetworkProject.Connection;
 using NetworkProject.Connection.ToClient;
 using NetworkProject.BodyParts;
 using NetworkProject.Items;
+using NetworkProject.Spells;
 
 [System.CLSCompliant(false)]
 public class NetPlayer : NetObject
 {
     public IConnectionMember OwnerAddress { get; set; }
+    public string Name { get; set; }
+    public BreedAndGender BreadAndGender { get; set; }
 
     public override void SendMessageAppeared(IConnectionMember address)
     {
@@ -20,7 +24,7 @@ public class NetPlayer : NetObject
         }
 
         var stats = GetComponent<PlayerStats>();
-        var request = new CreateOtherPlayer(IdNet, transform.position, transform.eulerAngles.y, stats);
+        var request = new CreateOtherPlayerToClient(IdNet, transform.position, transform.eulerAngles.y, stats, Name);
         var message = new OutgoingMessage(request);
 
         Server.Send(message, address);
@@ -50,7 +54,7 @@ public class NetPlayer : NetObject
     {
         Action<IConnectionMember> function = delegate(IConnectionMember address)
         {
-            var request = new Jump(IdNet);
+            var request = new JumpToClient(IdNet);
             var message = new OutgoingMessage(request);
 
             Server.Send(message, address);
@@ -63,7 +67,7 @@ public class NetPlayer : NetObject
     {
         Action<IConnectionMember> function = delegate(IConnectionMember address)
         {
-            var request = new Attack(IdNet);
+            var request = new AttackToClient(IdNet);
             var message = new OutgoingMessage(request);
 
             Server.Send(message, address);
@@ -76,7 +80,7 @@ public class NetPlayer : NetObject
     {
         Action<IConnectionMember> function = delegate(IConnectionMember address)
         {
-            var request = new UpdateAllStats(IdNet, GetComponent<PlayerStats>());
+            var request = new UpdateAllStatsToClient(IdNet, GetComponent<PlayerStats>());
             var message = new OutgoingMessage(request);
 
             Server.Send(message, address);
@@ -89,7 +93,7 @@ public class NetPlayer : NetObject
     {
         Action<IConnectionMember> function = delegate(IConnectionMember address)
         {
-            var request = new UpdateEquipedItem(IdNet, slot, item);
+            var request = new UpdateEquipedItemToClient(IdNet, slot, item);
             var message = new OutgoingMessage(request);
 
             Server.Send(message, address);
@@ -100,8 +104,69 @@ public class NetPlayer : NetObject
 
     public void SendRespawnMessageToOwner()
     {
-        var request = new NetworkProject.Connection.ToClient.Respawn(IdNet);
+        var request = new RespawnToClient(IdNet);
 
         Server.SendRequestAsMessage(request, OwnerAddress);
+    }
+
+    public void Initialize(int idNet, RegisterCharacter characterData, IConnectionMember ownerAddress)
+    {
+        Name = characterData.Name;
+
+        InitializeNetPlayer(idNet, ownerAddress);
+
+        InitalizeVision(ownerAddress);
+
+        InitializeStats(characterData);
+
+        InitializeSpellCaster(characterData.Spells);
+
+        InitializePlayerExperience(characterData.Lvl, characterData.Exp);
+
+        InitializePlayerEquipment();
+
+        GetComponent<PlayerStats>().CalculateStats(); // musi być przedostatnie!
+
+        GetComponent<PlayerHealthSystem>().Recuparate(); // musi być na końcu!
+    }
+
+    private void InitializeNetPlayer(int idNet, IConnectionMember ownerAddress)
+    {
+        var netPlayer = GetComponent<NetPlayer>();
+        netPlayer.IdNet = idNet;
+        netPlayer.OwnerAddress = ownerAddress;
+    }
+
+    private void InitalizeVision(IConnectionMember ownerAddress)
+    {
+        var vision = GetComponent<Vision>();
+        vision.AddObserver(ownerAddress);
+    }
+
+    private void InitializeStats(RegisterCharacter characterData)
+    {
+        var stats = GetComponent<PlayerStats>();
+        stats.Set(characterData);
+    }
+
+    private void InitializeSpellCaster(List<Spell> spells)
+    {
+        var spellCaster = GetComponent<SpellCaster>();
+        spellCaster.SetSpells(spells);
+    }
+
+    private void InitializePlayerExperience(int lvl, int exp)
+    {
+        var playerExperience = GetComponent<PlayerExperience>();
+        playerExperience.Set(lvl, exp);
+    }
+
+    private void InitializePlayerEquipment()
+    {
+        var playerEquipment = GetComponent<PlayerEquipment>();
+
+        playerEquipment.AddItem(new Item(0)); //temporary
+        playerEquipment.AddItem(new Item(1)); //temporary
+        playerEquipment.AddItem(new Item(2)); //temporary
     }
 }

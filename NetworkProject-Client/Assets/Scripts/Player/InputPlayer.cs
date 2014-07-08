@@ -39,7 +39,7 @@ public class InputPlayer : MonoBehaviour
 
             if (item != null && distance <= NetworkProject.Settings.pickItemRange)
             {
-                Client.SendMessagePickItem(item.IdObject);
+                Client.SendMessagePickItem(item.IdNet);
             }
         }
         if (Inputs.DownButton("Equipment"))

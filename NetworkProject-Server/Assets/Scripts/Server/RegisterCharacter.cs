@@ -12,7 +12,7 @@ public class RegisterCharacter
     public RegisterAccount MyAccount { get; set; }
     public string Name { get; set; }
     public int IdCharacter { get; set; }
-    public Breed Breed { get; set; }
+    public BreedAndGender BreedAndGender { get; set; }
 
     public Vector3 EndPosition { get; set; } // position at time of exit the game  
     public List<Spell> Spells { get; set; }

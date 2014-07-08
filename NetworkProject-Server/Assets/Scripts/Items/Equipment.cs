@@ -31,7 +31,7 @@ public class Equipment : MonoBehaviour
         int myIdNet = GetComponent<NetObject>().IdNet;
         var item = GetItemBySlot(slot);
 
-        var message = new UpdateItemInEquipment(myIdNet, slot, item);
+        var message = new UpdateItemInEquipmentToClient(myIdNet, slot, item);
     }
 
     public void ChangeItemInEquipment(int slot1, int slot2)

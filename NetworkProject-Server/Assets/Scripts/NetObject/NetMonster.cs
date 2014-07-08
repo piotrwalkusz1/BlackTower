@@ -12,7 +12,7 @@ public class NetMonster : NetObject
 
     public override void SendMessageAppeared(IConnectionMember address)
     {
-        var receive = new CreateMonster(IdNet, transform.position, transform.eulerAngles.y, IdMonster, GetComponent<MonsterStats>());
+        var receive = new CreateMonsterToClient(IdNet, transform.position, transform.eulerAngles.y, IdMonster, GetComponent<MonsterStats>());
 
         Server.SendRequestAsMessage(receive, address);
     }
@@ -28,21 +28,21 @@ public class NetMonster : NetObject
 
     public void SendJumpMessage()
     {
-        var request = new Jump(IdNet);
+        var request = new JumpToClient(IdNet);
 
         GenerateSendFunctionAndAddToUpdateEvent(request);
     }
 
     public void SendAttackMessage(int idAttackVictim)
     {
-        var request = new Attack(IdNet);
+        var request = new AttackToClient(IdNet);
 
         GenerateSendFunctionAndAddToUpdateEvent(request);
     }
 
     public void SendAllStatsMessage()
     {
-        var request = new UpdateAllStats(IdNet, (IStats)GetComponent(typeof(IStats)));
+        var request = new UpdateAllStatsToClient(IdNet, (IStats)GetComponent(typeof(IStats)));
 
         GenerateSendFunctionAndAddToUpdateEvent(request);
     }

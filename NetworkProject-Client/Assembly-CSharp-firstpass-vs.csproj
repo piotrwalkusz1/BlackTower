@@ -65,8 +65,14 @@
      <None Include="Assets\Resources\spells.xml" />
      <None Include="Assets\Resources\PL.xml" />
      <None Include="Assets\Resources\defaultInputs.txt" />
+ <Reference Include="Lidgren.Network">
+ <HintPath>C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Client/Assets/Plugins/Lidgren.Network.dll</HintPath>
+ </Reference>
  <Reference Include="NetworkProject">
- <HintPath>D:/NetworkProject/NetworkProject-Client/Assets/Plugins/NetworkProject.dll</HintPath>
+ <HintPath>C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Client/Assets/Plugins/NetworkProject.dll</HintPath>
+ </Reference>
+ <Reference Include="SpellActions">
+ <HintPath>C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Client/Assets/Plugins/SpellActions.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

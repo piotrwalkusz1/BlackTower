@@ -6,7 +6,6 @@ using NetworkProject;
 using NetworkProject.Connection;
 using NetworkProject.Spells;
 
-[System.CLSCompliant(false)]
 public class AccountRepositoryInServer : IAccountRepository
 {
     private List<RegisterAccount> _registerAccounts = new List<RegisterAccount>();
@@ -23,8 +22,7 @@ public class AccountRepositoryInServer : IAccountRepository
         RegisterCharacter character = new RegisterCharacter();
         character.Name = "Neon";
         character.EndPosition = new Vector3(0, 400, 0);
-        character.Breed = Breed.Troll;
-        character.AddSpell(new Spell(SpellRepository.GetSpell(0)));
+        character.BreedAndGender = new BreedAndGender(0, true);
         character.Lvl = 1;
         character.Exp = 0;
         RegisterCharacter(account, character);
@@ -35,7 +33,7 @@ public class AccountRepositoryInServer : IAccountRepository
         RegisterCharacter character2 = new RegisterCharacter();
         character2.Name = "Spejkon";
         character2.EndPosition = new Vector3(3, 400, 3);
-        character2.Breed = Breed.Troll;
+        character2.BreedAndGender = new BreedAndGender(0, true);
         RegisterCharacter(account2, character2);  
     }
 

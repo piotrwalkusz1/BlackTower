@@ -7,6 +7,6 @@ namespace NetworkProject
 {
     public interface IMonsterStats : IStats
     {
-        float AttackSpeed { get; set; }
+        
     }
 }

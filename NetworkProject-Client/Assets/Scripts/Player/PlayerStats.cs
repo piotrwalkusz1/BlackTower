@@ -55,24 +55,17 @@ public class PlayerStats : Stats
             motor.movement.maxBackwardsSpeed = value;
 		}	
     }
-    public virtual Breed Breed { get; set; }
+    public virtual int BreedAndGender { get; set; }
 
-    public void Set(PlayerStatsPackage package)
+    public void Set(IPlayerStats stats)
     {
-        HP = package._hp;
-        MaxHP = package._maxHp;
-        Defense = package._defense;
-        RegenerationHP = package._hpRegeneration;
+        HP = stats.HP;
+        MaxHP = stats.MaxHP;
+        Defense = stats.Defense;
+        RegenerationHP = stats.HPRegeneration;
         //RegenerationMP
-        AttackSpeed = package._attackSpeed;
-        MovementSpeed = package._movementSpeed;
-        Breed = package._breed;
-    }
-
-    public override void Set(IncomingMessage message)
-    {
-        var package = message.Read<PlayerStatsPackage>();
-
-        Set(package);
+        AttackSpeed = stats.AttackSpeed;
+        MovementSpeed = stats.MovementSpeed;
+        Breed = stats.BreedAndGender;
     }
 }
