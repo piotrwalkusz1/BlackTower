@@ -53,6 +53,7 @@
     <Compile Include="Combat\Bullets.cs" />
     <Compile Include="Combat\NormalBullet.cs" />
     <Compile Include="Connection\ISpellCasterStatsPackage.cs" />
+    <Compile Include="dasda.cs" />
     <Compile Include="ErrorCode.cs" />
     <Compile Include="Connection\IncomingMessageFromServer.cs" />
     <Compile Include="Connection\ToClient\ErrorMessageToClient.cs" />

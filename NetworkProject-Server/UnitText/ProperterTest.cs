@@ -8,11 +8,11 @@ namespace UnitTest
     public class ProperterTest
     {
         [TestMethod]
-        public void Get_ReturnSameValueWhichSet()
+        public void Get_ReturnSameValueLikeSet()
         {
             var setProperty = new TestClass();
             setProperty._breedAndGender = new BreedAndGender(10, true);
-            setProperty._count = 132;
+            setProperty.Count= 132;
 
             var properter = new Properter<ITestInterface>(setProperty);
             var getProperty = properter.Get();
@@ -23,7 +23,7 @@ namespace UnitTest
         }
     }
 
-    interface ITestInterface
+    public interface ITestInterface
     {
         BreedAndGender BreedAndGender { get; }
 
@@ -45,6 +45,8 @@ namespace UnitTest
 
         public BreedAndGender _breedAndGender;
 
-        public int _count;
+        private int _count;
+
+        private int _settler;
     }
 }
