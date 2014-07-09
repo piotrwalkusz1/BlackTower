@@ -2,9 +2,10 @@
 using System.Collections;
 using NetworkProject;
 
-[System.CLSCompliant(false)]
 public class NetPlayer : NetNamedObject
 {
+    public BreedAndGender BreedAndGender { get; set; }
+
     private Vector3 _positionInLastFrame;
     private bool _wasMovementInLastFrame;
 

@@ -2,7 +2,6 @@
 using System;
 using System.Collections;
 
-[System.CLSCompliant(false)]
 public class PlayerAnimation : AnimationManager, ICombatAnimation
 {
     protected Animator _animator;

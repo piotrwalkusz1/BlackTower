@@ -8,7 +8,6 @@ using NetworkProject;
 using NetworkProject.Connection;
 using UnityEngine;
 
-[System.CLSCompliant(false)]
 public class LidgrenClient : IClient
 {
     public ClientStatus Status

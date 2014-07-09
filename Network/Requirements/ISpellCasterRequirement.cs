@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NetworkProject.Requirements
 {
-    public interface ISpellCastRequirement : IRequirement
+    public interface ISpellCasterRequirement : IRequirement
     {
         bool IsRequirementSatisfy(ISpellCasterStats stats);
     }

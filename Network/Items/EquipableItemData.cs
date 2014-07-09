@@ -13,7 +13,7 @@ namespace NetworkProject.Items
     public abstract class EquipableItemData : ItemData
     {
         protected List<IEquipeBenefit> _benefits = new List<IEquipeBenefit>();
-        protected List<IEquipeRequirement> _requirements = new List<IEquipeRequirement>();
+        protected List<IEquipRequirement> _requirements = new List<IEquipRequirement>();
 
         public EquipableItemData()
         {
@@ -43,12 +43,12 @@ namespace NetworkProject.Items
             _benefits.AddRange(benefits);
         }
 
-        public void AddRequirement(IEquipeRequirement requirement)
+        public void AddRequirement(IEquipRequirement requirement)
         {
             _requirements.Add(requirement);
         }
 
-        public void AddRequirement(IEquipeRequirement[] requirements)
+        public void AddRequirement(IEquipRequirement[] requirements)
         {
             _requirements.AddRange(requirements);
         }
@@ -58,14 +58,14 @@ namespace NetworkProject.Items
             return _benefits.ToArray();
         }
 
-        public IEquipeRequirement[] GetRequirement()
+        public IEquipRequirement[] GetRequirement()
         {
             return _requirements.ToArray();
         }
 
         public bool CanEquipe(IEquipableStats stats)
         {
-            foreach(IEquipeRequirement req in _requirements)
+            foreach(IEquipRequirement req in _requirements)
             {
                 if (!req.IsRequirementSatisfy(stats))
                 {

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using InputsSystem;
+using NetworkProject.Connection.ToServer;
 
-[System.CLSCompliant(false)]
 public class InputPlayer : MonoBehaviour 
 {
 	private CharacterMotor movement;
@@ -25,7 +25,9 @@ public class InputPlayer : MonoBehaviour
         {
             movement.inputJump = true;
 
-            Client.SendMessagePlayerJump(transform.position, Vector3.zero);
+            var request = new PlayerJumpToServer();
+
+            Client.SendRequestAsMessage(request);
         }
         if (Inputs.UpButton("Jump"))
         {
@@ -39,7 +41,9 @@ public class InputPlayer : MonoBehaviour
 
             if (item != null && distance <= NetworkProject.Settings.pickItemRange)
             {
-                Client.SendMessagePickItem(item.IdNet);
+                var request = new PickItemToServer(item.IdItem);
+
+                Client.SendRequestAsMessage(request);
             }
         }
         if (Inputs.DownButton("Equipment"))
@@ -63,12 +67,6 @@ public class InputPlayer : MonoBehaviour
             {
                 GUIController.ShowCharacterGUI();
             }
-        }
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            Spell spell = GetComponent<SpellCaster>().GetSpellById(0);
-
-            GetComponent<SpellCaster>().CastSpell(spell);
         }
 	}
 

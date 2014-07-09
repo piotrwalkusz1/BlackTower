@@ -3,7 +3,6 @@ using System.Collections;
 using NetworkProject;
 using NetworkProject.Connection.ToClient;
 
-[System.CLSCompliant(false)]
 public class NetOtherPlayer : NetPlayer
 {
     public PlayerMovement Movement { get; set; }

@@ -2,22 +2,26 @@
 using System.Collections;
 using NetworkProject;
 
-[System.CLSCompliant(false)]
-public class PlayerStats : Stats, IPlayerStats
+public abstract class PlayerStats : Stats, IPlayerStats
 {
-    public int Lvl
+    public virtual BreedAndGender BreedAndGender
+    {
+        get { return GetComponent<NetPlayer>().BreedAndGender; }
+        set { GetComponent<NetPlayer>().BreedAndGender = value; }
+    }
+    public virtual int Lvl
     {
         get
         {
             return GetComponent<Experience>().Lvl;
         }
     }
-    public int MinDmg
+    public virtual int MinDmg
     {
         get { return GetComponent<PlayerCombat>().MinDmg; }
         set { GetComponent<PlayerCombat>().MinDmg = value; }
     }
-    public int MaxDmg
+    public virtual int MaxDmg
     {
         get { return GetComponent<PlayerCombat>().MaxDmg; }
         set { GetComponent<PlayerCombat>().MaxDmg = value; }
@@ -45,8 +49,6 @@ public class PlayerStats : Stats, IPlayerStats
         }
     }
     public virtual int Defense { get; set; }
-    public virtual float RegenerationHP { get; set; }
-    public virtual float RegenerationMP { get; set; }
     public virtual float AttackSpeed
     {
         get
@@ -71,17 +73,10 @@ public class PlayerStats : Stats, IPlayerStats
             motor.movement.maxSidewaysSpeed = value;
             motor.movement.maxBackwardsSpeed = value;
 		}	
-    }
-    public virtual BreedAndGender BreedAndGender { get; set; }
-    public float HPRegeneration
+    }   
+    public virtual float HPRegeneration
     {
-        get
-        {
-            throw new System.NotImplementedException();
-        }
-        set
-        {
-            throw new System.NotImplementedException();
-        }
+        get { return GetComponent<HP>()._hpRegeneration; }
+        set { GetComponent<HP>()._hpRegeneration = value; }
     }
 }

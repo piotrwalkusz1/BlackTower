@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Standard;
 
-[System.CLSCompliant(false)]
 public class CharacterWindow : GUIObject
 {
     public Texture Texture
@@ -17,13 +16,12 @@ public class CharacterWindow : GUIObject
         {
             GetComponent<GUITexture>().texture = value;
         }
-    }
-    public PlayerStats _stats;
-    public PlayerEquipment PlayerEquipement
+    }  
+    public OwnPlayerEquipment PlayerEquipement
     {
         get
         {
-            return _stats.GetComponent<PlayerEquipment>();
+            return _stats.GetComponent<OwnPlayerEquipment>();
         }
     }
 
@@ -46,7 +44,8 @@ public class CharacterWindow : GUIObject
     public GUIText _movementSpeed;
     public GUIText _movementSpeedAnswer;
 
-    public List<ItemInCharacterWindow> _equipedItems;
+    private OwnPlayerStats _stats;
+    private List<ItemInCharacterWindow> _equipedItems;
 
     private Vector3 _lastMousePosition;
 
@@ -69,6 +68,11 @@ public class CharacterWindow : GUIObject
         _lastMousePosition = Input.mousePosition;
     }
 
+    public void SetStats(OwnPlayerStats stats)
+    {
+        _stats = stats;
+    }
+
     public void Refresh()
     {
         _hp.text = Languages.GetSentence("hp");
@@ -79,9 +83,9 @@ public class CharacterWindow : GUIObject
         _defenseAnswer.text = _stats.Defense.ToString();
         _cooldownReduction.text = Languages.GetSentence("cooldownReduction");
         _regenerationHP.text = Languages.GetSentence("hpRegeneration");
-        _regenerationHPAnswer.text = _stats.RegenerationHP.ToString();
+        _regenerationHPAnswer.text = _stats.HPRegeneration.ToString();
         _regenerationMP.text = Languages.GetSentence("mpRegeneration");
-        _regenerationMPAnswer.text = _stats.RegenerationMP.ToString();
+        //_regenerationMPAnswer.text = _stats.RegenerationMP.ToString();
         _attackSpeed.text = Languages.GetSentence("attackSpeed");
         _attackSpeedAnswer.text = _stats.AttackSpeed.ToString();
         _movementSpeed.text = Languages.GetSentence("movementSpeed");
@@ -99,5 +103,10 @@ public class CharacterWindow : GUIObject
         }
 
         return -1;
+    }
+
+    public OwnPlayerStats GetPlayerStats()
+    {
+        return _stats;
     }
 }

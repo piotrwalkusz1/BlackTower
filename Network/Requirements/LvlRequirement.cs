@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NetworkProject.Requirements
 {
-    public class LvlRequirement : IEquipeRequirement, ISpellCastRequirement
+    public class LvlRequirement : IEquipRequirement, ISpellCasterRequirement
     {
         private int _requiredLvl;
 

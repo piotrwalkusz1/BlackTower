@@ -4,7 +4,6 @@ using System.Collections;
 using InputsSystem;
 using NetworkProject.Connection.ToServer;
 
-[System.CLSCompliant(false)]
 public class OwnPlayerCombat :PlayerCombat
 {
     private DateTime _newAttackTime = DateTime.UtcNow;

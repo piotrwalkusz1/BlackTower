@@ -8,7 +8,6 @@ using NetworkProject.Connection.ToClient;
 using NetworkProject.Items;
 using Standard;
 
-[System.CLSCompliant(false)]
 public static class SceneBuilder
 {
     private static IGameObjectRepository _gameObjectRepository;
@@ -74,7 +73,7 @@ public static class SceneBuilder
         monsterGO.GetComponent<NetObject>().IdNet = monster.IdNet;
 
         MonsterStats stats = monsterGO.GetComponent<MonsterStats>();
-        stats
+        stats.Set(monster.MonsterStats);
     }
 
     public static void CreateItem(CreateItemToClient item)
@@ -93,7 +92,7 @@ public static class SceneBuilder
         GameObject instantiate = GameObject.Instantiate(Prefabs.GetVisualObject(visualObject.IdVisualObject),
             visualObject.Position, Quaternion.Euler(0, visualObject.Rotation, 0)) as GameObject;
 
-        instantiate.GetComponent<NetObject>().IdNet = visualObject.IdObject;
+        instantiate.GetComponent<NetObject>().IdNet = visualObject.IdNet;
     }
 
     public static NetObject GetNetObjectByIdNet(int idNet)

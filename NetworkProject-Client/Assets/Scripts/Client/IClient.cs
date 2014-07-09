@@ -13,7 +13,6 @@ public enum ClientStatus
     Disconnecting
 }
 
-[System.CLSCompliant(false)]
 public interface IClient
 {
     ClientStatus Status { get; }

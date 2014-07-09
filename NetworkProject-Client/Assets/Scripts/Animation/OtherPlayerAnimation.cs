@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[System.CLSCompliant(false)]
 public class OtherPlayerAnimation : PlayerAnimation
 {
     private NetPlayer _netPlayer;

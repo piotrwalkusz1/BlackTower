@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NetworkProject.Requirements
 {
-    public interface IEquipeRequirement : IRequirement
+    public interface IEquipRequirement : IRequirement
     {
         bool IsRequirementSatisfy(IEquipableStats stats);
     }

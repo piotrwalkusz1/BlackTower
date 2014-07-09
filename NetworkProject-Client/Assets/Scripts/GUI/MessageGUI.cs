@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-
-[System.CLSCompliant(false)]
 public class MessageGUI
 {
     public string Title { get; set; }

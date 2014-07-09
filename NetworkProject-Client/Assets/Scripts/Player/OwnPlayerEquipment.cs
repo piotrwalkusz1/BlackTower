@@ -13,22 +13,42 @@ public class OwnPlayerEquipment : PlayerEquipment, IEquipment
         _equipment = new ItemBag();
     }
 
-    public void SetItem(Item item, int idSlot)
+    public void SetItemInBag(Item item, int idSlot)
     {
         _equipment.UpdateSlot(idSlot, item);
 
         GUIController.IsActiveEquipmentRefresh();
     }
 
-    public Item GetItem(int idSlot)
+    public Item GetItemFromBag(int idSlot)
     {
         return _equipment.GetItem(idSlot);
     }
 
-    public override void Equipe(Item item, int bodyPart)
+    public Item[] GetItemsFromBag()
     {
-        base.Equipe(item, bodyPart);
+        return _equipment.GetItems();
+    }
+
+    public override void Equip(Item item, int bodyPart)
+    {
+        base.Equip(item, bodyPart);
 
         GUIController.IsActiveEquipmentRefresh();
+    }
+
+    public bool IsEmptyBagSlot(int idSlot)
+    {
+        return GetItemFromBag(idSlot) == null;
+    }
+
+    public void SetSlot(Item item, int idSlot)
+    {
+        _equipment.UpdateSlot(idSlot, item);
+    }
+
+    public Item GetSlot(int idSlot)
+    {
+        return _equipment.GetItem(idSlot);
     }
 }

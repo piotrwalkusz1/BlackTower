@@ -2,7 +2,6 @@
 using System;
 using System.Collections;
 
-[System.CLSCompliant(false)]
 public class OwnPlayerAnimation : PlayerAnimation
 {
     private CharacterMotor _motor;

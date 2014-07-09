@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[System.CLSCompliant(false)]
 public class NetMonster : NetObject
 {
     public MonsterCombat Combat { get; private set; }
     protected Vector3 _lastPosition;
 
-    protected new void Awake()
+    void Awake()
     {
         Combat = GetComponent<MonsterCombat>();
     }

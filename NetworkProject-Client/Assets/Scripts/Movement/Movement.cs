@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[System.CLSCompliant(false)]
 public class Movement : MonoBehaviour
 {
     public virtual void SetNewTargetPosition(Vector3 position)

@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[System.CLSCompliant(false)]
 public class JumperAnimation : MonoBehaviour
 {
     private Animator _animator;

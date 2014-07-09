@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[System.CLSCompliant(false)]
 public class JumperMovement : Movement
 {
     public float Speed { get; set; }

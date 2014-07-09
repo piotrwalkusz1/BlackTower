@@ -12,25 +12,25 @@ namespace NetworkProject.Spells
 
         public float Cooldown { get; set; }
 
-        private List<ISpellCastRequirement> _requirements = new List<ISpellCastRequirement>();
+        private List<ISpellCasterRequirement> _requirements = new List<ISpellCasterRequirement>();
 
         public SpellData(int idSpell)
         {
             IdSpell = idSpell;
         }
 
-        public SpellData(int idSpell, ISpellCastRequirement[] requirements)
+        public SpellData(int idSpell, ISpellCasterRequirement[] requirements)
             : this(idSpell)
         {
             _requirements.AddRange(requirements);
         }
 
-        public void AddRequirement(ISpellCastRequirement requirement)
+        public void AddRequirement(ISpellCasterRequirement requirement)
         {
             _requirements.Add(requirement);
         }
 
-        public void AddRequirement(ISpellCastRequirement[] requirements)
+        public void AddRequirement(ISpellCasterRequirement[] requirements)
         {
             _requirements.AddRange(requirements);
         }
@@ -48,7 +48,7 @@ namespace NetworkProject.Spells
             return true;
         }
 
-        public ISpellCastRequirement[] GetRequirements()
+        public ISpellCasterRequirement[] GetRequirements()
         {
             return _requirements.ToArray();
         }

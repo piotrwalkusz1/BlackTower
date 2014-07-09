@@ -123,8 +123,8 @@
     <Compile Include="Monsters\MonsterRepository.cs" />
     <Compile Include="Movement\SimpleMovement.cs" />
     <Compile Include="Properter.cs" />
-    <Compile Include="Requirements\IEquipeRequirement.cs" />
-    <Compile Include="Requirements\ISpellCastRequirement.cs" />
+    <Compile Include="Requirements\IEquipRequirement.cs" />
+    <Compile Include="Requirements\ISpellCasterRequirement.cs" />
     <Compile Include="Requirements\LvlRequirement.cs" />
     <Compile Include="Connection\ToClient\GoToChoiceCharacterMenuToClient.cs" />
     <Compile Include="Connection\ToClient\TextMessageToClient.cs" />

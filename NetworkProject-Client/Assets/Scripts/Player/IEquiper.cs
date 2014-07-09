@@ -7,5 +7,5 @@ using NetworkProject.BodyParts;
 
 public interface IEquiper
 {
-    void Equipe(Item item, int bodyPart);
+    void Equip(Item item, int bodyPart);
 }

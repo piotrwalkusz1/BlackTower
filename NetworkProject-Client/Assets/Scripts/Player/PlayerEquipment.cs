@@ -4,7 +4,6 @@ using NetworkProject;
 using NetworkProject.Items;
 using NetworkProject.BodyParts;
 
-[System.CLSCompliant(false)]
 public class PlayerEquipment : MonoBehaviour, IEquiper
 {
     private PlayerEquipedItems _equipedItems;
@@ -19,7 +18,7 @@ public class PlayerEquipment : MonoBehaviour, IEquiper
         _equipedItems = package;
     }
 
-    public virtual void Equipe(Item item, int bodyPart)
+    public virtual void Equip(Item item, int bodyPart)
     {
         _equipedItems.EquipeItem(item, bodyPart);
     }

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using NetworkProject;
 using NetworkProject.Items;
 
-[System.CLSCompliant(false)]
 public class Prefabs : MonoBehaviour
 {
     public GameObject _guiEquipment;

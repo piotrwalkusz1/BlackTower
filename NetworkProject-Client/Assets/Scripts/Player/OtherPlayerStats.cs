@@ -3,7 +3,6 @@ using System.Collections;
 using NetworkProject;
 using NetworkProject.Connection;
 
-[System.CLSCompliant(false)]
 public class OtherPlayerStats : PlayerStats
 {
     public override float MovementSpeed

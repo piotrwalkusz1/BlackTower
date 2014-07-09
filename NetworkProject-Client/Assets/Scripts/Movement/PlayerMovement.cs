@@ -2,7 +2,6 @@
 using System;
 using System.Collections;
 
-[System.CLSCompliant(false)]
 public class PlayerMovement : Movement
 {
     public float Speed { get; set; }

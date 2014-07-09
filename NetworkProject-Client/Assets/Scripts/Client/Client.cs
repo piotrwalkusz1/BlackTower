@@ -11,7 +11,6 @@ using NetworkProject.Items;
 using UnityEngine;
 using Standard;
 
-[System.CLSCompliant(false)]
 public static class Client
 {
     public static ClientStatus Status
@@ -262,7 +261,7 @@ public static class Client
 
         IEquiper eq = (IEquiper)netObject.GetComponent(typeof(IEquiper));
 
-        eq.Equipe(request.Item, request.Slot);
+        eq.Equip(request.Item, request.Slot);
     }
 
     private static void ReceiveMessageNewPosition(IncomingMessageFromServer message)
@@ -371,46 +370,58 @@ public static class Client
 
     private static void ReceiveMessageDead(IncomingMessageFromServer message)
     {
-        OwnDeadEventPackage deadInfo = message.Read<OwnDeadEventPackage>();
+        var request = (DeadToClient)message.Request;
 
-        _netOwnPlayer.Dead(deadInfo);
+        var netObject = SceneBuilder.GetNetObjectByIdNet(request.IdNet);
+
+        if (IfNullDelayMessage(netObject, message))
+        {
+            return;
+        }
+
+        netObject.GetComponent<HP>().Dead();
     }
 
     private static void ReceiveMessageRespawn(IncomingMessageFromServer message)
     {
-        Vector3 position = message.ReadVector3();
+        var request = (RespawnToClient)message.Request;
 
-        _netOwnPlayer.transform.position = position;
+        var netObject = SceneBuilder.GetNetObjectByIdNet(request.IdNet);
+
+        if (IfNullDelayMessage(netObject, message))
+        {
+            return;
+        }
+
+        netObject.Respawn(request);
     }
 
     private static void ReceiveMessageUpdateHP(IncomingMessageFromServer message)
     {
-        int idObject = message.ReadInt();      
+        var request = (UpdateHPToClient)message.Request;
 
-        NetObject netObject = FindNetObjectByNetId(idObject);
+        var netObject = SceneBuilder.GetNetObjectByIdNet(request.NetId);
 
         if (IfNullDelayMessage(netObject, message))
         {
             return;
         }
 
-        int hp = message.ReadInt();
-
-        netObject.GetComponent<HP>()._hp = hp;  
+        netObject.GetComponent<HP>()._hp = request.HP;  
     }
 
     private static void ReceiveMessageUpdateAllStats(IncomingMessageFromServer message)
     {
-        int netId = message.ReadInt();
+        var request = (UpdateAllStatsToClient)message.Request;
 
-        var netObject = FindNetObjectByNetId(netId);
+        var netObject = SceneBuilder.GetNetObjectByIdNet(request.IdNet);
 
         if (IfNullDelayMessage(netObject, message))
         {
             return;
         }
 
-        netObject.GetComponent<Stats>().Set(message);
+        netObject.GetComponent<Stats>().Set(request.Stats);
     }
 
     private static void ReceiveMessageUpdateSpells(IncomingMessageFromServer message)
@@ -429,16 +440,16 @@ public static class Client
 
     private static void ReceiveMessageUpdateExp(IncomingMessageFromServer message)
     {
-        if (_netOwnPlayer == null)
+        var request = (UpdateExpToClient)message.Request;
+
+        var netObject = SceneBuilder.GetNetObjectByIdNet(request.IdNet);
+
+        if (IfNullDelayMessage(netObject, message))
         {
-            BufferMessages.DelayExecutionMessage(message);
             return;
         }
 
-        int lvl = message.ReadInt();
-        int exp = message.ReadInt();
-
-        _netOwnPlayer.GetComponent<PlayerExperience>().Set(lvl, exp);
+        netObject.GetComponent<Experience>().Exp = request.Exp;
     }
 
     #endregion

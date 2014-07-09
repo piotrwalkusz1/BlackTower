@@ -2,8 +2,8 @@
 using System.Collections;
 using NetworkProject;
 using NetworkProject.Items;
+using NetworkProject.Connection.ToServer;
 
-[System.CLSCompliant(false)]
 public class ItemInCharacterWindow : GUIObject
 {
     public CharacterWindow _characterWindow;
@@ -60,49 +60,45 @@ public class ItemInCharacterWindow : GUIObject
         _lastMousePosition = Input.mousePosition;
     }
 
-    public override void OnDropItem(ItemInEquipmentWindow item)
+    public override void OnDropItem(ItemInEquipmentWindow itemWindow)
     {
-        if (item.CanBeEquipedByPlayer(_itemType))
+        if (CanBeEquipedByPlayer(itemWindow.GetItem()))
         {
-            item.GoToDefaultPlace();
+            var request = new ChangeEquipedItemToServer(itemWindow.GetSlot(), GetSlot());
 
-            ChangeTextures(guiTexture, item.guiTexture);
+            Client.SendRequestAsMessage(request);
 
-            Client.SendMessageChangeEquipedItem(item.GetSlot(), _itemType);
+            ChangeTextures(guiTexture, itemWindow.guiTexture);
         }
-        else
-        {
-            item.GoToDefaultPlace();
-        }
+
+        itemWindow.GoToDefaultPlace();
     }
 
-    public override void OnDropEquipedItem(ItemInCharacterWindow item)
+    public override void OnDropEquipedItem(ItemInCharacterWindow itemWindow)
     {
-        if (item.CanBeEquipedByPlayer(_itemType))
+        if (CanBeEquipedByPlayer(itemWindow.GetItem()) && itemWindow.CanBeEquipedByPlayer(GetItem()))
         {
-            ChangeTextures(item.guiTexture, guiTexture);
+            var request = new ChangeEquipedItemsToServer(itemWindow.GetSlot(), GetSlot());
 
-            Client.SendMessageChangeEquipedItems(_itemType, item._itemType);
+            Client.SendRequestAsMessage(request);
 
-            item.GoToDefaultPlace();
+            ChangeTextures(itemWindow.guiTexture, guiTexture);
         }
-        else
-        {
-            item.GoToDefaultPlace();
-        }
+        
+        itemWindow.GoToDefaultPlace();
     }
 
     public bool CanBeEquipedByPlayer(Item item)
     {
         EquipableItemData itemData = (EquipableItemData)ItemRepository.GetItemByIdItem(item.IdItem);
-        PlayerStats stats = _characterWindow._stats;
+        PlayerStats stats = _characterWindow.GetPlayerStats();
 
         return item.CanEquipe(stats) && DoesBodyPartMatchToItem(itemData);
     }
 
     public int GetSlot()
     {
-        return _characterWindow
+        return _characterWindow.GetSlotToItem(this);
     }
 
     public void GoToDefaultPlace()
@@ -112,6 +108,18 @@ public class ItemInCharacterWindow : GUIObject
         gui.pixelInset = new Rect(_defaultPosition.x, _defaultPosition.y, gui.pixelInset.width, gui.pixelInset.height);
     }
 
+    public void SetTextureByItem(Item item)
+    {
+        if (item == null)
+        {
+            guiTexture.texture = null;
+        }
+        else
+        {
+            guiTexture.texture = ImageRepository.GetImageByItem(item);
+        }
+    }
+
     private Vector2 GetDefaultPosition()
     {
         return _defaultPosition;
@@ -119,12 +127,12 @@ public class ItemInCharacterWindow : GUIObject
 
     private Item GetItem()
     {
-        return _characterWindow.PlayerEquipement.GetEquipedItem(_itemType);
+        return _characterWindow.PlayerEquipement.GetEquipedItem(GetSlot());
     }
 
     private bool IsEmpty()
     {
-        return _characterWindow.PlayerEquipement.IsEmpty(_itemType);
+        return _characterWindow.PlayerEquipement.IsEmptyBagSlot(GetSlot());
     }
 
     private bool DoesBodyPartMatchToItem(ItemData itemData)

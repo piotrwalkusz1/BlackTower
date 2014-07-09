@@ -2,17 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using NetworkProject;
+using NetworkProject.Items;
 
-[System.CLSCompliant(false)]
 public class 
-    EquipmentWindow : GUIObject
-{
-    public ItemBag _equipment;   
+EquipmentWindow : GUIObject
+{  
     public Texture2D _texture;
     public Vector2 _externalBorder;
     public int _internalBorder;
     public int _sizeItemImage;
     public Rect _closeButtonRect;
+
+    private OwnPlayerEquipment _equipment;
 
     private List<ItemInEquipmentWindow> _items;
     private Vector3 _lastMousePosition;
@@ -53,6 +54,72 @@ public class
         InitializeItemsGUI();
     }
 
+    public void SetEquipment(OwnPlayerEquipment equipment)
+    {
+        _equipment = equipment;
+    }
+
+    public void RefreshEquipment()
+    {
+        Item[] items = _equipment.GetItemsFromBag();
+
+        for (int i = 0; i < items.Length; i++)
+        {
+            _items[i].SetTextureByItem(items[i]);
+        }
+    }
+
+    public Vector2 GetPixelPositionToItem(ItemInEquipmentWindow item)
+    {
+        for (int i = 0; i < _items.Count; i++)
+        {
+            if (_items[i] == item)
+            {
+                int x = i % Settings.widthEquipment;
+                int y = Mathf.FloorToInt(i / Settings.widthEquipment);
+
+                Vector2 position = _externalBorder + new Vector2(x, y) * (_internalBorder + _sizeItemImage);
+                position = new Vector2(position.x, _texture.height - position.y - _sizeItemImage);
+
+                return position;
+            }
+        }
+
+        throw new System.Exception("Nie ma takiego itemu w tablicy");
+    }
+
+    public Item GetItem(ItemInEquipmentWindow item)
+    {
+        int slot = GetSlotToItem(item);
+
+        return _equipment.GetItemFromBag(slot);
+    }
+
+    public int GetSlotToItem(ItemInEquipmentWindow item)
+    {
+        for (int i = 0; i < _items.Count; i++)
+        {
+            if (_items[i] == item)
+            {
+                return i;
+            }
+        }
+
+        throw new System.Exception("Nie ma takiego itemu w tablicy");
+    }
+
+    public bool IsSlotEmpty(ItemInEquipmentWindow item)
+    {
+        int slot = GetSlotToItem(item);
+        
+        return _equipment.IsEmptyBagSlot(slot);
+    }
+
+    public OwnPlayerStats GetPlayerStats()
+    {
+        return _equipment.GetComponent<OwnPlayerStats>();
+    }
+
     private void InitializeEquipmentGUI()
     {
         guiTexture.pixelInset = new Rect(0, 0, _texture.width, _texture.height);
@@ -84,69 +151,5 @@ public class
                 _items[index] = item;
             }
         }
-    }
-
-    public void RefreshEquipment()
-    {
-        Item[] items = _equipment.GetItems();
-
-        for (int i = 0; i < Settings.widthEquipment * Settings.heightEquipment; i++)
-        {
-            if (items[i] == null)
-            {
-                _items[i].guiTexture.texture = null;
-            }
-            else
-            {
-                int idImage = ItemBase.GetIdImage(items[i].IdItem);
-                Texture2D image = ImagesBase.GetImage(idImage);
-                _items[i].guiTexture.texture = image;
-            }
-        }
-    }
-
-    public Vector2 GetPixelPositionToItem(ItemInEquipmentWindow item)
-    {
-        for (int i = 0; i < _items.Count; i++)
-        {
-            if (_items[i] == item)
-            {
-                int x = i % Settings.widthEquipment;
-                int y = Mathf.FloorToInt(i / Settings.widthEquipment);
-
-                Vector2 position = _externalBorder + new Vector2(x, y) * (_internalBorder + _sizeItemImage);
-                position = new Vector2(position.x, _texture.height - position.y - _sizeItemImage);
-
-                return position;
-            }
-        }
-
-        throw new System.Exception("Nie ma takiego itemu w tablicy");
-    }
-
-    public Item GetItem(ItemInEquipmentWindow item)
-    {
-        int slot = GetSlotToItem(item);
-
-        return _equipment.GetItem(slot);
-    }
-
-    public int GetSlotToItem(ItemInEquipmentWindow item)
-    {
-        for (int i = 0; i < _items.Count; i++)
-        {
-            if (_items[i] == item)
-            {
-                return i;
-            }
-        }
-
-        throw new System.Exception("Nie ma takiego itemu w tablicy");
-    }
-
-    public bool IsSlotEmpty(ItemInEquipmentWindow item)
-    {
-        int slot = GetSlotToItem(item);
-        return _equipment.IsSlotEmpty(slot);
     }
 }

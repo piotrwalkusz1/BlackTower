@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using NetworkProject;
 using NetworkProject.Connection.ToClient;
+using NetworkProject.Connection.ToServer;
 
 enum Place
 {
@@ -16,7 +17,6 @@ enum DragType
     Equipment
 }
 
-[System.CLSCompliant(false)]
 public class GUIController : MonoBehaviour
 {
     static private Place _place;
@@ -54,7 +54,7 @@ public class GUIController : MonoBehaviour
         _equipmentWindow._externalBorder = new Vector2(6, 32);
         _equipmentWindow._internalBorder = 4;
         _equipmentWindow._sizeItemImage = 40;
-        _equipmentWindow._texture = StaticRepository.Textures._equipmentWindow;
+        _equipmentWindow._texture = ImageRepository.EquipmentWindow;
         _equipmentWindow.gameObject.SetActive(false);
 
         _equipmentWindow.Initialize();
@@ -63,7 +63,7 @@ public class GUIController : MonoBehaviour
 
         window = Instantiate(Prefabs.GUICharacter, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
         _characterWindow = window.GetComponent<CharacterWindow>();
-        _characterWindow.Texture = StaticRepository.Textures._characterWindow;
+        _characterWindow.Texture = ImageRepository.CharacterWindow;
         _characterWindow.gameObject.SetActive(false);
 
         DontDestroyOnLoad(window);
@@ -111,7 +111,7 @@ public class GUIController : MonoBehaviour
     static public void ShowEquipment()
     {
         NetOwnPlayer player = FindObjectOfType<NetOwnPlayer>();
-        _equipmentWindow._equipment = player.GetComponent<ItemBag>();
+        _equipmentWindow.SetEquipment(player.GetComponent<OwnPlayerEquipment>());
 
         _equipmentWindow.Focus();
 
@@ -141,7 +141,7 @@ public class GUIController : MonoBehaviour
     static public void ShowCharacterGUI()
     {
         NetOwnPlayer player = FindObjectOfType<NetOwnPlayer>();
-        _characterWindow._stats = player.GetComponent<PlayerStats>();
+        _characterWindow.SetStats(player.GetComponent<OwnPlayerStats>());
 
         _characterWindow.Focus();
 
@@ -244,6 +244,29 @@ public class GUIController : MonoBehaviour
         _infoAboutCurrentPlace = info;
     }
 
+    public static void ShowDeadMessage()
+    {
+        DoWindowGUIContent content = delegate(Rect rect)
+        {
+            GUI.TextArea(new Rect(5, 10, rect.width - 10, rect.height - 45), "Nie żyjesz!");
+
+            if (GUI.Button(new Rect(5, rect.height - 30, rect.width - 10, 25), "Wskrześ"))
+            {
+                var request = new RespawnToServer();
+
+                Client.SendRequestAsMessage(request);
+
+                return true;
+            }
+
+            return false;
+        };
+
+        MessageGUI message = new MessageGUI("", content);
+
+        ShowWindow(message);
+    }
+
     static private void DrawChoiceCharacterMenuGUI()
     {
         var info = (GoToChoiceCharacterMenuToClient)_infoAboutCurrentPlace;
@@ -252,7 +275,9 @@ public class GUIController : MonoBehaviour
         {
             if (GUI.Button(new Rect(10, 10, 100, 20), info.Characters[0].Name))
             {
-                Client.SendMessageGoIntoWorld(0);
+                var request = new GoIntoWorldToServer(0);
+
+                Client.SendRequestAsMessage(request);
             }
         }
     }
@@ -266,7 +291,9 @@ public class GUIController : MonoBehaviour
 
         if(GUI.Button(new Rect(10, 70, 150, 20), "Login"))
         {
-            vassd
+            var request = new LoginToGame(info.Login, info.Password);
+
+            Client.SendRequestAsMessage(request);
         }
     }
 

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using NetworkProject;
 using NetworkProject.Connection;
 
-[System.CLSCompliant(false)]
 static public class BufferMessages
 {
     private const int _maxNumberDelays = 5;

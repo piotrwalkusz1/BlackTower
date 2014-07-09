@@ -4,7 +4,6 @@ using NetworkProject;
 using NetworkProject.Items;
 using NetworkProject.Connection.ToServer;
 
-[System.CLSCompliant(false)]
 public class ItemInEquipmentWindow : GUIObject
 {
     public EquipmentWindow _equipmentWindow;
@@ -75,9 +74,11 @@ public class ItemInEquipmentWindow : GUIObject
 
     public override void OnDropEquipedItem(ItemInCharacterWindow item)
     {
-        if (IsEmpty() || CanBeEquipedByPlayer(item._itemType))
+        if (IsEmpty() || item.CanBeEquipedByPlayer(GetItem()))
         {
-            var request = new ChangeEquipedItemToServer(GetSlot(), item.)
+            var request = new ChangeEquipedItemToServer(GetSlot(), item.GetSlot());
+
+            Client.SendRequestAsMessage(request);
 
             ChangeTextures(guiTexture, item.guiTexture);
 
@@ -93,18 +94,13 @@ public class ItemInEquipmentWindow : GUIObject
         guiTexture.pixelInset = new Rect(position.x, position.y, guiTexture.pixelInset.width, guiTexture.pixelInset.height);
     }
 
-    public bool CanBeEquipedByPlayer()
+    public bool CanBeEquipedByPlayer(int bodyPart)
     {
         Item item = GetItem();
+        ItemData itemData = ItemRepository.GetItemByIdItem(item.IdItem);
+        IEquipableStats stats = _equipmentWindow.GetPlayerStats();
 
-        return item.CanBeEquipedByPlayer();
-    }
-
-    public bool CanBeEquipedByPlayer(ItemEquipableType type)
-    {
-        Item item = GetItem();
-
-        return item.CanBeEquipedByPlayer(type);
+        return item.CanEquipe(stats) && DoesBodyPartMatchToItem(itemData, bodyPart);
     }
 
     public Item GetItem()
@@ -120,5 +116,22 @@ public class ItemInEquipmentWindow : GUIObject
     public int GetSlot()
     {
         return _equipmentWindow.GetSlotToItem(this);
+    }
+
+    public void SetTextureByItem(Item item)
+    {
+        if (item == null)
+        {
+            guiTexture.texture = null;
+        }
+        else
+        {
+            guiTexture.texture = ImageRepository.GetImageByItem(item);
+        }
+    }
+
+    private bool DoesBodyPartMatchToItem(ItemData itemData, int bodyPart)
+    {
+        return IoC.GetBodyPart(bodyPart).CanEquipeItemOnThisBodyPart(itemData);
     }
 }

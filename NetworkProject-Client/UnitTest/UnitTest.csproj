@@ -54,9 +54,25 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="CharacterChoiceMenuInfoTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Messages.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Network\NetworkProject.csproj">
+      <Project>{aaa6a575-be26-4699-b4ca-4b5afe80e502}</Project>
+      <Name>NetworkProject</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Assembly-CSharp-Editor-vs.csproj">
+      <Project>{8e64673c-0f86-79d1-60ad-b45b8c8e4378}</Project>
+      <Name>Assembly-CSharp-Editor-vs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Assembly-CSharp-firstpass-vs.csproj">
+      <Project>{3a1c41a4-930b-7fb0-b69a-2b357061594c}</Project>
+      <Name>Assembly-CSharp-firstpass-vs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Assembly-CSharp-vs.csproj">
+      <Project>{104b4037-ddeb-85d2-72a1-da5afa9ca345}</Project>
+      <Name>Assembly-CSharp-vs</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
