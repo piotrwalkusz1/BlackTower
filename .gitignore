@@ -35,3 +35,7 @@
 /SpellActions/obj/Debug
 *.userprefs
 *.dgml
+/NetworkProject-Client/packages/Moq.4.2.1402.2112/Moq.4.2.1402.2112.nupkg
+/NetworkProject-Client/packages/Moq.4.2.1402.2112/lib/net35/Moq.xml
+/NetworkProject-Client/packages/Moq.4.2.1402.2112/lib/net40/Moq.xml
+/NetworkProject-Client/packages/Moq.4.2.1402.2112/lib/sl4/Moq.Silverlight.xml
