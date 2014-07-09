@@ -7,7 +7,7 @@ using NetworkProject.Items;
 namespace NetworkProject.Connection.ToClient
 {
     [Serializable]
-    public class UpdateItemInEquipmentToClient : INetworkRequest
+    public class UpdateItemInEquipmentToClient : INetworkRequestToClient
     {
         public int IdNet { get; set; }
         public int Slot { get; set; }

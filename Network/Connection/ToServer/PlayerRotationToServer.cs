@@ -6,7 +6,7 @@ using System.Text;
 namespace NetworkProject.Connection.ToServer
 {
     [Serializable]
-    public class PlayerRotationToServer : INetworkRequest
+    public class PlayerRotationToServer : INetworkRequestToServer
     {
         public float NewRotation { get; set; }
 

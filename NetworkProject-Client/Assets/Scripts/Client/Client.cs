@@ -130,7 +130,7 @@ public static class Client
         return _netOwnPlayer;
     }
 
-    public static void SendRequestAsMessage(INetworkRequest request)
+    public static void SendRequestAsMessage(INetworkRequestToServer request)
     {
         var message = new OutgoingMessage(request);
 

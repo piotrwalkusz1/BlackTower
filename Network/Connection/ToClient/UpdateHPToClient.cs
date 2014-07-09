@@ -6,7 +6,7 @@ using System.Text;
 namespace NetworkProject.Connection.ToClient
 {
     [Serializable]
-    public class UpdateHPToClient : INetworkRequest
+    public class UpdateHPToClient : INetworkRequestToClient
     {
         public int NetId { get; set; }
         public int HP { get; set; }

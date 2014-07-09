@@ -6,7 +6,7 @@ using System.Text;
 namespace NetworkProject.Connection.ToClient
 {
     [Serializable]
-    public class AttackToClient : INetworkRequest
+    public class AttackToClient : INetworkRequestToClient
     {
         public int IdNet { get; set; }
 

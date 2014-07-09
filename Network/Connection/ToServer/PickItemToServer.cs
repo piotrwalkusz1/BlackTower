@@ -6,7 +6,7 @@ using System.Text;
 namespace NetworkProject.Connection.ToServer
 {
     [Serializable]
-    public class PickItemToServer : INetworkRequest
+    public class PickItemToServer : INetworkRequestToServer
     {
         public int IdNetItem { get; set; }
 

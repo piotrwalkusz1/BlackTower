@@ -6,7 +6,7 @@ using System.Text;
 namespace NetworkProject.Connection.ToServer
 {
     [Serializable]
-    public class UseSpellToServer : INetworkRequest
+    public class UseSpellToServer : INetworkRequestToServer
     {
         public int IdSpell { get; set; }
 

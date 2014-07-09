@@ -6,7 +6,7 @@ using System.Text;
 namespace NetworkProject.Connection.ToServer
 {
     [Serializable]
-    public class RegisterToServer : INetworkRequest
+    public class RegisterToServer : INetworkRequestToServer
     {
         public string Login { get; set; }
         public string Password { get; set; }

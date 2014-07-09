@@ -7,7 +7,7 @@ using NetworkProject.BodyParts;
 namespace NetworkProject.Connection.ToServer
 {
     [Serializable]
-    public class ChangeEquipedItemToServer : INetworkRequest
+    public class ChangeEquipedItemToServer : INetworkRequestToServer
     {
         public int SlotInEquipment { get; set; }
         public int EquipedItemSlot { get; set; }

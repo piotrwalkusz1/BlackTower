@@ -6,7 +6,7 @@ using System.Text;
 namespace NetworkProject.Connection.ToClient
 {
     [Serializable]
-    public class UpdateAllStatsToClient : INetworkRequest
+    public class UpdateAllStatsToClient : INetworkRequestToClient
     {
         public int IdNet { get; set; }
         public IStats Stats { get; set; }

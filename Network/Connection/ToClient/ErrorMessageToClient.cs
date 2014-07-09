@@ -7,7 +7,7 @@ using NetworkProject.Connection;
 namespace NetworkProject.Connection.ToClient
 {
     [Serializable]
-    public class ErrorMessageToClient : INetworkRequest
+    public class ErrorMessageToClient : INetworkRequestToClient
     {
         public ErrorCode ErrorCode { get; set; }
 

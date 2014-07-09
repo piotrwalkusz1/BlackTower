@@ -7,7 +7,7 @@ using UnityEngine;
 namespace NetworkProject.Connection.ToServer
 {
     [Serializable]
-    public class AttackToServer : INetworkRequest
+    public class AttackToServer : INetworkRequestToServer
     {
         public Vector3 Direction { get; set; }
 

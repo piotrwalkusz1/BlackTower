@@ -52,6 +52,8 @@
     <Compile Include="Combat\Bullet.cs" />
     <Compile Include="Combat\Bullets.cs" />
     <Compile Include="Combat\NormalBullet.cs" />
+    <Compile Include="Connection\INetworkRequestToClient.cs" />
+    <Compile Include="Connection\INetworkRequestToServer.cs" />
     <Compile Include="Connection\ISpellCasterStatsPackage.cs" />
     <Compile Include="Copier.cs" />
     <Compile Include="ErrorCode.cs" />
