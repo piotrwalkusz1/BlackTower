@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 using NetworkProject;
+using NetworkProject.BodyParts;
+using NetworkProject.Items;
 
 public class PlayerGeneratorModel : MonoBehaviour
 {
-    private int Breed
+    private BreedAndGender BreedAndGender
     {
         get
         {
-            return GetComponent<PlayerStats>().Breed;
+            return GetComponent<PlayerStats>().BreedAndGender;
         }
     }
 
@@ -16,15 +18,14 @@ public class PlayerGeneratorModel : MonoBehaviour
 
     public void CreateModel()
     {
-        GameObject playerModel = Prefabs.GetPlayerModel(Breed);
-
-        playerModel = GameObject.Instantiate(playerModel, Vector3.zero, Quaternion.identity) as GameObject;
+        GameObject playerModel = GameObject.Instantiate(Prefabs.GetPlayerModelByBreed(BreedAndGender.Breed), Vector3.zero,
+            Quaternion.identity) as GameObject;
 
         playerModel.transform.parent = transform;
         playerModel.transform.localPosition = Vector3.zero;
         playerModel.transform.localEulerAngles = Vector3.zero;
 
-        GetComponent<PlayerAnimation>().animator = playerModel.GetComponentInChildren<Animator>();
+        GetComponent<PlayerAnimation>().SetAnimator();
 
         _playerMesh = playerModel.GetComponentInChildren<PlayerMesh>();
 
@@ -33,41 +34,28 @@ public class PlayerGeneratorModel : MonoBehaviour
 
     public void UpdateEquipedItems()
     {
-        var eq = (IEquippedItems)GetComponent(typeof(IEquippedItems));
+        var eq = GetComponent<PlayerEquipment>();
+        var bodyParts = eq.GetBodyParts();
 
-        UpdateWeapon(eq.Weapon);
-        UpdateArmor(eq.Armor);
+        for (int i = 0; i < bodyParts.Length; i++)
+        {
+            UpdateEquipedItem(bodyParts[i], i);
+        }
     }
 
-    public void UpdateWeapon(Item weapon)
+    public void UpdateEquipedItem(BodyPart bodyPart, int idBodyPart)
     {
-        if (weapon == null)
+        SkinnedMeshRenderer mesh = _playerMesh.GetItemMeshByIdBodyPart(idBodyPart);
+
+        if (bodyPart.EquipedItem == null)
         {
-            _playerMesh._weapon.sharedMesh = null;
+            mesh.sharedMesh = null;
             return;
         }
 
-        ItemData weaponData = ItemBase.GetWeapon(weapon.IdItem);
+        VisualEquipableItemData item = (VisualEquipableItemData)ItemRepository.GetItemByIdItem(bodyPart.EquipedItem.IdItem);
 
-        _playerMesh._weapon.sharedMesh = MeshRepository.GetItemMeshByBreed(Breed, weaponData._idPrefabOnPlayer);
-        _playerMesh._weapon.material = MeshRepository.ItemMaterials[weaponData._idPrefabOnPlayer];
-    }
-
-    public void UpdateArmor(Item armor)
-    {
-        if (armor == null)
-        {
-            _playerMesh._armor.sharedMesh = MeshRepository.GetCorpMeshByBreed(Breed);
-            _playerMesh._armor.sharedMaterials = new Material[] { MeshRepository.GetCorpMaterialByBreed(Breed) };
-            return;
-        }
-
-        ItemData armorData = ItemBase.GetArmor(armor.IdItem);
-
-        _playerMesh._armor.sharedMesh = MeshRepository.GetItemMeshByBreed(Breed, armorData._idPrefabOnPlayer);
-        _playerMesh._armor.sharedMaterials = new Material[] {
-            MeshRepository.GetCorpMaterialByBreed(Breed),
-            MeshRepository.ItemMaterials[armorData._idPrefabOnPlayer]
-        };
+        mesh.sharedMesh = MeshRepository.GetItemMesh(item.IdPrefabOnPlayer);
+        mesh.sharedMaterial = MeshRepository.GetItemMaterial(item.IdPrefabOnPlayer);
     }
 }

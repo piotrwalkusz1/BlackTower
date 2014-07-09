@@ -111,7 +111,7 @@ public class GUIController : MonoBehaviour
     static public void ShowEquipment()
     {
         NetOwnPlayer player = FindObjectOfType<NetOwnPlayer>();
-        _equipmentWindow._equipment = player.GetComponent<Equipment>();
+        _equipmentWindow._equipment = player.GetComponent<ItemBag>();
 
         _equipmentWindow.Focus();
 

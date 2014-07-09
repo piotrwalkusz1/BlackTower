@@ -3,12 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-[System.CLSCompliant(false)]
-public static class IoC
+namespace Standard
 {
-    public static IClient GetImplementationClient()
+    public static class IoC
     {
-        return new LidgrenClient();
-    }
+        public static IClient GetClient()
+        {
+            return new LidgrenClient();
+        }
+
+        public static IGameObjectRepository GetGameObjectRepsitory()
+        {
+            return new GameObjectRepositoryByFind();
+        }
+    } 
 }
 

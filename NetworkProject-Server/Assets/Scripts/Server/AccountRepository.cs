@@ -24,7 +24,7 @@ public static class AccountRepository
     {
         var registerAccount = GetAccountByLogin(login);
 
-        if (registerAccount.CheckPassword(password))
+        if (registerAccount != null && registerAccount.CheckPassword(password))
         {
             return LoginAccount(registerAccount, address);
         }
@@ -36,17 +36,45 @@ public static class AccountRepository
 
     public static OnlineAccount LoginAccount(RegisterAccount account, IConnectionMember address)
     {
-        return _accountRepository.LoginAccount(account, address);
+        if (GetOnlineAccountByIdAccount(account.IdAccount) == null)
+        {
+            return _accountRepository.LoginAccount(account, address);
+        }
+        else
+        {
+            throw new AccountRepositoryException(AccountRepositoryExceptionCode.AccountAlreadyLogin);
+        }       
     }
 
     public static OnlineCharacter LoginCharacter(OnlineAccount account, int characterSlotInAccount)
     {
-        return _accountRepository.LoginCharacter(account, characterSlotInAccount);
+        if (account.OnlineCharacter == null)
+        {
+            return _accountRepository.LoginCharacter(account, characterSlotInAccount);
+        }
+        else
+        {
+            throw new AccountRepositoryException(AccountRepositoryExceptionCode.CharacterAlreadyLogin);
+        }      
     }
 
     public static void LogoutAccount(OnlineAccount account)
     {
         _accountRepository.LogoutAccount(account);
+    }
+
+    public static void LogoutAccount(string login)
+    {
+        OnlineAccount onlineAccount = GetOnlineAccountByLogin(login);
+
+        if (onlineAccount == null)
+        {
+            throw new AccountRepositoryException(AccountRepositoryExceptionCode.AcconuntAlreadyLogout);
+        }
+        else
+        {
+            LogoutAccount(onlineAccount);
+        }
     }
 
     public static void LogoutAndDeleteCharacter(OnlineCharacter character)
@@ -56,29 +84,29 @@ public static class AccountRepository
 
     public static RegisterAccount GetAccountById(int id)
     {
-        return _accountRepository.GetAccounts().First(x => x.IdAccount == id);
+        return _accountRepository.GetAccounts().FirstOrDefault(x => x.IdAccount == id);
     }
 
     public static RegisterAccount GetAccountByLogin(string login)
     {
-        return _accountRepository.GetAccounts().First(x => x.Login == login);
+        return _accountRepository.GetAccounts().FirstOrDefault(x => x.Login == login);
     }
 
     public static OnlineAccount GetOnlineAccountByAddress(IConnectionMember address)
     {
-        return _accountRepository.GetOnlineAccounts().First(x => x.Address.Equals(address));
+        return _accountRepository.GetOnlineAccounts().FirstOrDefault(x => x.Address.Equals(address));
     }
 
     public static OnlineAccount GetOnlineAccountByLogin(string login)
     {
         RegisterAccount account = GetAccountByLogin(login);
 
-        return _accountRepository.GetOnlineAccounts().First(x => x.IdAccount == account.IdAccount);
+        return _accountRepository.GetOnlineAccounts().FirstOrDefault(x => x.IdAccount == account.IdAccount);
     }
 
     public static OnlineAccount GetOnlineAccountByIdAccount(int id)
     {
-        return _accountRepository.GetOnlineAccounts().First(x => x.IdAccount == id);
+        return _accountRepository.GetOnlineAccounts().FirstOrDefault(x => x.IdAccount == id);
     }
 
     public static RegisterCharacter GetCharacterById(int id)

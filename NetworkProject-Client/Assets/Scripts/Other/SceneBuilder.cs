@@ -1,18 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using NetworkProject;
 using NetworkProject.Connection;
 using NetworkProject.Connection.ToClient;
+using NetworkProject.Items;
 using Standard;
 
 [System.CLSCompliant(false)]
 public static class SceneBuilder
 {
+    private static IGameObjectRepository _gameObjectRepository;
+
     private static bool _newSceneIsLoading;
 
     static SceneBuilder()
     {
         Standard.Updating.LevelWasLoadedEvent += OnLevelWasLoaded;
+
+        _gameObjectRepository = Standard.IoC.GetGameObjectRepsitory();
     }
 
     public static void CreateScene(GoIntoWorldToClient worldInfo)
@@ -27,7 +34,7 @@ public static class SceneBuilder
         return _newSceneIsLoading;
     }
 
-    public static void CreateOwnPlayer(CreateOwnPlayerToClient playerInfo)
+    public static GameObject CreateOwnPlayer(CreateOwnPlayerToClient playerInfo)
     {
         GameObject player = GameObject.Instantiate(Prefabs.PlayerOwner, playerInfo.Position, Quaternion.Euler(Vector3.zero)) as GameObject;
         var netOwnPlayer = player.GetComponent<NetOwnPlayer>();
@@ -37,7 +44,7 @@ public static class SceneBuilder
 
         ChangeCameraToPlayer(player);
 
-        Client.SetNetOwnPlayer(netOwnPlayer);
+        return player;
     }
 
     public static void CreateOtherPlayer(CreateOtherPlayerToClient otherPlayer)
@@ -59,42 +66,51 @@ public static class SceneBuilder
         netBullet.Bullet = bullet.Bullet;
     }
 
-    public static void CreateMonster(MonsterPackage monster)
+    public static void CreateMonster(CreateMonsterToClient monster)
     {
-        GameObject monsterGO = GameObject.Instantiate(Prefabs.GetMonsterModel(monster._monsterType), monster._position, Quaternion.Euler(0, monster._rotation, 0)) as GameObject;
+        GameObject monsterGO = GameObject.Instantiate(Prefabs.GetMonsterModel(monster.IdMonster), monster.Position,
+            Quaternion.Euler(0, monster.Rotation, 0)) as GameObject;
 
-        monsterGO.GetComponent<NetObject>().IdNet = monster.IdObject;
+        monsterGO.GetComponent<NetObject>().IdNet = monster.IdNet;
 
         MonsterStats stats = monsterGO.GetComponent<MonsterStats>();
-        stats.Hp = monster._stats._hp;
-        stats.MaxHp = monster._stats._maxHp;
-        stats.MovingSpeed = monster._stats._movementSpeed;
+        stats
     }
 
-    public static void CreateItem(ItemPackage item)
+    public static void CreateItem(CreateItemToClient item)
     {
-        GameObject prefab = ChooseItem(item.IdItem);
+        GameObject prefab = Prefabs.GetItemByIdItem(item.IdItem);
 
         GameObject itemGO = GameObject.Instantiate(prefab, item.Position, Quaternion.identity) as GameObject;
 
         NetItem netItem = itemGO.GetComponent<NetItem>();
-        netItem.IdNet = item.IdObject;
+        netItem.IdNet = item.IdItem;
         netItem.IdItem = item.IdItem;
     }
 
-    public static void CreateVisualObject(VisualObjectPackage visualObject)
+    public static void CreateVisualObject(CreateVisualObjectToClient visualObject)
     {
-        GameObject instantiate = GameObject.Instantiate(Prefabs.GetVisualObject(visualObject._objectType),
-            visualObject._position, Quaternion.Euler(0, visualObject._rotation, 0)) as GameObject;
+        GameObject instantiate = GameObject.Instantiate(Prefabs.GetVisualObject(visualObject.IdVisualObject),
+            visualObject.Position, Quaternion.Euler(0, visualObject.Rotation, 0)) as GameObject;
 
         instantiate.GetComponent<NetObject>().IdNet = visualObject.IdObject;
     }
 
-    private static GameObject ChooseItem(int idItem)
+    public static NetObject GetNetObjectByIdNet(int idNet)
     {
-        ItemData item = ItemBase.GetAnyItem(idItem);
+        return _gameObjectRepository.GetNetObjects().FirstOrDefault(x => x.IdNet == idNet);
+    }
 
-        return Prefabs.Items[item._idPrefabOnScene];
+    public static NetPlayer GetNetPlayerByIdNet(int idNet)
+    {
+        return _gameObjectRepository.GetNetPlayers().FirstOrDefault(x => x.IdNet == idNet);
+    }
+
+    public static void DeleteObject(GameObject objectToDelete)
+    {
+        _gameObjectRepository.Delete(objectToDelete);
+
+        GameObject.Destroy(objectToDelete);
     }
 
     private static void ChangeCameraToPlayer(GameObject player)

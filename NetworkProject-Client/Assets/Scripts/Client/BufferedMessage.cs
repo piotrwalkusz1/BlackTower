@@ -1,13 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 using NetworkProject;
+using NetworkProject.Connection;
 
 [System.CLSCompliant(false)]
-public class BufferedMessage : IncomingMessage
+public class BufferedMessage : IncomingMessageFromServer
 {
     public int _time;
 
-    public BufferedMessage(IncomingMessage message) : base(message)
+    public BufferedMessage(IncomingMessageFromServer message)
+        : base(message)
     {
         _time = 0;
     }

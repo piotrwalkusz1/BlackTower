@@ -1,12 +1,30 @@
 ﻿using UnityEngine;
 using System.Collections;
+using NetworkProject;
 
-[System.CLSCompliant(false)]
-public abstract class MonsterStats : Stats
+public class MonsterStats : Stats, IMonsterStats
 {
-    public abstract int Hp { get; set; }
+    public int HP
+    {
+        get
+        {
+            return GetComponent<HP>()._hp;
+        }
+        set
+        {
+            GetComponent<HP>()._hp = value;
+        }
+    }
 
-    public abstract int MaxHp { get; set; }
-
-    public abstract float MovingSpeed { get; set; }
+    public int MaxHP
+    {
+        get
+        {
+            return GetComponent<HP>()._maxHp;
+        }
+        set
+        {
+            GetComponent<HP>()._maxHp = value;
+        }
+    }
 }

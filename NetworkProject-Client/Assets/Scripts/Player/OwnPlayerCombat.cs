@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using InputsSystem;
+using NetworkProject.Connection.ToServer;
 
 [System.CLSCompliant(false)]
 public class OwnPlayerCombat :PlayerCombat
@@ -22,17 +23,19 @@ public class OwnPlayerCombat :PlayerCombat
         }
 	}
 
-    new public void Attack()
+    public override void Attack()
     {
-        SendMessage("OnAttack1");
+        base.Attack();
 
         Vector3 direction = transform.TransformDirection(Vector3.forward);
 
-        Client.SendMessageAttack(direction);
+        var request = new AttackToServer(direction);
+
+        Client.SendRequestAsMessage(request);
     }
 
     bool CanAttack()
     {
-        return DateTime.UtcNow > _newAttackTime && GetComponent<PlayerEquipement>().Weapon != null;
+        return DateTime.UtcNow > _newAttackTime && GetComponent<PlayerEquipment>().IsEquipedWeapon();
     }
 }

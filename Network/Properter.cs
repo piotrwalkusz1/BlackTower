@@ -7,44 +7,43 @@ using System.Reflection.Emit;
 
 namespace NetworkProject
 {
-    public class Properter<T> where T : class
+    //Źródła powinny mieć tylko akcesory, które dodatkowo nie mają na początku
+    //nazwy znaku podkreślenia "_", nie można dziedziczyć po dwóch interfejsach,
+    //które mają akcesor o tej samej nazwie, tyczy się to również interfejsach
+    //po sobie dziedziczących
+
+    public static class Properter
     {
-        T _item;
-
-        public Properter(T item)
+        public static object GetProperter(object source)
         {
-            Set(item);
-        }
 
-        public void Set(T item)
-        {
             var typeBuilder = GetTypeBuilder();
 
-            var interfaceType = typeof(T);
-            var propertiesInInterface = interfaceType.GetProperties();
+            var interfaces = source.GetType().GetInterfaces();
 
-            typeBuilder.AddInterfaceImplementation(interfaceType);
-
-            foreach (var property in propertiesInInterface)
+            foreach (var sourceInterface in source.GetType().GetInterfaces())
             {
-                AddFieldAndProperty(typeBuilder, property);
+                typeBuilder.AddInterfaceImplementation(sourceInterface);
+
+                foreach (var property in sourceInterface.GetProperties())
+                {
+                    AddFieldAndProperty(typeBuilder, property);
+                }        
             }
 
-            Type generatedType = typeBuilder.CreateType();
+            Type generatedType = typeBuilder.CreateType();  
 
-            T properterItem = (T)Activator.CreateInstance(generatedType);
+            object properterItem = Activator.CreateInstance(generatedType);
 
-            SetProperties(item, properterItem, propertiesInInterface);
+            foreach (var sourceInterface in source.GetType().GetInterfaces())
+            {
+                SetProperties(source, properterItem, sourceInterface.GetProperties());
+            }
 
-            _item = properterItem;
+            return properterItem;
         }
 
-        public T Get()
-        {
-            return _item;
-        }
-
-        private TypeBuilder GetTypeBuilder()
+        private static TypeBuilder GetTypeBuilder()
         {
             var assemblyName = new AssemblyName("ProperterAssembly");
             var assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
@@ -53,25 +52,26 @@ namespace NetworkProject
             return moduleBuilder.DefineType("ProperterData");
         }
 
-        private void AddFieldAndProperty(TypeBuilder typeBuilder, PropertyInfo property)
+        private static void AddFieldAndProperty(TypeBuilder typeBuilder, PropertyInfo property)
         {
-            var fieldBuilder = typeBuilder.DefineField('_' + property.Name, property.PropertyType, FieldAttributes.Public);
+            string fieldName = GetFieldName(property.Name);
+
+            var fieldBuilder = typeBuilder.DefineField(fieldName, property.PropertyType, FieldAttributes.Public);          
 
             var getSetAttributes = MethodAttributes.Public | MethodAttributes.SpecialName |
                 MethodAttributes.HideBySig | MethodAttributes.Virtual;
 
             var getMethodBuilder = typeBuilder.DefineMethod("get_" + property.Name, getSetAttributes,
-                property.PropertyType, Type.EmptyTypes);
+            property.PropertyType, Type.EmptyTypes);
 
             var getILGenerator = getMethodBuilder.GetILGenerator();
             getILGenerator.Emit(OpCodes.Ldarg_0);
             getILGenerator.Emit(OpCodes.Ldfld, fieldBuilder);
             getILGenerator.Emit(OpCodes.Ret);
 
-            if(property.CanRead)
+            if (property.CanRead)
             {
-
-                typeBuilder.DefineMethodOverride(getMethodBuilder, property.GetGetMethod());      
+                typeBuilder.DefineMethodOverride(getMethodBuilder, property.GetGetMethod());
             }
 
             var setMethodBuilder = typeBuilder.DefineMethod("set_" + property.Name, getSetAttributes,
@@ -89,7 +89,7 @@ namespace NetworkProject
             }
         }
 
-        private void SetProperties(T source, T target, PropertyInfo[] properties)
+        private static void SetProperties(object source, object target, PropertyInfo[] properties)
         {
             foreach (var property in properties)
             {
@@ -99,6 +99,11 @@ namespace NetworkProject
                     target.GetType().GetField('_' + property.Name).SetValue(target, value);
                 }             
             }
+        }
+
+        private static string GetFieldName(string propertyName)
+        {
+            return '_' + propertyName;
         }
     }
 }

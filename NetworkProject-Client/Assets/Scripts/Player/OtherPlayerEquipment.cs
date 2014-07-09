@@ -3,7 +3,7 @@ using System.Collections;
 using NetworkProject;
 using NetworkProject.Items;
 
-public class OtherPlayerEquipment : PlayerEquipement
+public class OtherPlayerEquipment : PlayerEquipment
 {
    
 }

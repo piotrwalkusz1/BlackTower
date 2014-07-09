@@ -120,13 +120,13 @@ public static class Server
 
     private static void ReceiveMessageLogin(IncomingMessage message) 
     {
-        try
-        {
-            var loginData = (LoginToGame)message.Request;
+        var loginData = (LoginToGame)message.Request;
 
+        try
+        {        
             OnlineAccount account = AccountRepository.LoginAccount(loginData.Login, loginData.Password, message.Sender);
 
-            var requestToClient = new NetworkProject.Connection.ToClient.GoToChoiceCharacterMenuToClient();
+            var requestToClient = new GoToChoiceCharacterMenuToClient();
 
             foreach (RegisterCharacter character in account.GetCharacters())
             {
@@ -135,9 +135,7 @@ public static class Server
                 requestToClient.AddCharacter(characterData);
             }
 
-            var messageToClient = new OutgoingMessage(requestToClient);
-
-            Send(messageToClient, message.Sender);
+            SendRequestAsMessage(requestToClient, message.Sender);
         }
         catch (AccountRepositoryException exception)
         {
@@ -146,7 +144,8 @@ public static class Server
                 case AccountRepositoryExceptionCode.WrongLoginOrPassword:
                     SendErrorMessage(ErrorCode.WrongLoginOrPassword, message.Sender);
                     break;
-                case AccountRepositoryExceptionCode.CharacterAlreadyLogin:
+                case AccountRepositoryExceptionCode.AccountAlreadyLogin:
+                    AccountRepository.LogoutAccount(loginData.Login);
                     SendErrorMessage(ErrorCode.AccountAlreadyLogin, message.Sender);
                     break;
                 default:
@@ -161,11 +160,7 @@ public static class Server
         OnlineAccount account = AccountRepository.GetOnlineAccountByAddress(message.Sender);
         var requestData = (GoIntoWorldToServer)message.Request;
 
-        if (account.IsLoggedCharacter())
-        {
-            Server.SendErrorMessage(ErrorCode.CharacterAlreadyLogin, message.Sender);
-        }
-        else
+        try
         {  
             OnlineCharacter player = AccountRepository.LoginCharacter(account, requestData.CharacterSlot);
 
@@ -173,16 +168,27 @@ public static class Server
 
             int map = Standard.Settings.GetMap(player.Instantiate.transform.position);
             var goIntoWorldRequest = new NetworkProject.Connection.ToClient.GoIntoWorldToClient(map);
-            var goInfoWorldMessage = new OutgoingMessage(goIntoWorldRequest);
 
             var netPlayer = player.Instantiate.GetComponent<NetPlayer>();
             var tran = player.Instantiate.transform;
             var stats = player.Instantiate.GetComponent<PlayerStats>();
-            var createOwnPlayerRequest = new CreateOwnPlayerToClient(netPlayer.IdNet, tran.position, tran.eulerAngles.y, stats, netPlayer.Name);
-            var createOwnPlayerMessage = new OutgoingMessage(createOwnPlayerRequest);
+            var createOwnPlayerRequest = new CreateOwnPlayerToClient(netPlayer.IdNet, tran.position,
+                tran.eulerAngles.y, stats, netPlayer.Name);
 
-            Send(goInfoWorldMessage, message.Sender);
-            Send(createOwnPlayerMessage, message.Sender);
+            SendRequestAsMessage(goIntoWorldRequest, message.Sender);
+            SendRequestAsMessage(createOwnPlayerRequest, message.Sender);
+        }
+        catch (AccountRepositoryException exception)
+        {
+            if (exception.ErrorCode == AccountRepositoryExceptionCode.CharacterAlreadyLogin)
+            {
+                SendErrorMessage(ErrorCode.CharacterAlreadyLogin, message.Sender);
+            }
+            else
+            {
+                MonoBehaviour.print("Nie znany błąd z AccountRepository, errorCode : " +
+                    exception.ErrorCode.ToString());
+            }
         }
     }
 

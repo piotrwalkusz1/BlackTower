@@ -3,8 +3,25 @@ using System.Collections;
 using NetworkProject;
 
 [System.CLSCompliant(false)]
-public class PlayerStats : Stats
+public class PlayerStats : Stats, IPlayerStats
 {
+    public int Lvl
+    {
+        get
+        {
+            return GetComponent<Experience>().Lvl;
+        }
+    }
+    public int MinDmg
+    {
+        get { return GetComponent<PlayerCombat>().MinDmg; }
+        set { GetComponent<PlayerCombat>().MinDmg = value; }
+    }
+    public int MaxDmg
+    {
+        get { return GetComponent<PlayerCombat>().MaxDmg; }
+        set { GetComponent<PlayerCombat>().MaxDmg = value; }
+    }  
     public virtual int HP
     {
         get
@@ -55,17 +72,16 @@ public class PlayerStats : Stats
             motor.movement.maxBackwardsSpeed = value;
 		}	
     }
-    public virtual int BreedAndGender { get; set; }
-
-    public void Set(IPlayerStats stats)
+    public virtual BreedAndGender BreedAndGender { get; set; }
+    public float HPRegeneration
     {
-        HP = stats.HP;
-        MaxHP = stats.MaxHP;
-        Defense = stats.Defense;
-        RegenerationHP = stats.HPRegeneration;
-        //RegenerationMP
-        AttackSpeed = stats.AttackSpeed;
-        MovementSpeed = stats.MovementSpeed;
-        Breed = stats.BreedAndGender;
+        get
+        {
+            throw new System.NotImplementedException();
+        }
+        set
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

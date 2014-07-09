@@ -14,7 +14,7 @@ namespace NetworkProject.Connection.ToClient
         public UpdateAllStatsToClient(int idNet, IStats stats)
         {
             IdNet = idNet;
-            Stats = stats;
+            Stats = (IStats)Properter.GetProperter(stats);
         }
     }
 }

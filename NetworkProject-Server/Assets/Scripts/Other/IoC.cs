@@ -25,14 +25,14 @@ namespace Standard
             return new AccountRepositoryInServer();
         }
 
-        public static IGameObjectRepository GetGameObjectRepository()
-        {
-            return new GameObjectRepositoryByFind();
-        }
-
         public static ISpellRepository GetSpellRepository()
         {
             return new SpellRepositoryServer();
+        }
+
+        public static IGameObjectRepository GetGameObjectRepository()
+        {
+            return new GameObjectRepositoryByFind();
         }
     }
 }

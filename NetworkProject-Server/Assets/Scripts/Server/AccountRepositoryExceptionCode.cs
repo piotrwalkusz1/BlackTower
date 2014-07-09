@@ -7,5 +7,6 @@ public enum AccountRepositoryExceptionCode
 {
     WrongLoginOrPassword,
     AccountAlreadyLogin,
-    CharacterAlreadyLogin
+    CharacterAlreadyLogin,
+    AcconuntAlreadyLogout
 }

@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using NetworkProject;
+using NetworkProject.Items;
+using NetworkProject.Connection.ToServer;
 
 [System.CLSCompliant(false)]
 public class ItemInEquipmentWindow : GUIObject
@@ -61,7 +63,9 @@ public class ItemInEquipmentWindow : GUIObject
     {
         if (item._equipmentWindow == _equipmentWindow)
         {
-            Client.SendMessageChangeItemsInEquipment(_equipmentWindow.GetSlotToItem(item), _equipmentWindow.GetSlotToItem(this));
+            var request = new ChangeItemsInEquipmentToServer(GetSlot(), item.GetSlot());
+
+            Client.SendRequestAsMessage(request);
 
             ChangeTextures(guiTexture, item.guiTexture);
         }
@@ -73,16 +77,13 @@ public class ItemInEquipmentWindow : GUIObject
     {
         if (IsEmpty() || CanBeEquipedByPlayer(item._itemType))
         {
+            var request = new ChangeEquipedItemToServer(GetSlot(), item.)
+
             ChangeTextures(guiTexture, item.guiTexture);
 
-            Client.SendMessageChangeEquipedItem(GetSlot(), item._itemType);
+        }
 
-            item.GoToDefaultPlace();
-        }
-        else
-        {
-            item.GoToDefaultPlace();
-        }
+        item.GoToDefaultPlace();
     }
 
     public void GoToDefaultPlace()

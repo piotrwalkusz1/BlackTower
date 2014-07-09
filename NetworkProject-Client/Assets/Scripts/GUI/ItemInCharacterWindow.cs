@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using NetworkProject;
+using NetworkProject.Items;
 
 [System.CLSCompliant(false)]
 public class ItemInCharacterWindow : GUIObject
 {
     public CharacterWindow _characterWindow;
-    public ItemEquipableType _itemType;
 
     private Vector3 _lastMousePosition;
     private Vector2 _defaultPosition;
@@ -92,9 +92,17 @@ public class ItemInCharacterWindow : GUIObject
         }
     }
 
-    public bool CanBeEquipedByPlayer(ItemEquipableType type)
+    public bool CanBeEquipedByPlayer(Item item)
     {
-        return type == _itemType;
+        EquipableItemData itemData = (EquipableItemData)ItemRepository.GetItemByIdItem(item.IdItem);
+        PlayerStats stats = _characterWindow._stats;
+
+        return item.CanEquipe(stats) && DoesBodyPartMatchToItem(itemData);
+    }
+
+    public int GetSlot()
+    {
+        return _characterWindow
     }
 
     public void GoToDefaultPlace()
@@ -117,5 +125,10 @@ public class ItemInCharacterWindow : GUIObject
     private bool IsEmpty()
     {
         return _characterWindow.PlayerEquipement.IsEmpty(_itemType);
+    }
+
+    private bool DoesBodyPartMatchToItem(ItemData itemData)
+    {
+        return IoC.GetBodyPart(GetSlot()).CanEquipeItemOnThisBodyPart(itemData);
     }
 }

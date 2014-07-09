@@ -31,7 +31,7 @@ public static class Client
 
     public static void Start(ClientConfig config)
     {
-        _client = IoC.GetImplementationClient();
+        _client = Standard.IoC.GetClient();
         _client.Start(config);
     }
 
@@ -50,16 +50,11 @@ public static class Client
         IncomingMessageFromServer m;
         while ((m = _client.ReadMessage()) != null)
         {
-            ReceiveMessage(m);
+            ExecuteMessage(m);
         }
     }
 
     public static void ExecuteMessage(IncomingMessageFromServer message)
-    {
-        ReceiveMessage(message);
-    }
-
-    private static void ReceiveMessage(IncomingMessageFromServer message)
     {
         try
         {
@@ -173,97 +168,129 @@ public static class Client
 
         var request = (CreateOwnPlayerToClient)message.Request;
 
-        SceneBuilder.CreateOwnPlayer(request);
+        GameObject player = SceneBuilder.CreateOwnPlayer(request);
+
+        SetNetOwnPlayer(player.GetComponent<NetOwnPlayer>());
     }
 
     private static void ReceiveMessageMove(IncomingMessageFromServer message)
     {
-        int id = message.ReadInt();
-        Vector3 newPosition = message.ReadVector3();
-        NetOtherPlayer player = FindOtherPlayerByNetId(id);
-        player.Movement.SetNewTargetPosition(newPosition);
+        var request = (MoveToClient)message.Request;
+
+        var netObject = SceneBuilder.GetNetObjectByIdNet(request.IdNet);
+
+        if (IfNullDelayMessage(netObject, message))
+        {
+            return;
+        }
+
+        netObject.GetComponent<Movement>().SetNewTargetPosition(request.NewPosition);
     }
 
     private static void ReceiveMessageRotate(IncomingMessageFromServer message)
     {
-        int id = message.ReadInt();
-        float newRotation = message.ReadFloat();
-        NetOtherPlayer player = FindOtherPlayerByNetId(id);
-        player.Movement.SetNewRotation(newRotation);
+        var request = (RotateToClient)message.Request;
+
+        var netObject = SceneBuilder.GetNetObjectByIdNet(request.IdNet);
+
+        if (IfNullDelayMessage(netObject, message))
+        {
+            return;
+        }
+
+        netObject.GetComponent<Movement>().SetNewRotation(request.NewRotation);
     }
 
     private static void ReceiveMessageJump(IncomingMessageFromServer message)
     {
-        int id = message.ReadInt();
-        Vector3 position = message.ReadVector3();
-        Vector3 direction = message.ReadVector3();
-        NetOtherPlayer player = FindOtherPlayerByNetId(id);
-        player.Movement.Jump(position, direction);
+        /*narazie nie używamy komponentu movement do skakania
+
+        var request = (JumpToClient)message.Request;
+
+        var netObject = GameObjectRepository.GetNetObjectByIdNet(request.IdNet);*/
     }
 
     private static void ReceiveMessageGoIntoWorld(IncomingMessageFromServer message)
     {
-        WorldInfoPackage worldInfo = message.Read<WorldInfoPackage>();
-        ApplicationControler.GoToWorld(worldInfo);
+        var request = (GoIntoWorldToClient)message.Request;
+
+        ApplicationControler.GoToWorld(request);
     }
 
     private static void ReceiveMessageCreateOtherPlayer(IncomingMessageFromServer message)
     {
-        OtherPlayerPackage otherPlayer = message.Read<OtherPlayerPackage>();
-        SceneBuilder.CreateOtherPlayer(otherPlayer);
+        if (IfNewSceneLoadedDelayExecutionMessage(message))
+        {
+            return;
+        }
+
+        var request = (CreateOtherPlayerToClient)message.Request;
+
+        SceneBuilder.CreateOtherPlayer(request);
     }
 
     private static void ReceiveMessageUpdateItemInEquipment(IncomingMessageFromServer message)
     {
-        if (_netOwnPlayer == null)
+        var request = (UpdateItemInEquipmentToClient)message.Request;
+
+        var netObject = SceneBuilder.GetNetObjectByIdNet(request.IdNet);
+
+        if (IfNullDelayMessage(netObject, message))
         {
-            BufferMessages.DelayExecutionMessage(message);
             return;
         }
 
-        var itemPackage = message.Read<ItemInEquipmentPackage>();
-        int numberPlace = message.ReadInt();
+        if (IfNullDelayMessage(netObject, message))
+        {
+            return;
+        }
 
-        Item item = new Item(itemPackage.IdItem);
-
-        _netOwnPlayer.GetComponent<Equipment>().UpdateSlot(numberPlace, item);
-
-        GUIController.IsActiveEquipmentRefresh();
+        IEquipment eq = (IEquipment)netObject.GetComponent(typeof(IEquipment));
+        eq.SetSlot(request.Item, request.Slot);
     }
 
     private static void ReceiveMessageUpdateEquipedItem(IncomingMessageFromServer message)
     {
-        var item = message.Read<ItemInEquipmentPackage>();
-        ItemEquipableType type = (ItemEquipableType)message.ReadInt();
+        var request = (UpdateEquipedItemToClient)message.Request;
 
-        Item equipedItem = ItemInEquipmentPackageToItem(item);
+        var netObject = SceneBuilder.GetNetObjectByIdNet(request.IdNet);
 
-        _netOwnPlayer.GetComponent<PlayerEquipement>().Equipe(equipedItem, type);
+        if (IfNullDelayMessage(netObject, message))
+        {
+            return;
+        }
 
-        _netOwnPlayer.GetComponent<PlayerGeneratorModel>().UpdateEquipedItems();
+        IEquiper eq = (IEquiper)netObject.GetComponent(typeof(IEquiper));
 
-        GUIController.IsActiveCharacterGUIRefresh();
+        eq.Equipe(request.Item, request.Slot);
     }
 
     private static void ReceiveMessageNewPosition(IncomingMessageFromServer message)
     {
-        int idNet = message.ReadInt();
+        var request = (NewPositionToClient)message.Request;
 
-        Vector3 position = message.ReadVector3();
+        var netObject = SceneBuilder.GetNetObjectByIdNet(request.IdNet);
 
-        NetObject netObject = FindNetObjectByNetId(idNet);
+        if (IfNullDelayMessage(netObject, message))
+        {
+            return;
+        }
 
-        netObject.GetComponent<Movement>().SetNewTargetPosition(position);
+        netObject.transform.position = request.Position;
     }
 
     private static void ReceiveMessageNewRotation(IncomingMessageFromServer message)
     {
-        int idNet = message.ReadInt();
-        float rotation = message.ReadFloat();
+        var request = (NewRotationToClient)message.Request;
 
-        NetObject netObject = FindNetObjectByNetId(idNet);
+        var netObject = SceneBuilder.GetNetObjectByIdNet(request.IdNet);
 
-        netObject.GetComponent<Movement>().SetNewRotation(rotation);
+        if (IfNullDelayMessage(netObject, message))
+        {
+            return;
+        }
+
+        netObject.transform.eulerAngles = new Vector3(netObject.transform.position.x, request.Rotation, netObject.transform.position.z);
     }
 
     private static void ReceiveMessageCreateBullet(IncomingMessageFromServer message)
@@ -273,9 +300,9 @@ public static class Client
             return;
         }
 
-        BulletPackage bullet = message.Read<BulletPackage>();
+        var request = (CreateBulletToClient)message.Request;
 
-        SceneBuilder.CreateBullet(bullet);      
+        SceneBuilder.CreateBullet(request);
     }
 
     private static void ReceiveMessageCreateMonster(IncomingMessageFromServer message)
@@ -285,9 +312,9 @@ public static class Client
             return;
         }
 
-        MonsterPackage monster = message.Read<MonsterPackage>();
+        var request = (CreateMonsterToClient)message.Request;
 
-        SceneBuilder.CreateMonster(monster);
+        SceneBuilder.CreateMonster(request);
     }
 
     private static void ReceiveMessageCreateItemObject(IncomingMessageFromServer message)
@@ -297,40 +324,49 @@ public static class Client
             return;
         }
 
-        ItemPackage item = message.Read<ItemPackage>();
+        var request = (CreateItemToClient)message.Request;
 
-        SceneBuilder.CreateItem(item);
+        SceneBuilder.CreateItem(request);
     }
 
     private static void ReceiveMessageCreateVisualObject(IncomingMessageFromServer message)
     {
-        var visualObjectPackage = message.Read<VisualObjectPackage>();
+        if (IfNewSceneLoadedDelayExecutionMessage(message))
+        {
+            return;
+        }
 
-        SceneBuilder.CreateVisualObject(visualObjectPackage);
+        var request = (CreateVisualObjectToClient)message.Request;
+
+        SceneBuilder.CreateVisualObject(request);
     }
 
     private static void ReceiveMessageDeleteObject(IncomingMessageFromServer message)
     {
-        int idObject = message.ReadInt();
+        var request = (DeleteObjectToClient)message.Request;
 
-        NetObject netObject = FindNetObjectByNetId(idObject);
+        var netObject = SceneBuilder.GetNetObjectByIdNet(request.IdNet);
 
-        if (netObject == null)
+        if (IfNullDelayMessage(netObject, message))
         {
-            BufferMessages.DelayExecutionMessage(message);
             return;
         }
 
-        GameObject.Destroy(netObject.gameObject);
+        SceneBuilder.DeleteObject(netObject.gameObject);
     }
 
     private static void ReceiveMessageAttack(IncomingMessageFromServer message)
     {
-        int idNetPlayer = message.ReadInt();
+        var request = (AttackToClient)message.Request;
 
-        NetOtherPlayer player = FindOtherPlayerByNetId(idNetPlayer);
+        var netObject = SceneBuilder.GetNetObjectByIdNet(request.IdNet);
 
-        player.Combat.Attack();
+        if (IfNullDelayMessage(netObject, message))
+        {
+            return;
+        }
+
+        netObject.GetComponent<Combat>().Attack(request);
     }
 
     private static void ReceiveMessageDead(IncomingMessageFromServer message)
@@ -377,40 +413,18 @@ public static class Client
         netObject.GetComponent<Stats>().Set(message);
     }
 
-    private static void ReceiveMessageUpdateEquipedItems(IncomingMessageFromServer message)
+    private static void ReceiveMessageUpdateSpells(IncomingMessageFromServer message)
     {
-        int netId = message.ReadInt();
+        var request = (UpdateAllSpellsToClient)message.Request;
 
-        NetObject netObject = FindNetObjectByNetId(netId);
+        var netObject = SceneBuilder.GetNetObjectByIdNet(request.IdNet);
 
         if (IfNullDelayMessage(netObject, message))
         {
             return;
         }
 
-        IEquippedItems items = (IEquippedItems)netObject.GetComponent(typeof(IEquippedItems));
-
-        items.Set(message.Read<EquipedItemsPackage>());
-
-        PlayerGeneratorModel generatorModel = netObject.GetComponent<PlayerGeneratorModel>();
-
-        if (generatorModel != null)
-        {
-            generatorModel.UpdateEquipedItems();
-        }
-    }
-
-    private static void ReceiveMessageUpdateSpells(IncomingMessageFromServer message)
-    {
-        if (_netOwnPlayer == null)
-        {
-            BufferMessages.DelayExecutionMessage(message);
-            return;
-        }
-
-        var spells = message.Read<ListPackage<SpellPackage>>();
-
-        _netOwnPlayer.GetComponent<SpellCaster>().Set(spells);
+        netObject.GetComponent<SpellCaster>().SetSpells(request.Spells.ToArray());
     }
 
     private static void ReceiveMessageUpdateExp(IncomingMessageFromServer message)
@@ -428,47 +442,6 @@ public static class Client
     }
 
     #endregion
-
-    private static string[] BitsToStrings(byte[] bytes, int length, char separator)
-    {
-        string text = BitsToString(bytes, length);
-        return text.Split(new char[] { separator });
-    }
-
-    private static string BitsToString(byte[] bytes, int length)
-    {
-        string text = "";
-        for (int i = 0; i < length; i += 2)
-        {
-            text += BitConverter.ToChar(bytes, i);
-        }
-        return text;
-    }
-
-    private static NetObject FindNetObjectByNetId(int netId)
-    {
-        foreach (NetObject netObject in GameObject.FindObjectsOfType(typeof(NetObject)) as NetObject[])
-        {
-            if (netObject.IdNet == netId)
-            {
-                return netObject;
-            }
-        }
-
-        return null;
-    }
-
-    private static NetOtherPlayer FindOtherPlayerByNetId(int netId)
-    {
-        foreach(NetOtherPlayer player in GameObject.FindObjectsOfType(typeof(NetOtherPlayer))  as NetOtherPlayer[])
-        {
-            if (player.IdNet == netId)
-            {
-                return player;
-            }
-        }
-        return null;
-    }
 
     private static bool IfNewSceneLoadedDelayExecutionMessage(IncomingMessageFromServer message)
     {

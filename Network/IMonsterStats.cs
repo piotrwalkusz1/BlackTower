@@ -7,6 +7,7 @@ namespace NetworkProject
 {
     public interface IMonsterStats : IStats
     {
-        
+        int HP { get; set; }
+        int MaxHP { get; set; }
     }
 }

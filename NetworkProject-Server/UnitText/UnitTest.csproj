@@ -78,6 +78,7 @@
     <Compile Include="IoCTest.cs" />
     <Compile Include="ServerTest.cs" />
     <Compile Include="ProperterTest.cs" />
+    <Compile Include="CopierTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

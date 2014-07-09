@@ -82,10 +82,7 @@
     <Compile Include="Assets\Scripts\Other\BulletManager.cs" />
     <Compile Include="Assets\Scripts\Other\Damage.cs" />
     <Compile Include="Assets\Scripts\Other\Experience.cs" />
-    <Compile Include="Assets\Scripts\Other\GameObjectRepository.cs" />
-    <Compile Include="Assets\Scripts\Other\GameObjectRepositoryByFind.cs" />
     <Compile Include="Assets\Scripts\Other\IAttacker.cs" />
-    <Compile Include="Assets\Scripts\Other\IGameObjectRepository.cs" />
     <Compile Include="Assets\Scripts\Other\IoC.cs" />
     <Compile Include="Assets\Scripts\Other\SceneBuilder.cs" />
     <Compile Include="Assets\Scripts\Other\Settings.cs" />
@@ -116,6 +113,9 @@
     <Compile Include="Assets\Scripts\Stats\PlayerStats.cs" />
     <Compile Include="Assets\Scripts\Stats\SpellCasterStats.cs" />
     <Compile Include="Assets\Test\Test.cs" />
+    <Compile Include="Assets\Scripts\Other\GameObjectRepository.cs" />
+    <Compile Include="Assets\Scripts\Other\GameObjectRepositoryByFind.cs" />
+    <Compile Include="Assets\Scripts\Other\IGameObjectRepository.cs" />
     <None Include="Assets\Resources\spells.xml" />
     <None Include="Assets\Resources\monsters.xml" />
     <None Include="Assets\Resources\items.xml" />

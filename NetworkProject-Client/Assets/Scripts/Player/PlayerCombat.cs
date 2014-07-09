@@ -6,9 +6,11 @@ using NetworkProject;
 public class PlayerCombat : MonoBehaviour
 {
     public float AttackSpeed { get; set; }
+    public int MinDmg { get; set; }
+    public int MaxDmg { get; set; }
 
-    public void Attack()
+    public virtual void Attack()
     {
-        SendMessage("OnAttack1");
+        GetComponent<PlayerAnimation>().Attack();
     }
 }

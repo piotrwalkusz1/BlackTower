@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using NetworkProject;
+using NetworkProject.Connection;
 
 [System.CLSCompliant(false)]
 public class OtherPlayerStats : PlayerStats
@@ -15,12 +16,5 @@ public class OtherPlayerStats : PlayerStats
         {
             GetComponent<PlayerMovement>().Speed = value;
         }
-    }
-
-    public override void Set(IncomingMessage message)
-    {
-        var package = message.Read<OtherPlayerStatsPackage>();
-
-        Set(package);
     }
 }

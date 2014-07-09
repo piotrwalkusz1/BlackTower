@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using NetworkProject;
+using NetworkProject.Items;
 
 [System.CLSCompliant(false)]
 public class Prefabs : MonoBehaviour
@@ -9,9 +10,11 @@ public class Prefabs : MonoBehaviour
     public GameObject _guiEquipment;
     public GameObject _guiItemInEquipment;
     public GameObject _guiCharacter;
+    
     public GameObject _playerOwner;
     public GameObject _playerOther;
     public GameObject _bullet;
+    public List<GameObject> _playerModels;
     public List<GameObject> _monsters;
     public List<GameObject> _items;
     public List<GameObject> _visualObjects;
@@ -48,6 +51,11 @@ public class Prefabs : MonoBehaviour
         {
             _prefabs._guiCharacter = value;
         }
+    }
+    public static List<GameObject> PlayerModels
+    {
+        get { return _prefabs._playerModels; }
+        set { _prefabs._playerModels = value; }
     }
     public static GameObject PlayerOwner
     {
@@ -110,6 +118,23 @@ public class Prefabs : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
         _prefabs = this;
+    }
+
+    public static GameObject GetItemByIdItem(int idItem)
+    {
+        VisualItemData item = (VisualItemData)ItemRepository.GetItemByIdItem(idItem);
+
+        return GetItemByIdPrefab(item.IdPrefabOnScene);
+    }
+
+    public static GameObject GetItemByIdPrefab(int idPrefab)
+    {
+        return Items[idPrefab];
+    }
+
+    public static GameObject GetPlayerModelByBreed(int breed)
+    {
+        return _prefabs._playerModels[breed];
     }
 
     public static GameObject GetMonsterModel(int id)

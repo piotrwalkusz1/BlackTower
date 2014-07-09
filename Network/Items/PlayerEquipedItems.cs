@@ -20,6 +20,11 @@ namespace NetworkProject.Items
             return _bodyParts[slot].EquipedItem;
         }
 
+        public BodyPart[] GetBodyParts()
+        {
+            return _bodyParts.ToArray();
+        }
+
         public bool CanEquipeItem(Item item, IEquipableStats stats)
         {
             EquipableItemData itemData = (EquipableItemData)ItemRepository.GetItemByIdItem(item.IdItem);

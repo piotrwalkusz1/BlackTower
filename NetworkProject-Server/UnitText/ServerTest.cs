@@ -18,15 +18,15 @@ namespace UnitTest
 
         private static IConnectionMember _address = new FakeConnectionMember();
 
-        [ClassInitialize]
-        public static void Initialize(TestContext context)
+        [TestInitialize]
+        public void Initialize()
         {
             _sendedMessages = new List<OutgoingMessage>();
             
             Server.Set(new FakeServer());
             AccountRepository.Set(new FakeAccountRepository());
             GameObjectRepository.Set(new FakeGameObjectRepository());
-        }
+        }     
 
         [TestMethod]
         public void ReceiveLogin_Success()
@@ -41,6 +41,50 @@ namespace UnitTest
             Assert.AreEqual(1, _sendedMessages.Count);           
             Assert.AreEqual(1, sendedRequest.Characters.Count);
             Assert.AreEqual("Neon", sendedRequest.Characters[0].Name);
+        }
+
+        [TestMethod]
+        public void ReceiveLogin_AccountAlreadyLogin()
+        {
+            LoginAccount();
+
+            var request = new LoginToGame("Login", "Password");
+            IncomingMessage message = new IncomingMessage(request, _address);
+
+            Server.ExecuteMessage(message);
+
+            var sendedRequest = (ErrorMessageToClient)_sendedMessages[0].Request;
+            Assert.IsNull(AccountRepository.GetOnlineAccountByLogin("Login"));
+            Assert.AreEqual(1, _sendedMessages.Count);
+            Assert.AreEqual(sendedRequest.ErrorCode, ErrorCode.AccountAlreadyLogin);
+        }
+
+        [TestMethod]
+        public void ReceiveLogin_WrongLogin()
+        {
+            var request = new LoginToGame("WrongLogin", "Password");
+            IncomingMessage message = new IncomingMessage(request, _address);
+
+            Server.ExecuteMessage(message);
+
+            var sendedRequest = (ErrorMessageToClient)_sendedMessages[0].Request;
+            Assert.IsNull(AccountRepository.GetOnlineAccountByAddress(_address));
+            Assert.AreEqual(1, _sendedMessages.Count);
+            Assert.AreEqual(ErrorCode.WrongLoginOrPassword, sendedRequest.ErrorCode);
+        }
+
+        [TestMethod]
+        public void ReceiveLogin_WrongPassword()
+        {
+            var request = new LoginToGame("Login", "WrongPassword");
+            IncomingMessage message = new IncomingMessage(request, _address);
+
+            Server.ExecuteMessage(message);
+
+            var sendedRequest = (ErrorMessageToClient)_sendedMessages[0].Request;
+            Assert.IsNull(AccountRepository.GetOnlineAccountByAddress(_address));
+            Assert.AreEqual(1, _sendedMessages.Count);
+            Assert.AreEqual(ErrorCode.WrongLoginOrPassword, sendedRequest.ErrorCode);
         }
 
         public static void LoginAccount()

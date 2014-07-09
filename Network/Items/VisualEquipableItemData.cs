@@ -30,5 +30,10 @@ namespace NetworkProject.Items
         {
             _itemData = itemData;
         }
+
+        public static explicit operator EquipableItemData(VisualEquipableItemData item)
+        {
+            return item.EquipableItemData;
+        }
     }
 }

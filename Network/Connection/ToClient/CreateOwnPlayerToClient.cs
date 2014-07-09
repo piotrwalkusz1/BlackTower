@@ -15,7 +15,7 @@ namespace NetworkProject.Connection.ToClient
         public CreateOwnPlayerToClient(int idNet, Vector3 position, float rotation, IPlayerStats playerStats, string name)
         {
             IdNet = idNet;
-            PlayerStats = playerStats;
+            PlayerStats = (IPlayerStats)Properter.GetProperter(playerStats);
             Position = position;
             Rotation = rotation;
             Name = name;

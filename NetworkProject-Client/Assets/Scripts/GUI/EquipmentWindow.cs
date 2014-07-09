@@ -7,7 +7,7 @@ using NetworkProject;
 public class 
     EquipmentWindow : GUIObject
 {
-    public Equipment _equipment;   
+    public ItemBag _equipment;   
     public Texture2D _texture;
     public Vector2 _externalBorder;
     public int _internalBorder;

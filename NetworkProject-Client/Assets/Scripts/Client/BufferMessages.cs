@@ -3,20 +3,21 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using NetworkProject;
+using NetworkProject.Connection;
 
 [System.CLSCompliant(false)]
 static public class BufferMessages
 {
     private const int _maxNumberDelays = 5;
 
-    private static List<IncomingMessage> _messages;
+    private static List<IncomingMessageFromServer> _messages;
 
     static BufferMessages()
     {
-        _messages = new List<IncomingMessage>();
+        _messages = new List<IncomingMessageFromServer>();
     }
 
-    public static void DelayExecutionMessage(IncomingMessage message)
+    public static void DelayExecutionMessage(IncomingMessageFromServer message)
     {
         if (message is BufferedMessage)
         {
@@ -29,19 +30,21 @@ static public class BufferMessages
             else
             {
                 bufferedMessage._time++;
+
+                _messages.Add(message);
             }
         }
+        else
+        {
+            BufferedMessage newMessage = new BufferedMessage(message);
 
-        message.SetIndex(0);
-
-        BufferedMessage newMessage = new BufferedMessage(message);
-
-        _messages.Add(newMessage);
+            _messages.Add(newMessage);
+        } 
     }
 
     public static void Update()
     {
-        IncomingMessage[] messagesArray = _messages.ToArray();
+        IncomingMessageFromServer[] messagesArray = _messages.ToArray();
 
         _messages.Clear();
 

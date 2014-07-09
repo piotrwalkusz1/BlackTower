@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Standard;
 
 [System.CLSCompliant(false)]
@@ -17,11 +19,11 @@ public class CharacterWindow : GUIObject
         }
     }
     public PlayerStats _stats;
-    public PlayerEquipement PlayerEquipement
+    public PlayerEquipment PlayerEquipement
     {
         get
         {
-            return _stats.GetComponent<PlayerEquipement>();
+            return _stats.GetComponent<PlayerEquipment>();
         }
     }
 
@@ -44,13 +46,7 @@ public class CharacterWindow : GUIObject
     public GUIText _movementSpeed;
     public GUIText _movementSpeedAnswer;
 
-    public ItemInCharacterWindow _head;
-    public ItemInCharacterWindow _chest;
-    public ItemInCharacterWindow _shoes;
-    public ItemInCharacterWindow _rightHand;
-    public ItemInCharacterWindow _leftHand;
-    public ItemInCharacterWindow _Addition1;
-    public ItemInCharacterWindow _Addition2;
+    public List<ItemInCharacterWindow> _equipedItems;
 
     private Vector3 _lastMousePosition;
 
@@ -90,5 +86,18 @@ public class CharacterWindow : GUIObject
         _attackSpeedAnswer.text = _stats.AttackSpeed.ToString();
         _movementSpeed.text = Languages.GetSentence("movementSpeed");
         _movementSpeedAnswer.text = _stats.MovementSpeed.ToString();
+    }
+
+    public int GetSlotToItem(ItemInCharacterWindow item)
+    {
+        for (int i = 0; i < _equipedItems.Count; i++)
+        {
+            if (_equipedItems[i] == item)
+            {
+                return i;
+            }   
+        }
+
+        return -1;
     }
 }

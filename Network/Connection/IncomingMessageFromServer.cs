@@ -23,5 +23,10 @@ namespace NetworkProject.Connection
         {
             Request = request;
         }
+
+        public IncomingMessageFromServer(IncomingMessageFromServer message)
+        {
+            Request = message.Request;
+        }
     }
 }
