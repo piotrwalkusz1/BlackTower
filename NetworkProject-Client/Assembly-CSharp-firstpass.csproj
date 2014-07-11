@@ -59,11 +59,11 @@
      <Compile Include="Assets\Standard Assets\SaveLoad\Saver.cs" />
      <Compile Include="Assets\Standard Assets\SaveLoadExtension\Inputs\InputsToSave.cs" />
      <Compile Include="Assets\Standard Assets\SaveLoadExtension\Inputs\SaveLoadExtension.cs" />
+     <Compile Include="Assets\Standard Assets\Settings\Configuration.cs" />
      <Compile Include="Assets\Standard Assets\Settings\Settings.cs" />
      <Compile Include="Assets\Standard Assets\Standard\Updating.cs" />
-     <None Include="Assets\Resources\items.xml" />
-     <None Include="Assets\Resources\spells.xml" />
-     <None Include="Assets\Resources\PL.xml" />
+     <None Include="Assets\Resources\defaultSettings.xml" />
+     <None Include="Assets\Resources\items.txt" />
      <None Include="Assets\Resources\defaultInputs.txt" />
  <Reference Include="Lidgren.Network">
  <HintPath>C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Client/Assets/Plugins/Lidgren.Network.dll</HintPath>

@@ -26,6 +26,12 @@ namespace NetworkProject.Items
 
         private EquipableItemData _itemData;
 
+        //Xml serialization require this constructor
+        public VisualEquipableItemData()
+        {
+
+        }
+
         public VisualEquipableItemData(EquipableItemData itemData)
         {
             _itemData = itemData;

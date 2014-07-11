@@ -57,9 +57,9 @@
      <Compile Include="Assets\Scripts\MonoBehaviour\Vision.cs" />
      <Compile Include="Assets\Scripts\Monsters\Drop.cs" />
      <Compile Include="Assets\Scripts\Monsters\JumperStats.cs" />
+     <Compile Include="Assets\Scripts\Monsters\MonsterCombat.cs" />
      <Compile Include="Assets\Scripts\Monsters\MonsterRespawn.cs" />
      <Compile Include="Assets\Scripts\Monsters\MonsterRespawnLimit.cs" />
-     <Compile Include="Assets\Scripts\Monsters\MonsterStats.cs" />
      <Compile Include="Assets\Scripts\Monsters\RespawnConnection.cs" />
      <Compile Include="Assets\Scripts\Movement\ActionPoint.cs" />
      <Compile Include="Assets\Scripts\Movement\ActionPointType.cs" />
@@ -77,6 +77,7 @@
      <Compile Include="Assets\Scripts\Other\Attacker.cs" />
      <Compile Include="Assets\Scripts\Other\BulletInfo.cs" />
      <Compile Include="Assets\Scripts\Other\BulletManager.cs" />
+     <Compile Include="Assets\Scripts\Other\Combat.cs" />
      <Compile Include="Assets\Scripts\Other\Damage.cs" />
      <Compile Include="Assets\Scripts\Other\Experience.cs" />
      <Compile Include="Assets\Scripts\Other\GameObjectRepository.cs" />
@@ -110,6 +111,7 @@
      <Compile Include="Assets\Scripts\Spells\ISpellCaster.cs" />
      <Compile Include="Assets\Scripts\Spells\SpellCaster.cs" />
      <Compile Include="Assets\Scripts\Spells\SpellRepositoryServer.cs" />
+     <Compile Include="Assets\Scripts\Stats\MonsterStats.cs" />
      <Compile Include="Assets\Scripts\Stats\PlayerStats.cs" />
      <Compile Include="Assets\Scripts\Stats\SpellCasterStats.cs" />
      <Compile Include="Assets\Test\Test.cs" />

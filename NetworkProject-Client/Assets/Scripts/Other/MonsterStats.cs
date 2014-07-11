@@ -8,11 +8,11 @@ public class MonsterStats : Stats, IMonsterStats
     {
         get
         {
-            return GetComponent<HP>()._hp;
+            return GetComponent<Health>()._hp;
         }
         set
         {
-            GetComponent<HP>()._hp = value;
+            GetComponent<Health>()._hp = value;
         }
     }
 
@@ -20,11 +20,11 @@ public class MonsterStats : Stats, IMonsterStats
     {
         get
         {
-            return GetComponent<HP>()._maxHp;
+            return GetComponent<Health>()._maxHp;
         }
         set
         {
-            GetComponent<HP>()._maxHp = value;
+            GetComponent<Health>()._maxHp = value;
         }
     }
 }

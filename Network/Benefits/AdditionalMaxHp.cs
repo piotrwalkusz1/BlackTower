@@ -6,9 +6,14 @@ using System.Text;
 namespace NetworkProject.Benefits
 {
     [Serializable]
-    public class AdditionalMaxHp : IBuffBenefit, IEquipeBenefit
+    public class AdditionalMaxHp : IBuffBenefit, IEquipBenefit
     {
         private int _additionalMaxHp;
+
+        public AdditionalMaxHp()
+        {
+
+        }
 
         public AdditionalMaxHp(string value)
         {
@@ -26,16 +31,30 @@ namespace NetworkProject.Benefits
             {
                 ApplyToStats((IEquipableStats)stats);
             }
+            else if (stats is IBuffBenefit)
+            {
+                ApplyToStats((IPlayerStats)stats);
+            }
         }
 
         public void ApplyToStats(IPlayerStats stats)
         {
-            ApplyToStats((IEquipableStats)stats);
+            stats.MaxHP += _additionalMaxHp;
         }
 
         public void ApplyToStats(IEquipableStats stats)
         {
             stats.MaxHP += _additionalMaxHp;
+        }
+
+        public void Set(string value)
+        {
+            _additionalMaxHp = int.Parse(value);
+        }
+
+        public string GetAsString()
+        {
+            return _additionalMaxHp.ToString();
         }
     }
 }

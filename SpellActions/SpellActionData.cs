@@ -18,7 +18,7 @@ namespace NetworkProject.Spells
             _spellAction = spellAction;
         }
 
-        public SpellActionData(int idSpell, ISpellCastRequirement[] requirements, SpellFunction spellAction) : base(idSpell, requirements)
+        public SpellActionData(int idSpell, ISpellCasterRequirement[] requirements, SpellFunction spellAction) : base(idSpell, requirements)
         {
             _spellAction = spellAction;
         }

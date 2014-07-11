@@ -70,6 +70,8 @@
      <Compile Include="Assets\Scripts\GUI\LoginMenuInfo.cs" />
      <Compile Include="Assets\Scripts\GUI\MessageGUI.cs" />
      <Compile Include="Assets\Scripts\GUI\WindowGUI.cs" />
+     <Compile Include="Assets\Scripts\Health\Health.cs" />
+     <Compile Include="Assets\Scripts\Health\PlayerHealth.cs" />
      <Compile Include="Assets\Scripts\Movement\JumperMovement.cs" />
      <Compile Include="Assets\Scripts\Movement\Movement.cs" />
      <Compile Include="Assets\Scripts\Movement\PlayerMovement.cs" />
@@ -84,9 +86,8 @@
      <Compile Include="Assets\Scripts\Other\ApplicationControler.cs" />
      <Compile Include="Assets\Scripts\Other\Experience.cs" />
      <Compile Include="Assets\Scripts\Other\GameObjectRepositoryByFind.cs" />
-     <Compile Include="Assets\Scripts\Other\HP.cs" />
      <Compile Include="Assets\Scripts\Other\IGameObjectRepository.cs" />
-     <Compile Include="Assets\Scripts\Other\ImagesBase.cs" />
+     <Compile Include="Assets\Scripts\Other\ImageRepository.cs" />
      <Compile Include="Assets\Scripts\Other\IoC.cs" />
      <Compile Include="Assets\Scripts\Other\JumperCombat.cs" />
      <Compile Include="Assets\Scripts\Other\MeshRepository.cs" />
@@ -94,9 +95,7 @@
      <Compile Include="Assets\Scripts\Other\MonsterStats.cs" />
      <Compile Include="Assets\Scripts\Other\Prefabs.cs" />
      <Compile Include="Assets\Scripts\Other\SceneBuilder.cs" />
-     <Compile Include="Assets\Scripts\Other\StaticRepository.cs" />
      <Compile Include="Assets\Scripts\Other\Stats.cs" />
-     <Compile Include="Assets\Scripts\Other\Textures.cs" />
      <Compile Include="Assets\Scripts\Player\IEquiper.cs" />
      <Compile Include="Assets\Scripts\Player\IEquipment.cs" />
      <Compile Include="Assets\Scripts\Player\InputPlayer.cs" />
@@ -114,14 +113,12 @@
      <Compile Include="Assets\Scripts\Player\PlayerGeneratorModel.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerMesh.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerStats.cs" />
+     <Compile Include="Assets\Scripts\Spell\DescriptedSpellData.cs" />
      <Compile Include="Assets\Scripts\Spell\ISpellCastOption.cs" />
      <Compile Include="Assets\Scripts\Spell\ISpellCaster.cs" />
      <Compile Include="Assets\Scripts\Spell\SpellCaster.cs" />
-     <Compile Include="Assets\Scripts\Spell\SpellData.cs" />
-     <Compile Include="Assets\Scripts\Spell\SpellRepository.cs" />
-     <None Include="Assets\Resources\items.xml" />
-     <None Include="Assets\Resources\spells.xml" />
-     <None Include="Assets\Resources\PL.xml" />
+     <None Include="Assets\Resources\defaultSettings.xml" />
+     <None Include="Assets\Resources\items.txt" />
      <None Include="Assets\Resources\defaultInputs.txt" />
  <Reference Include="Lidgren.Network">
  <HintPath>C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Client/Assets/Plugins/Lidgren.Network.dll</HintPath>

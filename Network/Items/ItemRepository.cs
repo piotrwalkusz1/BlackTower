@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Xml;
-using System.Xml.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using UnityEngine;
 
@@ -19,30 +18,69 @@ namespace NetworkProject.Items
             return _items.Find(x => x.IdItem == idItem);
         }
 
-        public static void LoadItemsFromResources()
+        public static void LoadAndSetItemsFromFile(string path)
         {
-            LoadItemsFromResources(Settings.pathToItemsInResources);
+            _items = new List<ItemData>(LoadItemsFromFile(path));
         }
 
-        public static void LoadItemsFromResources(string pathToItemsInResources)
+        public static ItemData[] LoadItemsFromResources(string name)
         {
-            var textAsset = Resources.Load<TextAsset>(pathToItemsInResources);
-            var reader = new StringReader(textAsset.text);
-            var serializer = new XmlSerializer(typeof(List<ItemData>));
+            var textAsset = Resources.Load<TextAsset>(name);
 
-            List<ItemData> items = (List<ItemData>)serializer.Deserialize(reader);
+            if (textAsset == null)
+            {
+                return new ItemData[0];
+            }
+            else
+            {
+                try
+                {
+                    var stream = new MemoryStream(textAsset.bytes);
 
-            _items = items;
+                    return LoadItemsFromStream(stream);
+                }
+                catch
+                {
+                    MonoBehaviour.print("Plik ma niewłaściwą zawartość. Zostanie utworzona pusta kolekcja.");
+
+                    return new ItemData[0];
+                }
+            }
+            
         }
 
-        public static void SaveItems(string path, List<ItemData> items)
+        public static ItemData[] LoadItemsFromFile(string path)
         {
-            var serializer = new XmlSerializer(typeof(List<ItemData>));
+            try
+            {
+                using (var reader = new FileStream(path, FileMode.OpenOrCreate))
+                {
+                    return LoadItemsFromStream(reader);
+                }
+            }
+            catch
+            {
+                MonoBehaviour.print("Plik nie istnieje lub ma niewłaściwą zawartość. Zostanie utworzona pusta kolekcja.");
 
-            using (var writter = new StreamWriter(path))
+                return new ItemData[0];
+            }
+        }     
+
+        public static void SaveItems(string path, ItemData[] items)
+        {
+            var serializer = new BinaryFormatter();
+
+            using (var writter = new FileStream(path, FileMode.Create))
             {
                 serializer.Serialize(writter, items);
             }
+        }
+
+        private static ItemData[] LoadItemsFromStream(Stream stream)
+        {
+            var serializer = new BinaryFormatter();
+
+            return (ItemData[])serializer.Deserialize(stream);
         }
     }
 }

@@ -52,11 +52,21 @@
      <Compile Include="Assets\Editor\Inputs\Extension\InputAxis.cs" />
      <Compile Include="Assets\Editor\Inputs\Extension\InputButton.cs" />
      <Compile Include="Assets\Editor\Inputs\Extension\List.cs" />
-     <Compile Include="Assets\Editor\Inputs\Helpful\Indentation.cs" />
      <Compile Include="Assets\Editor\Inputs\InputsWindow.cs" />
-     <None Include="Assets\Resources\items.xml" />
-     <None Include="Assets\Resources\spells.xml" />
-     <None Include="Assets\Resources\PL.xml" />
+     <Compile Include="Assets\Editor\Items\ItemWindow.cs" />
+     <Compile Include="Assets\Editor\Items\ItemWindowAdditionalData.cs" />
+     <Compile Include="Assets\Editor\Items\ItemWindowArmorData.cs" />
+     <Compile Include="Assets\Editor\Items\ItemWindowData.cs" />
+     <Compile Include="Assets\Editor\Items\ItemWindowEquipableData.cs" />
+     <Compile Include="Assets\Editor\Items\ItemWindowHelmetData.cs" />
+     <Compile Include="Assets\Editor\Items\ItemWindowShieldData.cs" />
+     <Compile Include="Assets\Editor\Items\ItemWindowShoesData.cs" />
+     <Compile Include="Assets\Editor\Items\ItemWindowWeaponData.cs" />
+     <Compile Include="Assets\Editor\Items\ItemsWindow.cs" />
+     <Compile Include="Assets\Editor\Settings\SettingsEditor.cs" />
+     <Compile Include="Assets\Editor\Utility\Indentation.cs" />
+     <None Include="Assets\Resources\defaultSettings.xml" />
+     <None Include="Assets\Resources\items.txt" />
      <None Include="Assets\Resources\defaultInputs.txt" />
  <Reference Include="Lidgren.Network">
  <HintPath>C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Client/Assets/Plugins/Lidgren.Network.dll</HintPath>
@@ -76,6 +86,8 @@
       <Project>{3A1C41A4-930B-7FB0-B69A-2B357061594C}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
     <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
       <Project>{A93D780A-BB70-76E4-A00A-3DBE9655FA24}</Project>      <Name>Assembly-UnityScript-firstpass</Name>    </ProjectReference>
+    <ProjectReference Include="Assembly-CSharp.csproj">
+      <Project>{104B4037-DDEB-85D2-72A1-DA5AFA9CA345}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

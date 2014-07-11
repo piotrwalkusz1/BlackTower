@@ -84,7 +84,7 @@ public static class SceneBuilder
     {
         respawnedPlayer.transform.position = respawn.transform.position;
 
-        var request = new RespawnToClient(respawnedPlayer.IdNet);
+        var request = new RespawnToClient(respawnedPlayer.IdNet, respawn.transform.position);
 
         respawnedPlayer.GetComponent<PlayerHealthSystem>().RecuperateAndSendHPUpdate();
     }

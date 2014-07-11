@@ -30,22 +30,22 @@ public abstract class PlayerStats : Stats, IPlayerStats
     {
         get
         {
-            return GetComponent<HP>()._hp;
+            return GetComponent<Health>()._hp;
         }
         set
         {
-            GetComponent<HP>()._hp = value;
+            GetComponent<Health>()._hp = value;
         }
     }
     public virtual int MaxHP
     {
         get
         {
-            return GetComponent<HP>()._maxHp;
+            return GetComponent<Health>()._maxHp;
         }
         set
         {
-            GetComponent<HP>()._maxHp = value;
+            GetComponent<Health>()._maxHp = value;
         }
     }
     public virtual int Defense { get; set; }
@@ -76,7 +76,7 @@ public abstract class PlayerStats : Stats, IPlayerStats
     }   
     public virtual float HPRegeneration
     {
-        get { return GetComponent<HP>()._hpRegeneration; }
-        set { GetComponent<HP>()._hpRegeneration = value; }
+        get { return GetComponent<Health>()._hpRegeneration; }
+        set { GetComponent<Health>()._hpRegeneration = value; }
     }
 }

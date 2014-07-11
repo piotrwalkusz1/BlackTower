@@ -379,7 +379,7 @@ public static class Client
             return;
         }
 
-        netObject.GetComponent<HP>().Dead();
+        netObject.GetComponent<Health>().Dead();
     }
 
     private static void ReceiveMessageRespawn(IncomingMessageFromServer message)
@@ -407,7 +407,7 @@ public static class Client
             return;
         }
 
-        netObject.GetComponent<HP>()._hp = request.HP;  
+        netObject.GetComponent<Health>()._hp = request.HP;  
     }
 
     private static void ReceiveMessageUpdateAllStats(IncomingMessageFromServer message)

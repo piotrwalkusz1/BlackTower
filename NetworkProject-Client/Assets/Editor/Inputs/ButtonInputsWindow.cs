@@ -57,7 +57,7 @@ namespace EditorExtension
             _isShowed = EditorGUILayout.Foldout(_isShowed, _name);
             if (_isShowed)
             {
-                Indentation.BeginIndentation(InputsWindow._indentation);
+                Indentation.BeginIndentation(InputsWindow.INDENTATION);
                 _name = EditorGUILayout.TextField("Name :", _name);
                 _button.DrawFieldsAdjustment();
                 Indentation.EndIndentation();

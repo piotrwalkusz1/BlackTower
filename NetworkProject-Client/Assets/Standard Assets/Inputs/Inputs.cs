@@ -39,8 +39,6 @@ namespace InputsSystem
             {
                 throw new Exception("Brak Updating na mapie.");
             }
-
-            LoadInputs();
         }
 
         static public bool DownButton(string name)
@@ -123,12 +121,34 @@ namespace InputsSystem
             Main.RemoveAllAxes();
         }
 
-        static private void LoadInputs()
+        public static void LoadInputsFromFileOrResources(string pathToFile)
         {
-            TextAsset inputsAsset = Resources.Load(Settings.pathToDefaultInputsInResources) as TextAsset;
-            string inputsText = inputsAsset.text;
+            try
+            {
+                LoadInputsFromFile(pathToFile);
+            }
+            catch
+            {
+                LoadInputsFromResources();
+            }
+        }
+
+        static public void LoadInputsFromFile(string path)
+        {
+            string inputsText = SaveLoad.Read(path);
+            LoadInputsFromText(inputsText);
+        }
+
+        static public void LoadInputsFromResources()
+        {
+            TextAsset inputsAsset = Resources.Load(Settings.pathToInputsInResources) as TextAsset;
+            LoadInputsFromText(inputsAsset.text);
+        }
+
+        private static void LoadInputsFromText(string text)
+        {
             InputsToSave inputsToSave = new InputsToSave();
-            inputsToSave.SetByLoadedText(inputsText);
+            inputsToSave.SetByLoadedText(text);
             Main = inputsToSave.InputsData;
         }
     }

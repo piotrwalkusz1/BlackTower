@@ -8,5 +8,9 @@ namespace NetworkProject.Benefits
     public interface IBenefit
     {
         void ApplyToStats(IStats stats);
+
+        void Set(string value);
+
+        string GetAsString();
     }
 }

@@ -8,5 +8,9 @@ namespace NetworkProject.Requirements
     public interface IRequirement
     {
         bool IsRequirementSatisfy(IStats stats);
+
+        void Set(string value);
+
+        string GetAsString();
     }
 }

@@ -5,17 +5,33 @@ using System.Text;
 using System.IO;
 using System.Xml.Serialization;
 using System.Runtime.Serialization.Formatters;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 namespace Standard
 {
     public static class Languages
     {
-        private static Language _currentLanguage;
+        public const string LANGUAGE_NAME_PATTERN = @"^Language-[^ ]*$";
 
-        static Languages()
+        private static Language _currentLanguage;
+        private static List<Language> _allLanguages;
+
+        public static bool AreLanguagesFromRepositoryLoaded()
         {
-            SetLanguageByName("PL");
+            return _allLanguages != null;
+        }
+
+        public static Language[] GetAllLanguages()
+        {
+            return _allLanguages.ToArray();
+        }
+
+        public static void SetAllLanguages(Language[] languages)
+        {
+            _allLanguages.Clear();
+
+            _allLanguages.AddRange(languages);
         }
 
         public static string GetSentence(string name)
@@ -43,35 +59,107 @@ namespace Standard
             return _currentLanguage.GetErrorText(idError);
         }
 
-        public static void SetLanguageByName(string name)
+        public static void LoadAndSetAllLanguagesFromResources()
         {
-            _currentLanguage = LoadLanguageByName(name);
+            _allLanguages = LoadAllLanguagesFromResources();
         }
 
-        public static void SetLanguageByPath(string path)
+        public static List<Language> LoadAllLanguagesFromResources()
         {
-            _currentLanguage = LoadLanguageByPath(path);
-        }
+            var allLanguages = new List<Language>();
 
-        public static Language LoadLanguageByName(string name)
-        {
-            TextAsset textAsset = (TextAsset)Resources.Load(Settings.pathToLanguagesInResources + name, typeof(TextAsset));
-            if (textAsset != null)
+            TextAsset[] textAssets = Resources.FindObjectsOfTypeAll<TextAsset>();
+
+            foreach (var textAsset in textAssets)
             {
-                return LoadLanguageByString(textAsset.text);
+                if (Regex.IsMatch(textAsset.name, LANGUAGE_NAME_PATTERN, RegexOptions.IgnoreCase))
+                {
+                    allLanguages.Add(LoadLanguageByString(textAsset.text));
+                }
+                
             }
-            else
+
+            return allLanguages;
+        }
+
+        public static List<Language> LoadAllLanguagesFromResourcesDirectly()
+        {
+            var allLanguages = new List<Language>();
+
+            var files = Directory.GetFiles(Settings.pathToLanguagesInUnity);
+
+            foreach (string file in files)
             {
-                return LoadLanguageByPath(Settings.pathToLanguages + name + ".xml");
+                string fileName = Path.GetFileNameWithoutExtension(file);
+
+                if (Regex.IsMatch(fileName, LANGUAGE_NAME_PATTERN, RegexOptions.IgnoreCase))
+                {
+                    allLanguages.Add(LoadLanguageFromFile(file));
+                }
+            }
+
+            return allLanguages;
+        }
+
+        public static void SetLanguage(string path, string name)
+        {
+            _currentLanguage = LoadLanguageFromFileOrResources(path, name);
+        }
+
+        public static Language LoadLanguageFromFileOrResources(string pathToFolder, string name)
+        {
+            try
+            {
+                return LoadLanguageFromFile(pathToFolder + '/' + name + ".xml");
+            }
+            catch
+            {
+                return LoadLanguageFromResources(name);
             }
         }
 
-        public static Language LoadLanguageByPath(string path)
+        public static Language LoadLanguageFromResources(string name)
+        {
+            TextAsset textAsset = (TextAsset)Resources.Load(name, typeof(TextAsset));
+
+            return LoadLanguageByString(textAsset.text);
+        }
+
+        public static Language LoadLanguageFromResourcesDirectly(string name)
+        {
+            string text = "";
+
+            try
+            {
+                text = File.ReadAllText(Settings.pathToLanguagesInUnity + name + ".xml");
+            }
+            catch(FileNotFoundException)
+            {
+
+            }
+
+            return LoadLanguageByString(text);
+        }
+
+        public static Language LoadLanguageFromFile(string path)
         {
             string text = File.ReadAllText(path);
 
             return LoadLanguageByString(text);
         }
+
+        public static void SaveAllLanguagesToResources()
+        {
+            var serializer = new XmlSerializer(typeof(Language)); 
+
+            foreach (var language in _allLanguages)
+            {
+                using (var stream = new StreamWriter(Settings.pathToLanguagesInUnity + language.Name + ".xml"))
+                {
+                    serializer.Serialize(stream, language);
+                }
+            }
+        } 
 
         private static Language LoadLanguageByString(string text)
         {

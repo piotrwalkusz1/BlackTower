@@ -104,7 +104,7 @@ public abstract class NetObject : MonoBehaviour
 
     public void SendRespawnMessage()
     {
-        var request = new RespawnToClient(IdNet);
+        var request = new RespawnToClient(IdNet, transform.position);
 
         GenerateSendFunctionAndAddToUpdateEvent(request);
     }
@@ -165,7 +165,7 @@ public abstract class NetObject : MonoBehaviour
         SetVisionFunction(DefaultVisionFunction);
     }
 
-    protected void GenerateSendFunctionAndAddToUpdateEvent(INetworkRequest request)
+    protected void GenerateSendFunctionAndAddToUpdateEvent(INetworkRequestToClient request)
     {
         Action<IConnectionMember> function = delegate(IConnectionMember address)
         {

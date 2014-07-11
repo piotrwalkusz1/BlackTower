@@ -13,12 +13,7 @@ namespace NetworkProject.Monsters
     {
         private static List<Monster> _monsters;
 
-        public static void LoadMonstersFromResources()
-        {
-            LoadMonstersFromResources(Settings.pathToMonstersInResources);
-        }
-
-        public static void LoadMonstersFromResources(string pathToMonstersInResources)
+        public static void LoadMonstersFromFile(string pathToMonstersInResources)
         {
             var textAsset = Resources.Load<TextAsset>(pathToMonstersInResources);
             var reader = new StringReader(textAsset.text);

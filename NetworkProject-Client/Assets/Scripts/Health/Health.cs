@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HP : MonoBehaviour
+public class Health : MonoBehaviour
 {	
 	public int _hp;
 	public int _maxHp;

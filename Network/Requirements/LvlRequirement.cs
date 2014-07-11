@@ -5,9 +5,15 @@ using System.Text;
 
 namespace NetworkProject.Requirements
 {
+    [Serializable]
     public class LvlRequirement : IEquipRequirement, ISpellCasterRequirement
     {
         private int _requiredLvl;
+
+        public LvlRequirement()
+        {
+
+        }
 
         public LvlRequirement(string requiredLvl)
         {
@@ -17,6 +23,16 @@ namespace NetworkProject.Requirements
         public LvlRequirement(int requiredLvl)
         {
             _requiredLvl = requiredLvl;
+        }
+
+        public void Set(string value)
+        {
+            _requiredLvl = int.Parse(value);
+        }
+
+        public string GetAsString()
+        {
+            return _requiredLvl.ToString();
         }
 
         public bool IsRequirementSatisfy(IStats stats)

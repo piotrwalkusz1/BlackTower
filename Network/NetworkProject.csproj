@@ -47,7 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Benefits\IBuffBenefit.cs" />
-    <Compile Include="Benefits\IEquipeBenefit.cs" />
+    <Compile Include="Benefits\IEquipBenefit.cs" />
     <Compile Include="BreedAndGender.cs" />
     <Compile Include="Combat\Bullet.cs" />
     <Compile Include="Combat\Bullets.cs" />
@@ -78,6 +78,7 @@
     <Compile Include="Items\EquipedItems.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="Items\EquipableItemData.cs" />
+    <Compile Include="Items\ItemsToSave.cs" />
     <Compile Include="Items\ItemType.cs" />
     <Compile Include="Items\PlayerEquipedItems.cs" />
     <Compile Include="Items\VisualEquipableItemData.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="IStats.cs" />
     <Compile Include="Spells\SpellData.cs" />
     <Compile Include="Spells\SpellRepository.cs" />
+    <Compile Include="TypeFinder.cs" />
     <Compile Include="Updating.cs" />
     <Compile Include="Items\WeaponData.cs" />
   </ItemGroup>

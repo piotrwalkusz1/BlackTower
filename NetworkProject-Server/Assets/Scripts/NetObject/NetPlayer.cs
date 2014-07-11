@@ -104,7 +104,7 @@ public class NetPlayer : NetObject
 
     public void SendRespawnMessageToOwner()
     {
-        var request = new RespawnToClient(IdNet);
+        var request = new RespawnToClient(IdNet, transform.position);
 
         Server.SendRequestAsMessage(request, OwnerAddress);
     }

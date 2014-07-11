@@ -15,9 +15,6 @@ namespace NetworkProject
         public const int widthEquipment = 6;
         public const int heightEquipment = 8;
         public const float pickItemRange = 1.5f;
-        public const string pathToItemsInResources = "items";
-        public const string pathToMonstersInResources = "monsters";
-        public const string pathToSpellsInResources = "spells";
         public const float gravitation = 10f;
         public const float basicPlayerMovementSpeed = 4;
         public const int basicPlayerMaxHP = 100;

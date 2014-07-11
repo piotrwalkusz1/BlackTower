@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Xml;
 
 namespace NetworkProject.Items
 {
@@ -21,8 +20,9 @@ namespace NetworkProject.Items
             }
         }
 
-        private int _idItem;
+        public int _idItem;
 
+        //Xml serialization require this constructor
         public ItemData()
         {
 
@@ -31,11 +31,6 @@ namespace NetworkProject.Items
         public ItemData(int idItem)
         {
             _idItem = idItem;
-        }
-
-        public virtual void SetStats(XmlNodeList stats)
-        {
-            _idItem = int.Parse(stats[0].InnerText);
         }
     }
 }

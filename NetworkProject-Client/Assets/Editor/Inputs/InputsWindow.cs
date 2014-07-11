@@ -17,7 +17,7 @@ namespace EditorExtension
         static private readonly string pathToDeleteImage = "file://" + Application.dataPath + "/Editor/Inputs/GUI/delete.png";
         static public Texture2D _deleteImage;
 
-        public const float _indentation = 15f;
+        public const float INDENTATION = 15f;
 
         private bool _isButtonsShowed = true;
         private bool _isAxesShowed = true;
@@ -26,7 +26,7 @@ namespace EditorExtension
         private List<ButtonInputsWindow> _buttons = new List<ButtonInputsWindow>();
         private List<AxisInputsWindow> _axes = new List<AxisInputsWindow>();
 
-        [MenuItem("Extending/Inputs")]
+        [MenuItem("Extension/Inputs")]
         static void ShowWindow()
         {
             InputsWindow inputsWindow = EditorWindow.GetWindow(typeof(InputsWindow), false, "Inputs") as InputsWindow;
@@ -50,7 +50,7 @@ namespace EditorExtension
             InputsToSave inputs;
             try
             {
-                inputs = SaveLoad.Load<InputsToSave>(Settings.pathToDefaultInputs);
+                inputs = SaveLoad.Load<InputsToSave>(Settings.pathToInputsInUnity);
             }
             catch(FileNotFoundException)
             {
@@ -75,7 +75,7 @@ namespace EditorExtension
             _isButtonsShowed = EditorGUILayout.Foldout(_isButtonsShowed, "Buttons");
             if (_isButtonsShowed)
             {
-                Indentation.BeginIndentation(_indentation);
+                Indentation.BeginIndentation(INDENTATION);
                 DrawButtons();
                 Indentation.EndIndentation();
             }
@@ -152,7 +152,7 @@ namespace EditorExtension
             _isAxesShowed = EditorGUILayout.Foldout(_isAxesShowed, "Axes");
             if (_isAxesShowed)
             {
-                Indentation.BeginIndentation(_indentation);
+                Indentation.BeginIndentation(INDENTATION);
                 DrawAxes();
                 Indentation.EndIndentation();
             }
@@ -229,17 +229,17 @@ namespace EditorExtension
             BeginWindows();
             if (GUILayout.Button("Save"))
             {
-                SaveInputs();
+                SaveInputs(Settings.pathToInputsInUnity);
             }
             EndWindows();
         }
 
-        private void SaveInputs()
+        private void SaveInputs(string path)
         {
             InputsToSave inputsToSave = new InputsToSave();
             inputsToSave.Buttons = _buttons.ToDictionary();
             inputsToSave.Axes = _axes.ToDictionary();
-            SaveLoad.Save(inputsToSave, Settings.pathToDefaultInputs);
+            SaveLoad.Save(inputsToSave, path);
         }
     }
 }

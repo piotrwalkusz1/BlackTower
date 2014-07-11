@@ -10,7 +10,7 @@ namespace NetworkProject.Items
     {
         public int _minDmg;
         public int _maxDmg;
-        public float _attackSpeed;
+        public int _attackSpeed;
 
         public WeaponData()
         {

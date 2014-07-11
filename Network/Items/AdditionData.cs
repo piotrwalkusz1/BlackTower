@@ -9,15 +9,15 @@ namespace NetworkProject.Items
     [Serializable]
     public class AdditionData : EquipableItemData
     {
+        public AdditionData()
+        {
+
+        }
+
         public AdditionData(int idItem)
         {
             IdItem = idItem;
         }
-
-        public override void SetStats(XmlNodeList data)
-        {
-            IdItem = int.Parse(data[0].InnerText);
-        }   
        
         protected override void ApplyItemStats(IEquipableStats stats)
         {

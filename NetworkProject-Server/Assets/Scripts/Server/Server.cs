@@ -64,7 +64,7 @@ public static class Server
         }
     }
 
-    public static void SendRequestAsMessage(INetworkRequest request, IConnectionMember address)
+    public static void SendRequestAsMessage(INetworkRequestToClient request, IConnectionMember address)
     {
         var message = new OutgoingMessage(request);
 

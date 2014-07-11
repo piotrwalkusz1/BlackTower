@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NetworkProject.Benefits
 {
-    public interface IEquipeBenefit : IBenefit
+    public interface IEquipBenefit : IBenefit
     {
         void ApplyToStats(IEquipableStats stats);
     }

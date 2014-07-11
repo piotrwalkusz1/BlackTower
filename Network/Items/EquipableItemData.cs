@@ -12,9 +12,10 @@ namespace NetworkProject.Items
     [Serializable]
     public abstract class EquipableItemData : ItemData
     {
-        protected List<IEquipeBenefit> _benefits = new List<IEquipeBenefit>();
-        protected List<IEquipRequirement> _requirements = new List<IEquipRequirement>();
+        public List<IEquipBenefit> _benefits = new List<IEquipBenefit>();
+        public List<IEquipRequirement> _requirements = new List<IEquipRequirement>();
 
+        //Xml serialization require this constructor
         public EquipableItemData()
         {
 
@@ -33,12 +34,12 @@ namespace NetworkProject.Items
 
         protected abstract void ApplyItemStats(IEquipableStats stats);
 
-        public void AddBenefit(IEquipeBenefit benefit)
+        public void AddBenefit(IEquipBenefit benefit)
         {
             _benefits.Add(benefit);
         }
 
-        public void AddBenefit(IEquipeBenefit[] benefits)
+        public void AddBenefit(IEquipBenefit[] benefits)
         {
             _benefits.AddRange(benefits);
         }
@@ -53,7 +54,7 @@ namespace NetworkProject.Items
             _requirements.AddRange(requirements);
         }
 
-        public IEquipeBenefit[] GetBenefits()
+        public IEquipBenefit[] GetBenefits()
         {
             return _benefits.ToArray();
         }
@@ -78,7 +79,7 @@ namespace NetworkProject.Items
 
         private void ApplyBenefits(IEquipableStats stats)
         {
-            foreach (IEquipeBenefit benefit in _benefits)
+            foreach (IEquipBenefit benefit in _benefits)
             {
                 benefit.ApplyToStats(stats);
             }
