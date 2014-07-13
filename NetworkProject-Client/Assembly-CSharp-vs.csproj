@@ -118,6 +118,8 @@
      <Compile Include="Assets\Scripts\Spell\ISpellCaster.cs" />
      <Compile Include="Assets\Scripts\Spell\SpellCaster.cs" />
      <None Include="Assets\Resources\defaultSettings.xml" />
+     <None Include="Assets\Resources\Language-Polski.xml" />
+     <None Include="Assets\Editor\Languages\languagePhrases.xml" />
      <None Include="Assets\Resources\items.txt" />
      <None Include="Assets\Resources\defaultInputs.txt" />
  <Reference Include="Assembly-UnityScript-firstpass">

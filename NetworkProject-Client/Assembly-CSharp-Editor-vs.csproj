@@ -63,9 +63,14 @@
      <Compile Include="Assets\Editor\Items\ItemWindowShoesData.cs" />
      <Compile Include="Assets\Editor\Items\ItemWindowWeaponData.cs" />
      <Compile Include="Assets\Editor\Items\ItemsWindow.cs" />
+     <Compile Include="Assets\Editor\Languages\LanguageWindow.cs" />
+     <Compile Include="Assets\Editor\Languages\LanguagesWindow.cs" />
+     <Compile Include="Assets\Editor\Languages\PhrasesCategoryWindow.cs" />
      <Compile Include="Assets\Editor\Settings\SettingsEditor.cs" />
      <Compile Include="Assets\Editor\Utility\Indentation.cs" />
      <None Include="Assets\Resources\defaultSettings.xml" />
+     <None Include="Assets\Resources\Language-Polski.xml" />
+     <None Include="Assets\Editor\Languages\languagePhrases.xml" />
      <None Include="Assets\Resources\items.txt" />
      <None Include="Assets\Resources\defaultInputs.txt" />
  <Reference Include="Assembly-UnityScript-firstpass">

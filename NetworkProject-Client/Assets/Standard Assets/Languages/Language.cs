@@ -7,18 +7,25 @@ namespace Standard
 {
     public class Language
     {
-        private const string ITEM_NAME = "itemName";
-        private const string SPELL_NAME = "spellName";
-        private const string SPELL_DESCRIPTION = "spellDescription";
-        private const string ERROR_TEXT = "errorText";
-
         public string Name { get; set; }
+
+        public Dictionary<string, string> Pharses
+        {
+            get { return _dictionary; }
+            private set { _dictionary = value; }
+        }
 
         private Dictionary<string, string> _dictionary;
 
         public Language(Dictionary<string, string> dictionary)
         {
             _dictionary = dictionary;
+        }
+
+        public Language(Dictionary<string, string> dictionary, string name)
+        {
+            _dictionary = dictionary;
+            Name = name;
         }
 
         public string this[string name]
@@ -47,49 +54,67 @@ namespace Standard
             }
         }
 
-        public string GetSentense(string name)
+        public bool ContainPhrase(string phrase)
+        {
+            return _dictionary.ContainsKey(phrase);
+        }
+
+        //xml serializer require 0-argumnet constructor
+        public Language()
+        {
+            _dictionary = new Dictionary<string, string>();
+        }
+
+        
+
+        public string GetPhrase(string name)
         {
             return this[name];
         }
 
         public string GetItemName(int idItem)
         {
-            return this[ITEM_NAME + idItem.ToString()];
+            return this[Languages.ITEM_NAME + idItem.ToString()];
         }
 
         public string GetErrorText(int errorId)
         {
-            return this[ERROR_TEXT + errorId.ToString()];
+            return this[Languages.ERROR_TEXT + errorId.ToString()];
         }
 
         public string GetSpellDescription(int idSpell)
         {
-            return this[SPELL_DESCRIPTION + idSpell.ToString()];
+            return this[Languages.SPELL_DESCRIPTION + idSpell.ToString()];
         }
 
         public string GetSpellName(int idSpell)
         {
-            return this[SPELL_NAME + idSpell.ToString()];
+            return this[Languages.SPELL_NAME + idSpell.ToString()];
+        }
+
+        public void SetPhrase(string phrase, string value)
+        {
+            this[phrase] = value;
         }
 
         public void SetItemName(int idItem, string value)
         {
-            this[ITEM_NAME + idItem.ToString()] = value;
+            this[Languages.ITEM_NAME + idItem.ToString()] = value;
         }
 
         public void SetErrorText(int errorId, string value)
         {
-            this[ERROR_TEXT + errorId.ToString()] = value;
+            this[Languages.ERROR_TEXT + errorId.ToString()] = value;
         }
 
         public void SetSpellDescription(int idSpell, string value)
         {
-            this[SPELL_DESCRIPTION + idSpell.ToString()] = value;
+            this[Languages.SPELL_DESCRIPTION + idSpell.ToString()] = value;
         }
 
         public void SetSpellName(int idSpell, string value)
         {
-            this[SPELL_NAME + idSpell.ToString()] = value;
+            this[Languages.SPELL_NAME + idSpell.ToString()] = value;
         }
     }
 }

@@ -150,7 +150,7 @@ public static class Client
 
         string errorText = Languages.GetErrorText((int)request.ErrorCode);
 
-        GUIController.ShowWindow(Languages.GetSentence("error"), errorText);
+        GUIController.ShowWindow(Languages.GetPhrase("error"), errorText);
     }
 
     private static void ReceiveMessageGoToChoiceCharacterMenu(IncomingMessageFromServer message)

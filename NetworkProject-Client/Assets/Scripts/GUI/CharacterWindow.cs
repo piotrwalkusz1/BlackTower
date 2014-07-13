@@ -75,20 +75,20 @@ public class CharacterWindow : GUIObject
 
     public void Refresh()
     {
-        _hp.text = Languages.GetSentence("hp");
+        _hp.text = Languages.GetPhrase("hp");
         _hpAnswer.text = _stats.HP.ToString() + "/" + _stats.MaxHP.ToString();
-        _mp.text = Languages.GetSentence("mp");
-        _power.text = Languages.GetSentence("power");
-        _defense.text = Languages.GetSentence("defense");
+        _mp.text = Languages.GetPhrase("mp");
+        _power.text = Languages.GetPhrase("power");
+        _defense.text = Languages.GetPhrase("defense");
         _defenseAnswer.text = _stats.Defense.ToString();
-        _cooldownReduction.text = Languages.GetSentence("cooldownReduction");
-        _regenerationHP.text = Languages.GetSentence("hpRegeneration");
+        _cooldownReduction.text = Languages.GetPhrase("cooldownReduction");
+        _regenerationHP.text = Languages.GetPhrase("hpRegeneration");
         _regenerationHPAnswer.text = _stats.HPRegeneration.ToString();
-        _regenerationMP.text = Languages.GetSentence("mpRegeneration");
+        _regenerationMP.text = Languages.GetPhrase("mpRegeneration");
         //_regenerationMPAnswer.text = _stats.RegenerationMP.ToString();
-        _attackSpeed.text = Languages.GetSentence("attackSpeed");
+        _attackSpeed.text = Languages.GetPhrase("attackSpeed");
         _attackSpeedAnswer.text = _stats.AttackSpeed.ToString();
-        _movementSpeed.text = Languages.GetSentence("movementSpeed");
+        _movementSpeed.text = Languages.GetPhrase("movementSpeed");
         _movementSpeedAnswer.text = _stats.MovementSpeed.ToString();
     }
 

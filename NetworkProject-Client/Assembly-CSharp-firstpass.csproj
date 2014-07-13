@@ -53,7 +53,10 @@
      <Compile Include="Assets\Standard Assets\Inputs\Inputs.cs" />
      <Compile Include="Assets\Standard Assets\Inputs\InputsData.cs" />
      <Compile Include="Assets\Standard Assets\Languages\Language.cs" />
+     <Compile Include="Assets\Standard Assets\Languages\LanguagePhrases.cs" />
+     <Compile Include="Assets\Standard Assets\Languages\LanguageToSave.cs" />
      <Compile Include="Assets\Standard Assets\Languages\Languages.cs" />
+     <Compile Include="Assets\Standard Assets\Languages\PharsesCategory.cs" />
      <Compile Include="Assets\Standard Assets\SaveLoad\ISavable.cs" />
      <Compile Include="Assets\Standard Assets\SaveLoad\SaveLoad.cs" />
      <Compile Include="Assets\Standard Assets\SaveLoad\Saver.cs" />
@@ -63,6 +66,8 @@
      <Compile Include="Assets\Standard Assets\Settings\Settings.cs" />
      <Compile Include="Assets\Standard Assets\Standard\Updating.cs" />
      <None Include="Assets\Resources\defaultSettings.xml" />
+     <None Include="Assets\Resources\Language-Polski.xml" />
+     <None Include="Assets\Editor\Languages\languagePhrases.xml" />
      <None Include="Assets\Resources\items.txt" />
      <None Include="Assets\Resources\defaultInputs.txt" />
  <Reference Include="Lidgren.Network">

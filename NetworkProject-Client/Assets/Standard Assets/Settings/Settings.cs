@@ -14,6 +14,7 @@ namespace Standard
         public static readonly string pathToInputsInApplication = Application.dataPath + "/inputs.txt";
         public static readonly string pathToLanguagesInUnity = Application.dataPath + "/Resources/";
         public static readonly string pathToLanguagesInApplication = Application.dataPath + "/Languages/";
+        public static readonly string pathToLanguagePhrases = Application.dataPath + "/Editor/Languages/languagePhrases.xml";
         public static readonly string pathToItemsInResources = "items";
         public static readonly string pathToItemsInUnity = Application.dataPath + "/Resources/items.txt";
         public static readonly float jumpAndFallSpeed = 2f;

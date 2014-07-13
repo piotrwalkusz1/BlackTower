@@ -13,6 +13,10 @@ namespace Standard
     public static class Languages
     {
         public const string LANGUAGE_NAME_PATTERN = @"^Language-[^ ]*$";
+        public const string ITEM_NAME = "itemName";
+        public const string SPELL_NAME = "spellName";
+        public const string SPELL_DESCRIPTION = "spellDescription";
+        public const string ERROR_TEXT = "errorText";
 
         private static Language _currentLanguage;
         private static List<Language> _allLanguages;
@@ -34,7 +38,7 @@ namespace Standard
             _allLanguages.AddRange(languages);
         }
 
-        public static string GetSentence(string name)
+        public static string GetPhrase(string name)
         {
             return _currentLanguage[name];
         }
@@ -94,7 +98,13 @@ namespace Standard
 
                 if (Regex.IsMatch(fileName, LANGUAGE_NAME_PATTERN, RegexOptions.IgnoreCase))
                 {
-                    allLanguages.Add(LoadLanguageFromFile(file));
+                    try
+                    {
+                        allLanguages.Add(LoadLanguageFromFile(file));
+                    }
+                    catch
+                    {
+                    }
                 }
             }
 
@@ -150,23 +160,69 @@ namespace Standard
 
         public static void SaveAllLanguagesToResources()
         {
-            var serializer = new XmlSerializer(typeof(Language)); 
+            SaveAllLanguagesToResources(_allLanguages);
+        }
 
-            foreach (var language in _allLanguages)
+        public static void SaveAllLanguagesToResources(List<Language> languages)
+        {
+            var serializer = new XmlSerializer(typeof(LanguageToSave));         
+
+            foreach (var language in languages)
             {
                 using (var stream = new StreamWriter(Settings.pathToLanguagesInUnity + language.Name + ".xml"))
                 {
-                    serializer.Serialize(stream, language);
+                    serializer.Serialize(stream, new LanguageToSave(language));
                 }
             }
-        } 
+        }
+
+        public static LanguagePhrases LoadLanguagePhrases()
+        {
+            string text = "";
+
+            try
+            {
+                text = File.ReadAllText(Settings.pathToLanguagePhrases);
+            }
+            catch (FileNotFoundException)
+            {
+
+            }
+
+            try
+            {
+                var serializer = new XmlSerializer(typeof(LanguagePhrases));
+                using (var stream = new StringReader(text))
+                {
+                    return (LanguagePhrases)serializer.Deserialize(stream);
+                }
+            }
+            catch
+            {
+                MonoBehaviour.print("Plik ma niewłaściwą budowę. Zostanie zwrócony pusty obiekt.");
+
+                return new LanguagePhrases();
+            }          
+        }
+
+        public static void SaveLanguagesPhrases(LanguagePhrases phrases)
+        {
+            var serializer = new XmlSerializer(typeof(LanguagePhrases));
+
+            using (var stream = new FileStream(Settings.pathToLanguagePhrases, FileMode.Create))
+            {
+                serializer.Serialize(stream, phrases);
+            }
+        }
 
         private static Language LoadLanguageByString(string text)
         {
-            var serializer = new XmlSerializer(typeof(Language));
+            var serializer = new XmlSerializer(typeof(LanguageToSave));
             var stream = new StringReader(text);
 
-            return (Language)serializer.Deserialize(stream);
+            var language = (LanguageToSave)serializer.Deserialize(stream);
+
+            return language.GetLanguage();
         }
     }
 }
