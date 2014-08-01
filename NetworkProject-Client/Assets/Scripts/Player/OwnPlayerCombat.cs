@@ -4,7 +4,7 @@ using System.Collections;
 using InputsSystem;
 using NetworkProject.Connection.ToServer;
 
-public class OwnPlayerCombat :PlayerCombat
+public class OwnPlayerCombat : PlayerCombat
 {
     private DateTime _newAttackTime = DateTime.UtcNow;
 
@@ -18,7 +18,7 @@ public class OwnPlayerCombat :PlayerCombat
         {
             Attack();
 
-            _newAttackTime = DateTime.UtcNow.AddSeconds(AttackSpeed);
+            _newAttackTime = DateTime.UtcNow.AddSeconds(TimeBetweenAttacks);
         }
 	}
 
@@ -33,7 +33,7 @@ public class OwnPlayerCombat :PlayerCombat
         Client.SendRequestAsMessage(request);
     }
 
-    bool CanAttack()
+    private bool CanAttack()
     {
         return DateTime.UtcNow > _newAttackTime && GetComponent<PlayerEquipment>().IsEquipedWeapon();
     }

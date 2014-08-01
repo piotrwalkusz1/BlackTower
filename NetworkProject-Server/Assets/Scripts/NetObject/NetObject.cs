@@ -5,16 +5,18 @@ using NetworkProject;
 using NetworkProject.Connection;
 using NetworkProject.Connection.ToClient;
 
-[System.CLSCompliant(false)]
 public abstract class NetObject : MonoBehaviour 
 {
     public int IdNet { get; set; }
+    public bool IsModelVisible { get; set; }
 
     protected Func<Vision, bool> _isVisible;
 
     protected event Action<IConnectionMember> _sendMessageUpdateEvent;
 
+    private bool _wasMovement;
     private Vector3 _positionInLastFrame;
+    private bool _wasRotation;
     private float _rotationInLastFrame;
 
     protected void Awake()
@@ -23,14 +25,16 @@ public abstract class NetObject : MonoBehaviour
 
         SetVisionFunctionToDefault();
 
-        ApplicationController.AddNetObject(this);
+        IsModelVisible = true;
+    }
+
+    public void Update()
+    {
+        CheckMovementAndRotation();
     }
 
     public void ResetMessages()
     {
-        _positionInLastFrame = transform.position;
-        _rotationInLastFrame = transform.eulerAngles.y;
-
         _sendMessageUpdateEvent = null;
     }
 
@@ -109,6 +113,13 @@ public abstract class NetObject : MonoBehaviour
         GenerateSendFunctionAndAddToUpdateEvent(request);
     }
 
+    public void SendVisibleModelMessage()
+    {
+        var request = new ChangeVisibilityModelToClient(IdNet, IsModelVisible);
+
+        GenerateSendFunctionAndAddToUpdateEvent(request);
+    }
+
     protected void SetVisionFunction(Func<Vision, bool> function)
     {
         _isVisible = function;
@@ -118,7 +129,7 @@ public abstract class NetObject : MonoBehaviour
     {
         if (IsChangePosition())
         {
-            var package = new RotateToClient(IdNet, transform.eulerAngles.y);
+            var package = new MoveToClient(IdNet, transform.position);
             var message = new OutgoingMessage(package);
 
             Server.Send(message, address);
@@ -129,7 +140,7 @@ public abstract class NetObject : MonoBehaviour
     {
         if (IsChangeRotation())
         {
-            var package = new MoveToClient(IdNet, transform.position);
+            var package = new RotateToClient(IdNet, transform.eulerAngles.y);
             var message = new OutgoingMessage(package);
 
             Server.Send(message, address);
@@ -138,16 +149,28 @@ public abstract class NetObject : MonoBehaviour
 
     protected bool IsChangePosition()
     {
-        return transform.position != _positionInLastFrame;
+        return _wasMovement;
     }
 
     protected bool IsChangeRotation()
     {
-        return transform.eulerAngles.y != _rotationInLastFrame;
+        return _wasRotation;
     }
 
     protected void InitializePositionAndRotation()
     {
+        _wasMovement = false;
+        _wasRotation = false;
+
+        _positionInLastFrame = transform.position;
+        _rotationInLastFrame = transform.eulerAngles.y;
+    }
+
+    protected void CheckMovementAndRotation()
+    {
+        _wasMovement = transform.position != _positionInLastFrame;
+        _wasRotation = transform.eulerAngles.y != _rotationInLastFrame;
+
         _positionInLastFrame = transform.position;
         _rotationInLastFrame = transform.eulerAngles.y;
     }

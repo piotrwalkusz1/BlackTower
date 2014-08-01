@@ -60,7 +60,6 @@
      <Compile Include="Assets\Scripts\Client\ClientController.cs" />
      <Compile Include="Assets\Scripts\Client\IClient.cs" />
      <Compile Include="Assets\Scripts\Client\LidgrenClient.cs" />
-     <Compile Include="Assets\Scripts\Combat\Combat.cs" />
      <Compile Include="Assets\Scripts\GUI\CharacterWindow.cs" />
      <Compile Include="Assets\Scripts\GUI\EquipmentWindow.cs" />
      <Compile Include="Assets\Scripts\GUI\GUIController.cs" />
@@ -72,7 +71,17 @@
      <Compile Include="Assets\Scripts\GUI\WindowGUI.cs" />
      <Compile Include="Assets\Scripts\Health\Health.cs" />
      <Compile Include="Assets\Scripts\Health\PlayerHealth.cs" />
+     <Compile Include="Assets\Scripts\Item\IEquiper.cs" />
+     <Compile Include="Assets\Scripts\Item\IEquipment.cs" />
+     <Compile Include="Assets\Scripts\Item\ItemBag.cs" />
+     <Compile Include="Assets\Scripts\Item\OtherPlayerEquipment.cs" />
+     <Compile Include="Assets\Scripts\Item\OwnPlayerEquipment.cs" />
+     <Compile Include="Assets\Scripts\Item\PlayerEquipment.cs" />
+     <Compile Include="Assets\Scripts\Monsters\MonsterCombat.cs" />
+     <Compile Include="Assets\Scripts\Monsters\MonsterStats.cs" />
+     <Compile Include="Assets\Scripts\Monsters\VisualMonsterData.cs" />
      <Compile Include="Assets\Scripts\Movement\JumperMovement.cs" />
+     <Compile Include="Assets\Scripts\Movement\MonsterMovement.cs" />
      <Compile Include="Assets\Scripts\Movement\Movement.cs" />
      <Compile Include="Assets\Scripts\Movement\PlayerMovement.cs" />
      <Compile Include="Assets\Scripts\NetObjects\NetBullet.cs" />
@@ -84,42 +93,41 @@
      <Compile Include="Assets\Scripts\NetObjects\NetOwnPlayer.cs" />
      <Compile Include="Assets\Scripts\NetObjects\NetPlayer.cs" />
      <Compile Include="Assets\Scripts\Other\ApplicationControler.cs" />
+     <Compile Include="Assets\Scripts\Other\Combat.cs" />
      <Compile Include="Assets\Scripts\Other\Experience.cs" />
      <Compile Include="Assets\Scripts\Other\GameObjectRepositoryByFind.cs" />
      <Compile Include="Assets\Scripts\Other\IGameObjectRepository.cs" />
      <Compile Include="Assets\Scripts\Other\ImageRepository.cs" />
      <Compile Include="Assets\Scripts\Other\IoC.cs" />
-     <Compile Include="Assets\Scripts\Other\JumperCombat.cs" />
      <Compile Include="Assets\Scripts\Other\MeshRepository.cs" />
-     <Compile Include="Assets\Scripts\Other\MonsterCombat.cs" />
-     <Compile Include="Assets\Scripts\Other\MonsterStats.cs" />
+     <Compile Include="Assets\Scripts\Other\PlayerAdditionalData.cs" />
      <Compile Include="Assets\Scripts\Other\Prefabs.cs" />
      <Compile Include="Assets\Scripts\Other\SceneBuilder.cs" />
      <Compile Include="Assets\Scripts\Other\Stats.cs" />
-     <Compile Include="Assets\Scripts\Player\IEquiper.cs" />
-     <Compile Include="Assets\Scripts\Player\IEquipment.cs" />
      <Compile Include="Assets\Scripts\Player\InputPlayer.cs" />
-     <Compile Include="Assets\Scripts\Player\ItemBag.cs" />
      <Compile Include="Assets\Scripts\Player\OtherPlayerCombat.cs" />
-     <Compile Include="Assets\Scripts\Player\OtherPlayerEquipment.cs" />
      <Compile Include="Assets\Scripts\Player\OtherPlayerStats.cs" />
      <Compile Include="Assets\Scripts\Player\OwnPlayerCombat.cs" />
-     <Compile Include="Assets\Scripts\Player\OwnPlayerEquipment.cs" />
      <Compile Include="Assets\Scripts\Player\OwnPlayerStats.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerCamera.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerCombat.cs" />
-     <Compile Include="Assets\Scripts\Player\PlayerEquipment.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerExperience.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerGeneratorModel.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerMesh.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerStats.cs" />
-     <Compile Include="Assets\Scripts\Spell\DescriptedSpellData.cs" />
-     <Compile Include="Assets\Scripts\Spell\ISpellCastOption.cs" />
-     <Compile Include="Assets\Scripts\Spell\ISpellCaster.cs" />
+     <Compile Include="Assets\Scripts\Quests\KillQuestTargetDescription.cs" />
      <Compile Include="Assets\Scripts\Spell\SpellCaster.cs" />
+     <Compile Include="Assets\Scripts\Spell\SpellClient.cs" />
+     <Compile Include="Assets\Scripts\Spell\SpellClientRepository.cs" />
+     <Compile Include="Assets\Scripts\Spell\VisualSpellData.cs" />
+     <None Include="Assets\Resources\spells.txt" />
      <None Include="Assets\Resources\defaultSettings.xml" />
+     <None Include="Assets\Resources\buffs.txt" />
+     <None Include="Assets\Standard Assets\Skyboxes\_skybox info.txt" />
      <None Include="Assets\Resources\Language-Polski.xml" />
      <None Include="Assets\Editor\Languages\languagePhrases.xml" />
+     <None Include="Assets\Resources\monsters.txt" />
+     <None Include="Assets\Standard Assets\Water (Basic)\Sources\Shaders\FX-Water Simple.shader" />
      <None Include="Assets\Resources\items.txt" />
      <None Include="Assets\Resources\defaultInputs.txt" />
  <Reference Include="Assembly-UnityScript-firstpass">
@@ -130,9 +138,6 @@
  </Reference>
  <Reference Include="NetworkProject">
  <HintPath>C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Client/Assets/Plugins/NetworkProject.dll</HintPath>
- </Reference>
- <Reference Include="SpellActions">
- <HintPath>C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Client/Assets/Plugins/SpellActions.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>

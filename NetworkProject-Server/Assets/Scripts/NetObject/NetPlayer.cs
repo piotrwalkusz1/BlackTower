@@ -24,7 +24,9 @@ public class NetPlayer : NetObject
         }
 
         var stats = GetComponent<PlayerStats>();
-        var request = new CreateOtherPlayerToClient(IdNet, transform.position, transform.eulerAngles.y, stats, Name);
+        var eq = GetComponent<PlayerEquipment>();
+        var request = new CreateOtherPlayerToClient(IdNet, IsModelVisible, transform.position, transform.eulerAngles.y, stats, Name,
+            eq.GetEquipedItems());
         var message = new OutgoingMessage(request);
 
         Server.Send(message, address);
@@ -123,7 +125,7 @@ public class NetPlayer : NetObject
 
         InitializePlayerExperience(characterData.Lvl, characterData.Exp);
 
-        InitializePlayerEquipment();
+        InitializePlayerEquipment(characterData.Equipment, characterData.EquipedItems);
 
         GetComponent<PlayerStats>().CalculateStats(); // musi być przedostatnie!
 
@@ -161,12 +163,10 @@ public class NetPlayer : NetObject
         playerExperience.Set(lvl, exp);
     }
 
-    private void InitializePlayerEquipment()
+    private void InitializePlayerEquipment(Equipment equipment, PlayerEquipedItems equipedItems)
     {
         var playerEquipment = GetComponent<PlayerEquipment>();
 
-        playerEquipment.AddItem(new Item(0)); //temporary
-        playerEquipment.AddItem(new Item(1)); //temporary
-        playerEquipment.AddItem(new Item(2)); //temporary
+        playerEquipment.Set(equipment, equipedItems);
     }
 }

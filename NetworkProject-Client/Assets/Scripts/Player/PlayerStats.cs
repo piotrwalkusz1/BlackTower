@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using NetworkProject;
+using NetworkProject.Connection;
 
 public abstract class PlayerStats : Stats, IPlayerStats
 {
@@ -14,6 +15,10 @@ public abstract class PlayerStats : Stats, IPlayerStats
         get
         {
             return GetComponent<Experience>().Lvl;
+        }
+        set
+        {
+            GetComponent<Experience>().Lvl = value;
         }
     }
     public virtual int MinDmg
@@ -30,26 +35,26 @@ public abstract class PlayerStats : Stats, IPlayerStats
     {
         get
         {
-            return GetComponent<Health>()._hp;
+            return GetComponent<Health>().HP;
         }
         set
         {
-            GetComponent<Health>()._hp = value;
+            GetComponent<Health>().HP = value;
         }
     }
     public virtual int MaxHP
     {
         get
         {
-            return GetComponent<Health>()._maxHp;
+            return GetComponent<Health>().MaxHP;
         }
         set
         {
-            GetComponent<Health>()._maxHp = value;
+            GetComponent<Health>().MaxHP = value;
         }
     }
     public virtual int Defense { get; set; }
-    public virtual float AttackSpeed
+    public virtual int AttackSpeed
     {
         get
         {
@@ -76,7 +81,7 @@ public abstract class PlayerStats : Stats, IPlayerStats
     }   
     public virtual float HPRegeneration
     {
-        get { return GetComponent<Health>()._hpRegeneration; }
-        set { GetComponent<Health>()._hpRegeneration = value; }
+        get { return GetComponent<Health>().HPRegeneration; }
+        set { GetComponent<Health>().HPRegeneration = value; }
     }
 }

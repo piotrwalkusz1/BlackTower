@@ -5,6 +5,7 @@ using System.Text;
 
 namespace NetworkProject.Items
 {
+    [Serializable]
     public abstract class EquipedItems
     {
         public abstract void ApplyToStats(IEquipableStats stats);

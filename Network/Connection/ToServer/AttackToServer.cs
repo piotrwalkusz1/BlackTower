@@ -9,7 +9,7 @@ namespace NetworkProject.Connection.ToServer
     [Serializable]
     public class AttackToServer : INetworkRequestToServer
     {
-        public Vector3 Direction { get; set; }
+        public Vector3Serializable Direction { get; set; }
 
         public AttackToServer(Vector3 direction)
         {

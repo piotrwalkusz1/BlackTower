@@ -88,10 +88,6 @@
       <Project>{aaa6a575-be26-4699-b4ca-4b5afe80e502}</Project>
       <Name>NetworkProject</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SpellActions\SpellActions.csproj">
-      <Project>{21f651fc-53f9-4c99-ab9e-6d5a49da3403}</Project>
-      <Name>SpellActions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Assembly-CSharp-firstpass-vs.csproj">
       <Project>{3c8b5763-220e-b358-3256-6f8acc67e425}</Project>
       <Name>Assembly-CSharp-firstpass-vs</Name>

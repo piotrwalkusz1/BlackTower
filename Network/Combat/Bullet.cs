@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace NetworkProject.Combat
 {
+    [Serializable]
     public abstract class Bullet
     {
         public int BulletType { get; set; }

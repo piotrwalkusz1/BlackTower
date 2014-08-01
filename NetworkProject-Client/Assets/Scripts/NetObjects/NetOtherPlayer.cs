@@ -21,9 +21,13 @@ public class NetOtherPlayer : NetPlayer
     public void InitializePlayer(CreateOtherPlayerToClient package)
     {
         IdNet = package.IdNet;
+        IsModelVisible = package.IsModelVisible;
         Name = package.Name;
 
         var stats = GetComponent<OtherPlayerStats>();
-        stats.Set(package.PlayerStats);
+        package.PlayerStats.CopyToStats(stats);
+
+        var equipment = GetComponent<OtherPlayerEquipment>();
+        equipment.SetEquipedItems(package.EquipedItems);
     }
 }

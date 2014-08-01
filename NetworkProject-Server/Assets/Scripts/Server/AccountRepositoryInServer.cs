@@ -5,6 +5,7 @@ using System.Linq;
 using NetworkProject;
 using NetworkProject.Connection;
 using NetworkProject.Spells;
+using NetworkProject.Items;
 
 public class AccountRepositoryInServer : IAccountRepository
 {
@@ -25,6 +26,12 @@ public class AccountRepositoryInServer : IAccountRepository
         character.BreedAndGender = new BreedAndGender(0, true);
         character.Lvl = 1;
         character.Exp = 0;
+        character.Equipment.SetSlot(new Item(0), 0);
+        character.Equipment.SetSlot(new Item(1), 1);
+        character.Equipment.SetSlot(new Item(2), 2);
+        var spells = new List<Spell>();
+        spells.Add(new Spell(0));
+        character.Spells = spells;
         RegisterCharacter(account, character);
 
         RegisterAccount account2 = new RegisterAccount("Login1", "Password");

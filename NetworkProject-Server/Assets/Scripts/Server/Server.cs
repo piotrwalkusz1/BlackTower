@@ -167,13 +167,15 @@ public static class Server
             player.CreatePlayerInstantiate();
 
             int map = Standard.Settings.GetMap(player.Instantiate.transform.position);
-            var goIntoWorldRequest = new NetworkProject.Connection.ToClient.GoIntoWorldToClient(map);
+            var goIntoWorldRequest = new GoIntoWorldToClient(map);
 
             var netPlayer = player.Instantiate.GetComponent<NetPlayer>();
             var tran = player.Instantiate.transform;
             var stats = player.Instantiate.GetComponent<PlayerStats>();
-            var createOwnPlayerRequest = new CreateOwnPlayerToClient(netPlayer.IdNet, tran.position,
-                tran.eulerAngles.y, stats, netPlayer.Name);
+            var eq = player.Instantiate.GetComponent<PlayerEquipment>();
+            var spellCaster = player.Instantiate.GetComponent<SpellCaster>();
+            var createOwnPlayerRequest = new CreateOwnPlayerToClient(netPlayer.IdNet, netPlayer.IsModelVisible, tran.position,
+                tran.eulerAngles.y, stats, netPlayer.Name, eq.GetEquipment(), eq.GetEquipedItems(), spellCaster.GetSpells().ToList());
 
             SendRequestAsMessage(goIntoWorldRequest, message.Sender);
             SendRequestAsMessage(createOwnPlayerRequest, message.Sender);
@@ -186,7 +188,7 @@ public static class Server
             }
             else
             {
-                MonoBehaviour.print("Nie znany błąd z AccountRepository, errorCode : " +
+                MonoBehaviour.print("Nieznany błąd z AccountRepository, errorCode : " +
                     exception.ErrorCode.ToString());
             }
         }
@@ -250,12 +252,13 @@ public static class Server
         var request = (ChangeItemsInEquipmentToServer)message.Request;
 
         NetPlayer netPlayer = AccountRepository.FindAliveNetPlayerByAddress(message.Sender);
-        Equipment eq = netPlayer.GetComponent<Equipment>();
+        var equipmentManager = (IEquipmentManager)netPlayer.GetComponent(typeof(IEquipmentManager));
+        var eq = equipmentManager.GetEquipment();
 
         eq.ChangeItemInEquipment(request.Slot1, request.Slot2);
 
-        eq.SendUpdateSlot(request.Slot1, message.Sender);
-        eq.SendUpdateSlot(request.Slot2, message.Sender);
+        equipmentManager.SendUpdateSlot(request.Slot1, message.Sender);
+        equipmentManager.SendUpdateSlot(request.Slot2, message.Sender);
     }
 
     private static void ReceiveMessageChangeEquipedItem(IncomingMessage message)
@@ -268,7 +271,7 @@ public static class Server
         eq.TryEquipeItemInEquipmentOnThisBodyPart(request.SlotInEquipment, request.EquipedItemSlot);
 
         Item equipedItem = eq.GetEquipedItem(request.EquipedItemSlot);
-        Item itemInEquipment = eq.GetItemBySlot(request.SlotInEquipment);
+        Item itemInEquipment = eq.GetItemInEquipment(request.SlotInEquipment);
 
         var updateEquipedItem = new NetworkProject.Connection.ToClient.UpdateEquipedItemToClient(player.IdNet, request.EquipedItemSlot, equipedItem);
         var updateItemInEquipment = new NetworkProject.Connection.ToClient.UpdateItemInEquipmentToClient(player.IdNet, request.SlotInEquipment, itemInEquipment);

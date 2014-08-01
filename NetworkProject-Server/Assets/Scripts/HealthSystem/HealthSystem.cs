@@ -18,6 +18,7 @@ public class HealthSystem : MonoBehaviour
     public float HPRegenerationPerSecond { get; set; }
 
     private float _hp;
+    protected bool _isSendedDeadMessage;
 
     protected void Awake()
     {
@@ -28,7 +29,10 @@ public class HealthSystem : MonoBehaviour
 
     void Update()
     {
-        Regeneration();
+        if (!IsDead())
+        {
+            RegenerationAndSendUpdate();
+        }      
     }
 
     public bool IsDead()
@@ -41,11 +45,21 @@ public class HealthSystem : MonoBehaviour
         _hp = (float)hp;
     }
 
-    public virtual void Attack(AttackInfo attackInfo)
+    public virtual void AttackWithoutSendUpdate(AttackInfo attackInfo)
     {
-        attackInfo = ApplyAttackEvent(attackInfo);
+        if (!IsDead())
+        {
+            attackInfo = ApplyAttackEvent(attackInfo);
 
-        DecreaseHP(attackInfo.Dmg);
+            DecreaseHP(attackInfo.Dmg);
+        }       
+    }
+
+    public void AttackAndSendUpdate(AttackInfo attackInfo)
+    {
+        AttackWithoutSendUpdate(attackInfo);
+
+        SendUpdateHP();
     }
 
     protected AttackInfo ApplyAttackEvent(AttackInfo attackInfo)
@@ -88,13 +102,18 @@ public class HealthSystem : MonoBehaviour
 
     public virtual void DieAndSendUpdate()
     {
-        SendMessage("OnDead");
+        SendMessage("OnDead", SendMessageOptions.DontRequireReceiver);
 
-        NetObject netObject = GetComponent<NetObject>();
+        ChangeHp(0);
 
-        if (netObject!= null)
+        if (!_isSendedDeadMessage)
         {
-            netObject.SendDeadMessage();
+            NetObject netObject = GetComponent<NetObject>();
+
+            if (netObject != null)
+            {
+                netObject.SendDeadMessage();
+            }
         }
 
         transform.position = new Vector3(1000000, 1000000, 1000000);
@@ -116,21 +135,49 @@ public class HealthSystem : MonoBehaviour
 
     public void Recuparate()
     {
-        _hp = (float)MaxHP;
+        Recuparate(MaxHP);
+    }
+
+    public void Recuparate(int hp)
+    {
+        _hp = hp;
+
+        _isSendedDeadMessage = false;
     }
 
     protected void CheckWhetherIsDead()
     {
-        if (IsDead())
+        if (IsDead() && !_isSendedDeadMessage)
         {
             DieAndSendUpdate();
+
+            _isSendedDeadMessage = true;
         }
     }
 
-    protected void Regeneration()
+    protected void RegenerationWithoutSendUpdate()
     {
-        float hpIncrease = HPRegenerationPerSecond * Time.deltaTime;
+        if (!IsDead())
+        {
+            float hpIncrease = HPRegenerationPerSecond * Time.deltaTime;
 
-        IncreaseHP(hpIncrease);
+            IncreaseHP(hpIncrease);
+        }
+        else
+        {
+            MonoBehaviour.print("Obiekt jest martwy. Nie można zregenerować.");
+        }
+    }
+
+    protected void RegenerationAndSendUpdate()
+    {
+        int hp = HP;
+
+        RegenerationWithoutSendUpdate();
+
+        if (hp != HP)
+        {
+            SendUpdateHP();
+        }
     } 
 }

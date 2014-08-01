@@ -8,24 +8,32 @@ public class PlayerHealthSystem : HealthSystem
 {
     public int Defense { get; set; }
 
-    public override void Attack(AttackInfo attackInfo)
+    public override void AttackWithoutSendUpdate(AttackInfo attackInfo)
     {
-        attackInfo = ApplyAttackEvent(attackInfo);
+        if (!IsDead())
+        {
+            attackInfo = ApplyAttackEvent(attackInfo);
 
-        int dmg = ApplyDefense(attackInfo.Dmg);
+            int dmg = ApplyDefense(attackInfo.Dmg);
 
-        DecreaseHP(dmg);
+            DecreaseHP(dmg);
+        }
     }
 
     public override void DieAndSendUpdate()
     {
-        base.DieAndSendUpdate();
+        ChangeHp(0);
 
-        NetPlayer player = GetComponent<NetPlayer>();
+        if (!_isSendedDeadMessage)
+        {
+            NetPlayer player = GetComponent<NetPlayer>();
 
-        var request = new DeadToClient(player.IdNet);
+            player.SendDeadMessage();
 
-        Server.SendRequestAsMessage(request, player.OwnerAddress);
+            var request = new DeadToClient(player.IdNet);
+
+            Server.SendRequestAsMessage(request, player.OwnerAddress);
+        }  
     }
 
     public override void SendUpdateHP()
@@ -37,6 +45,8 @@ public class PlayerHealthSystem : HealthSystem
 
     public void SendUpdateHPToOwner()
     {
+        SendMessage("OnDead", SendMessageOptions.DontRequireReceiver);
+
         NetPlayer netPlayer = GetComponent<NetPlayer>();
 
         var request = new UpdateHPToClient(netPlayer.IdNet, HP);

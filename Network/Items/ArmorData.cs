@@ -10,14 +10,10 @@ namespace NetworkProject.Items
     {
         public int _defense;
 
-        public ArmorData()
-        {
-
-        }
-
         public ArmorData(int idItem)
+            : base(idItem)
         {
-            IdItem = idItem;
+
         }
 
         protected override void ApplyItemStats(IEquipableStats stats)

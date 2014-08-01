@@ -20,7 +20,7 @@ namespace NetworkProject.Items
             }
         }
 
-        public int _idItem;
+        protected int _idItem;
 
         //Xml serialization require this constructor
         public ItemData()

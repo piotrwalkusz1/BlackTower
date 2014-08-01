@@ -24,11 +24,10 @@ public class JumperAI : MonoBehaviour
         _netMonster = GetComponent<NetMonster>();
         _combat = GetComponent<MonsterCombat>();
 
-        Monster monster = MonsterRepository.GetMonster(GetComponent<NetMonster>().IdMonster);
-        _combat.MinDmg = monster._damages[0];
-        _combat.MaxDmg = monster._damages[1];
-        _combat.AttackRange = 2f;
-        _combat.AttackSpeed = 50f;
+        MonsterFullData monster = (MonsterFullData)MonsterRepository.GetMonster(GetComponent<NetMonster>().IdMonster);
+
+        var stats = GetComponent<MonsterStats>();
+        monster.Stats.CopyToStats(stats);
 
         InitializeItemsToDrop(monster);    
 	}
@@ -115,10 +114,10 @@ public class JumperAI : MonoBehaviour
         _movement.Stop();
     }
 
-    private void InitializeItemsToDrop(Monster monster)
+    private void InitializeItemsToDrop(MonsterFullData monster)
     {
         Drop drop = GetComponent<Drop>();
 
-        drop.AddItemToDrop(monster._drop.ToArray());
+        drop.AddItemToDrop(monster.Drop.ToArray());
     }
 }

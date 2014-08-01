@@ -12,21 +12,17 @@ namespace NetworkProject.Items
         public int _maxDmg;
         public int _attackSpeed;
 
-        public WeaponData()
-        {
-
-        }
-
         public WeaponData(int idItem)
+            : base(idItem)
         {
-            IdItem = idItem;
+
         }
 
         protected override void ApplyItemStats(IEquipableStats stats)
         {
-            IEquipableStats equipableStats = (IEquipableStats)stats;
-
-            equipableStats.AttackSpeed += equipableStats.AttackSpeed;
+            stats.MinDmg += _minDmg;
+            stats.MaxDmg += _maxDmg;
+            stats.AttackSpeed += _attackSpeed;
         }
     }
 }

@@ -10,20 +10,19 @@ using NetworkProject.BodyParts;
 namespace NetworkProject.Items
 {
     [Serializable]
-    public abstract class EquipableItemData : ItemData
+    public abstract class EquipableItemData : ItemData, IEquipableItemManager
     {
         public List<IEquipBenefit> _benefits = new List<IEquipBenefit>();
         public List<IEquipRequirement> _requirements = new List<IEquipRequirement>();
 
-        //Xml serialization require this constructor
-        public EquipableItemData()
-        {
-
-        }
-
         public EquipableItemData(int idItem)
         {
             IdItem = idItem;
+        }
+
+        public EquipableItemData GetEquipableItemData()
+        {
+            return this;
         }
 
         public void ApplyToStats(IEquipableStats stats)
@@ -59,7 +58,7 @@ namespace NetworkProject.Items
             return _benefits.ToArray();
         }
 
-        public IEquipRequirement[] GetRequirement()
+        public IEquipRequirement[] GetRequirements()
         {
             return _requirements.ToArray();
         }

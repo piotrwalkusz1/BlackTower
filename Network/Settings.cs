@@ -26,9 +26,11 @@ namespace NetworkProject
             return basicPlayerMaxExp + (lvl - 1) * additionalMaxExpPerLvl;
         }
 
-        public static float GetTimeBetweenAttacks(float attackSpeed)
+        public static float GetTimeBetweenAttacks(int attackSpeed)
         {
-            return 50f / attackSpeed;
+            int speed = attackSpeed >= 25 ? attackSpeed : 25;
+
+            return 50f / speed;
         }
     }
 }

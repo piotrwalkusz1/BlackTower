@@ -4,7 +4,8 @@ using NetworkProject;
 using NetworkProject.BodyParts;
 using NetworkProject.Items;
 
-public class PlayerGeneratorModel : MonoBehaviour
+public class 
+    PlayerGeneratorModel : MonoBehaviour
 {
     private BreedAndGender BreedAndGender
     {
@@ -15,6 +16,7 @@ public class PlayerGeneratorModel : MonoBehaviour
     }
 
     private PlayerMesh _playerMesh;
+    private GameObject _playerModel;
 
     public void CreateModel()
     {
@@ -27,9 +29,39 @@ public class PlayerGeneratorModel : MonoBehaviour
 
         GetComponent<PlayerAnimation>().SetAnimator();
 
+        _playerModel = playerModel;
         _playerMesh = playerModel.GetComponentInChildren<PlayerMesh>();
 
-        UpdateEquipedItems();
+        UpdateEquipedItems();    
+
+        if (GetComponent<NetObject>().IsModelVisible)
+        {
+            ShowModel();
+        }
+        else
+        {
+            HideModel();
+        }
+    }
+
+    public void HideModel()
+    {
+        if (_playerModel != null)
+        {
+            _playerModel.SetActive(false);
+        }
+
+        GetComponent<PlayerAnimation>().enabled = false;
+    }
+
+    public void ShowModel()
+    {
+        if (_playerModel != null)
+        {
+            _playerModel.SetActive(true);
+        }
+
+        GetComponent<PlayerAnimation>().enabled = true;
     }
 
     public void UpdateEquipedItems()
@@ -46,6 +78,11 @@ public class PlayerGeneratorModel : MonoBehaviour
     public void UpdateEquipedItem(BodyPart bodyPart, int idBodyPart)
     {
         SkinnedMeshRenderer mesh = _playerMesh.GetItemMeshByIdBodyPart(idBodyPart);
+
+        if (mesh == null)
+        {
+            return;
+        }
 
         if (bodyPart.EquipedItem == null)
         {

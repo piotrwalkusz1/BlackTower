@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using NetworkProject;
 using NetworkProject.Spells;
+using NetworkProject.Connection;
 using UnityEngine;
 
-public class SpellCasterStats : MonsterRespawn, ISpellCasterStats
+public class SpellCasterStats : Stats, ISpellCasterStats
 {
     public int Lvl
     {

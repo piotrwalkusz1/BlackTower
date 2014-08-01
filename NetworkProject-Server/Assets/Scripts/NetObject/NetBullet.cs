@@ -8,10 +8,19 @@ using NetworkProject.Combat;
 [System.CLSCompliant(false)]
 public class NetBullet : NetObject
 {
+    public Bullet Bullet { get; set; }
+
+    public int BulletType
+    {
+        get
+        {
+            return Bullet.BulletType;
+        }
+    }
+
     public override void SendMessageAppeared(IConnectionMember address)
     {
-        var bulletManager = GetComponent<BulletManager>();
-        var request = new CreateBulletToClient(IdNet, transform.position, transform.eulerAngles, bulletManager.Bullet);
+        var request = new CreateBulletToClient(IdNet, transform.position, transform.eulerAngles, Bullet);
         var message = new OutgoingMessage(request);
 
         Server.Send(message, address);

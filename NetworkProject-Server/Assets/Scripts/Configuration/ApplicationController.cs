@@ -7,20 +7,22 @@ using NetworkProject;
 using NetworkProject.Items;
 using NetworkProject.Monsters;
 using NetworkProject.Spells;
+using NetworkProject.Buffs;
 
 [System.CLSCompliant(false)]
 public class ApplicationController : MonoBehaviour
 {
-    private static List<Vision> _visions = new List<Vision>();
-    private static List<NetObject> _netObjects = new List<NetObject>();
-
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
 
-        SpellRepository.Set(Standard.IoC.GetSpellRepository());
-        ItemRepository.LoadItemsFromResources();
-        MonsterRepository.LoadMonstersFromResources();
+        var spellRepository = Standard.IoC.GetSpellRepository();
+        spellRepository.SetSpellsFromResources();
+        SpellRepository.Set(spellRepository);
+
+        ItemRepository.SetItemsFromResource(Standard.Settings.PATH_TO_ITEMS_IN_RESOURCE);
+        MonsterRepository.SetMonstersFromResource(Standard.Settings.PATH_TO_MONSTER_IN_RESOURCE);
+        BuffRepository.LoadAndSetFromResources(Standard.Settings.PATH_TO_BUFFS_IN_RESOURCES);
 
         Application.LoadLevelAdditive("Map1");
     }
@@ -28,16 +30,6 @@ public class ApplicationController : MonoBehaviour
     void LateUpdate()
     {
         UpdateVisionsAndRestetNetObjectsMessages();
-    }
-
-    public static void AddVision(Vision vision)
-    {
-        _visions.Add(vision);   
-    }
-
-    public static void AddNetObject(NetObject netObject)
-    {
-        _netObjects.Add(netObject);
     }
 
     private void UpdateVisionsAndRestetNetObjectsMessages()
@@ -49,7 +41,9 @@ public class ApplicationController : MonoBehaviour
 
     private void UpdateVisions()
     {
-        foreach (Vision vision in _visions)
+        Vision[] visions = GameObject.FindObjectsOfType<Vision>();
+
+        foreach (Vision vision in visions)
         {
             vision.UpdateInApplicationController();
         }
@@ -57,7 +51,9 @@ public class ApplicationController : MonoBehaviour
 
     private void ResetNetObjectsMessages()
     {
-        foreach (NetObject netObject in _netObjects)
+        NetObject[] netObjects = GameObject.FindObjectsOfType<NetObject>();
+
+        foreach (NetObject netObject in netObjects)
         {
             netObject.ResetMessages();
         }

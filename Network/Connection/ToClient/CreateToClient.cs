@@ -10,7 +10,8 @@ namespace NetworkProject.Connection.ToClient
     public abstract class CreateToClient : INetworkRequestToClient
     {
         public int IdNet { get; set; }
-        public Vector3 Position { get; set; }
+        public bool IsModelVisible { get; set; }
+        public Vector3Serializable Position { get; set; }
         public virtual float Rotation { get; set; }
     }
 }

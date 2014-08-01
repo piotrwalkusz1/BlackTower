@@ -29,13 +29,7 @@ namespace NetworkProject.Items
         public int IdTexture { get; set; }
         public int IdPrefabOnScene { get; set; }
 
-        public ItemData _itemData;
-
-        //Xml serialization require this constructor
-        public VisualItemData()
-        {
-
-        }
+        protected ItemData _itemData;
 
         public VisualItemData(ItemData itemData)
         {

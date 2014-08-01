@@ -9,12 +9,12 @@ namespace NetworkProject.Connection.ToClient
     public class UpdateAllStatsToClient : INetworkRequestToClient
     {
         public int IdNet { get; set; }
-        public IStats Stats { get; set; }
+        public StatsPackage Stats { get; set; }
 
         public UpdateAllStatsToClient(int idNet, IStats stats)
         {
             IdNet = idNet;
-            Stats = (IStats)Properter.GetProperter(stats);
+            Stats = StatsPackage.GetStatsPackage(stats);
         }
     }
 }

@@ -90,10 +90,10 @@ public class ItemInCharacterWindow : GUIObject
 
     public bool CanBeEquipedByPlayer(Item item)
     {
-        EquipableItemData itemData = (EquipableItemData)ItemRepository.GetItemByIdItem(item.IdItem);
+        var itemData = (IEquipableItemManager)ItemRepository.GetItemByIdItem(item.IdItem);
         PlayerStats stats = _characterWindow.GetPlayerStats();
 
-        return item.CanEquipe(stats) && DoesBodyPartMatchToItem(itemData);
+        return item.CanEquipe(stats) && DoesBodyPartMatchToItem(itemData.GetEquipableItemData());
     }
 
     public int GetSlot()
@@ -132,10 +132,10 @@ public class ItemInCharacterWindow : GUIObject
 
     private bool IsEmpty()
     {
-        return _characterWindow.PlayerEquipement.IsEmptyBagSlot(GetSlot());
+        return _characterWindow.PlayerEquipement.IsEmptyEquipedSlot(GetSlot());
     }
 
-    private bool DoesBodyPartMatchToItem(ItemData itemData)
+    private bool DoesBodyPartMatchToItem(EquipableItemData itemData)
     {
         return IoC.GetBodyPart(GetSlot()).CanEquipeItemOnThisBodyPart(itemData);
     }

@@ -8,5 +8,7 @@ namespace NetworkProject.Spells
     public interface ISpellRepository
     {
         SpellData GetSpell(int idSpell);
+
+        void SetSpellsFromResources();
     }
 }

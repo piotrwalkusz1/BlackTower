@@ -6,9 +6,10 @@ using NetworkProject.Requirements;
 
 namespace NetworkProject.Spells
 {
+    [Serializable]
     public class SpellData
     {
-        public int IdSpell { get; private set; }
+        public int IdSpell { get; set; }
 
         public float Cooldown { get; set; }
 
@@ -22,7 +23,19 @@ namespace NetworkProject.Spells
         public SpellData(int idSpell, ISpellCasterRequirement[] requirements)
             : this(idSpell)
         {
-            _requirements.AddRange(requirements);
+            _requirements = new List<ISpellCasterRequirement>(requirements);
+        }
+
+        public SpellData(int idSpell, ISpellCasterRequirement[] requirements, float cooldown)
+            : this(idSpell, requirements)
+        {
+            Cooldown = cooldown;
+        }
+
+        public SpellData(SpellData spellData)
+            : this(spellData.IdSpell, spellData.GetRequirements(), spellData.Cooldown)
+        {
+
         }
 
         public void AddRequirement(ISpellCasterRequirement requirement)
@@ -40,7 +53,7 @@ namespace NetworkProject.Spells
             foreach (IRequirement requirement in _requirements)
             {
                 if (!requirement.IsRequirementSatisfy(stats))
-                {
+                {                  
                     return false;
                 }
             }

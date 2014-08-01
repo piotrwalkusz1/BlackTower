@@ -14,19 +14,19 @@ namespace UnitTest
             Derived target = new Derived();
             source.Number = 12.7f;
 
-            Copier.CopyProperties(source, target);
+            Copier.CopyAllSourceProperties(source, target);
 
             Assert.AreEqual(source.Number, target.Number);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException), "Source has more properties than target")]
+        [ExpectedException(typeof(ArgumentException))]
         public void CopyProperties_sourceIsDerivedTergetIsBase()
         {
             Derived source = new Derived();
             Base target = new Base();
 
-            Copier.CopyProperties(source, target);
+            Copier.CopyAllSourceProperties(source, target);
 
         }
     }

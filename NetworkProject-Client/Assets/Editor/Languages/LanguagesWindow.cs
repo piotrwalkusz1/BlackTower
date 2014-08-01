@@ -15,6 +15,7 @@ namespace EditorExtension
 
         private static bool _isActivePhrasesList;
         private static List<PhrasesCategoryWindow> _phrasesCategories;
+        private static Vector2 _scrollPosition;
 
         [MenuItem("Extension/Languages")]
         static void ShowWindow()
@@ -43,18 +44,35 @@ namespace EditorExtension
 
         private void OnGUI()
         {
-            if(_isActivePhrasesList = EditorGUILayout.Foldout(_isActivePhrasesList, "Phrases list"))
+            try
             {
-                _phrasesCategories.ForEach(x => x.Draw());
+                _scrollPosition = GUILayout.BeginScrollView(_scrollPosition);
+
+                if (_isActivePhrasesList = EditorGUILayout.Foldout(_isActivePhrasesList, "Phrases list"))
+                {
+                    _phrasesCategories.ForEach(x => x.Draw());
+                }
+
+                LanguagesList.ForEach(x => x.Draw());
+
+                UpdateLanguages();
+
+                ShowSave();
+
+                ShowContextMenu();
+
+                GUILayout.EndScrollView();
             }
+            catch (NullReferenceException ex)
+            {
+                Start();
 
-            LanguagesList.ForEach(x => x.Draw());
-
-            UpdateLanguages();
-
-            ShowSave();
-
-            ShowContextMenu();
+                MonoBehaviour.print(ex.ToString() + '\n' + ex.StackTrace);
+            }
+            catch (Exception ex)
+            {
+                MonoBehaviour.print(ex.ToString() + '\n' + ex.StackTrace);
+            }
         }
 
         private void ShowSave()
@@ -87,8 +105,12 @@ namespace EditorExtension
             {
                 var menu = new GenericMenu();
 
-                menu.AddItem(new GUIContent("Add item name"), false, delegate() { Phrases.Phrases.Add(Languages.ITEM_NAME); UpdateLanguages(); });
-                menu.AddItem(new GUIContent("Add language"), false, () => LanguagesList.Add(new LanguageWindow(new Language(new Dictionary<string,string>()))));
+                menu.AddItem(new GUIContent("Add phrase"), false, delegate() { AddPhraseAndUpdateLanguages(""); });
+                menu.AddItem(new GUIContent("Add item name"), false, delegate() { AddPhraseAndUpdateLanguages(Languages.ITEM_NAME); });
+                menu.AddItem(new GUIContent("Add spell name"), false, delegate() { AddPhraseAndUpdateLanguages(Languages.SPELL_NAME); });
+                menu.AddItem(new GUIContent("Add spell description"), false, delegate() { AddPhraseAndUpdateLanguages(Languages.SPELL_DESCRIPTION); });
+                menu.AddItem(new GUIContent("Add monster name"), false, delegate() { AddPhraseAndUpdateLanguages(Languages.MONSTER_NAME); });
+                menu.AddItem(new GUIContent("Add language"), false, () => LanguagesList.Add(new LanguageWindow(new Language())));
 
                 menu.ShowAsContext();
 
@@ -96,11 +118,34 @@ namespace EditorExtension
             }
         }
 
+
+
+        private void AddPhraseAndUpdateLanguages(string phrasePrefix)
+        {
+            AddPharse(phrasePrefix);
+
+            UpdateLanguages();
+        }
+
+        private void AddPharse(string prefix)
+        {
+            for (int i = 0; ; i++)
+            {
+                string newPhrase = prefix + i.ToString();
+
+                if(!Phrases.IsContain(newPhrase))
+                {
+                    Phrases.Add(newPhrase);
+                    break;
+                }
+            }
+        }
+
         private void UpdateLanguages()
         {
             foreach (var language in LanguagesList)
             {
-                language.UpdatePhrases();
+                language.Language.UpdatePhrases(Phrases.AllPhrases.ToArray());
             }
         }
     }

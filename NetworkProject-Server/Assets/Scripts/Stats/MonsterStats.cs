@@ -2,9 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using NetworkProject;
+using NetworkProject.Connection;
 
 [System.CLSCompliant(false)]
-public class MonsterStats : MonoBehaviour, IMonsterStats
+public abstract class MonsterStats : Stats, IMonsterStats
 {
     public virtual int HP
     {
@@ -30,9 +31,21 @@ public class MonsterStats : MonoBehaviour, IMonsterStats
         }
     }
 
-    public virtual float MovementSpeed { get; set; }
+    public virtual int MinDmg
+    {
+        get { return GetComponent<MonsterCombat>().MinDmg; }
+        set { GetComponent<MonsterCombat>().MinDmg = value; }
+    }
 
-    public virtual float AttackSpeed
+    public virtual int MaxDmg
+    {
+        get { return GetComponent<MonsterCombat>().MaxDmg; }
+        set { GetComponent<MonsterCombat>().MaxDmg = value; }
+    }
+
+    public abstract float MovementSpeed { get; set; }
+
+    public virtual int AttackSpeed
     {
         get
         {

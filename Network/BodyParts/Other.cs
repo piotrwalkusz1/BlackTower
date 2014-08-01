@@ -7,9 +7,10 @@ using NetworkProject.Items;
 
 namespace NetworkProject.BodyParts
 {
+    [Serializable]
     public class Other : BodyPart
     {
-        public override bool CanEquipeItemOnThisBodyPart(ItemData item)
+        public override bool CanEquipeItemOnThisBodyPart(EquipableItemData item)
         {
             return item is AdditionData;
         }

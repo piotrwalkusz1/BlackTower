@@ -58,7 +58,7 @@ public static class SceneBuilder
 
     public static void CreateBullet(CreateBulletToClient bullet)
     {
-        GameObject bulletGameObject = GameObject.Instantiate(Prefabs.Bullet, bullet.Position, Quaternion.Euler(bullet.FullRotation)) as GameObject;
+        GameObject bulletGameObject = bullet.Bullet.CreateInstantiate(bullet.Position, Quaternion.Euler(bullet.FullRotation));
 
         var netBullet = bulletGameObject.GetComponent<NetBullet>();
         netBullet.IdNet = bullet.IdNet;
@@ -73,7 +73,7 @@ public static class SceneBuilder
         monsterGO.GetComponent<NetObject>().IdNet = monster.IdNet;
 
         MonsterStats stats = monsterGO.GetComponent<MonsterStats>();
-        stats.Set(monster.MonsterStats);
+        monster.MonsterStats.CopyToStats(stats);
     }
 
     public static void CreateItem(CreateItemToClient item)
@@ -83,7 +83,7 @@ public static class SceneBuilder
         GameObject itemGO = GameObject.Instantiate(prefab, item.Position, Quaternion.identity) as GameObject;
 
         NetItem netItem = itemGO.GetComponent<NetItem>();
-        netItem.IdNet = item.IdItem;
+        netItem.IdNet = item.IdNet;
         netItem.IdItem = item.IdItem;
     }
 

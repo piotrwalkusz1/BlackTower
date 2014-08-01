@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NetworkProject.Benefits;
+using NetworkProject.Requirements;
 
 namespace NetworkProject.Items
 {
     [Serializable]
-    public class VisualEquipableItemData : VisualItemData
+    public class VisualEquipableItemData : VisualItemData, IEquipableItemManager
     {
         public override ItemData ItemData
         {
@@ -19,27 +21,25 @@ namespace NetworkProject.Items
         {
             get
             {
-                return _itemData;
+                return (EquipableItemData)_itemData;
             }
         }
         public int IdPrefabOnPlayer { get; set; }
 
-        private EquipableItemData _itemData;
-
-        //Xml serialization require this constructor
-        public VisualEquipableItemData()
-        {
-
-        }
-
         public VisualEquipableItemData(EquipableItemData itemData)
+            : base(itemData)
         {
-            _itemData = itemData;
+
         }
 
-        public static explicit operator EquipableItemData(VisualEquipableItemData item)
+        public static implicit operator EquipableItemData(VisualEquipableItemData item)
         {
             return item.EquipableItemData;
+        }
+
+        public EquipableItemData GetEquipableItemData()
+        {
+            return EquipableItemData;
         }
     }
 }

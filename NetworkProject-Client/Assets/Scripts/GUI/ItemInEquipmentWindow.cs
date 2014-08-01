@@ -97,10 +97,10 @@ public class ItemInEquipmentWindow : GUIObject
     public bool CanBeEquipedByPlayer(int bodyPart)
     {
         Item item = GetItem();
-        ItemData itemData = ItemRepository.GetItemByIdItem(item.IdItem);
+        var itemData = (IEquipableItemManager)ItemRepository.GetItemByIdItem(item.IdItem);
         IEquipableStats stats = _equipmentWindow.GetPlayerStats();
 
-        return item.CanEquipe(stats) && DoesBodyPartMatchToItem(itemData, bodyPart);
+        return item.CanEquipe(stats) && DoesBodyPartMatchToItem(itemData.GetEquipableItemData(), bodyPart);
     }
 
     public Item GetItem()
@@ -130,7 +130,7 @@ public class ItemInEquipmentWindow : GUIObject
         }
     }
 
-    private bool DoesBodyPartMatchToItem(ItemData itemData, int bodyPart)
+    private bool DoesBodyPartMatchToItem(EquipableItemData itemData, int bodyPart)
     {
         return IoC.GetBodyPart(bodyPart).CanEquipeItemOnThisBodyPart(itemData);
     }

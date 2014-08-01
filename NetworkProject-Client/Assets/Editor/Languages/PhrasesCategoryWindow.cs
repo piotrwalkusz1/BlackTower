@@ -20,6 +20,8 @@ namespace EditorExtension
 
         public void Draw()
         {
+            Indentation.BeginIndentation();
+
             if (_isActive = EditorGUILayout.Foldout(_isActive, PharsesCategory.Name))
             {
                 Indentation.BeginIndentation();
@@ -31,6 +33,8 @@ namespace EditorExtension
 
                 Indentation.EndIndentation();
             }
+
+            Indentation.EndIndentation();
         }
     }
 }

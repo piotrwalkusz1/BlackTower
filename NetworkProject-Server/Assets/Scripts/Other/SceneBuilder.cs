@@ -27,12 +27,12 @@ public static class SceneBuilder
     {
         GameObject instantiate = bulletInfo.Bullet.CreateInstantiate(bulletInfo.Position, bulletInfo.Rotation);
 
-        Damage damage = instantiate.GetComponent<Damage>();
+        DamageBullet damage = instantiate.GetComponent<DamageBullet>();
         damage._attackInfo = bulletInfo.AttackInfo;
-        damage._attacker = attacker;
 
         NetBullet netBullet = instantiate.GetComponent<NetBullet>();
         netBullet.IdNet = GetNextIdNet();
+        netBullet.Bullet = bulletInfo.Bullet;
 
         GameObject.Destroy(instantiate, bulletInfo.LiveTime);
 
@@ -45,15 +45,16 @@ public static class SceneBuilder
 
         instantiate = GameObject.Instantiate(instantiate, position, Quaternion.Euler(0, rotation, 0)) as GameObject;
 
-        Monster monsterInfo = MonsterRepository.GetMonster(idMonster);
+        MonsterFullData monsterInfo = (MonsterFullData)MonsterRepository.GetMonster(idMonster);
 
         NetMonster netMonster = instantiate.GetComponent<NetMonster>();
         netMonster.IdNet = GetNextIdNet();
 
         MonsterStats stats = instantiate.GetComponent<MonsterStats>();
-        stats.MaxHP = monsterInfo._maxHp;
-        stats.HP = monsterInfo._maxHp;
-        stats.MovementSpeed = monsterInfo._movingSpeed;
+
+        monsterInfo.Stats.CopyToStats(stats);
+
+        stats.HP = stats.MaxHP;
 
         return instantiate;
     }
@@ -87,6 +88,13 @@ public static class SceneBuilder
         var request = new RespawnToClient(respawnedPlayer.IdNet, respawn.transform.position);
 
         respawnedPlayer.GetComponent<PlayerHealthSystem>().RecuperateAndSendHPUpdate();
+
+
+        NetPlayer netPlayer = respawnedPlayer.GetComponent<NetPlayer>();
+
+        netPlayer.SendRespawnMessage();
+
+        netPlayer.SendRespawnMessageToOwner();
     }
 
     public static void DeletePlayer(OnlineCharacter onlineCharacter)

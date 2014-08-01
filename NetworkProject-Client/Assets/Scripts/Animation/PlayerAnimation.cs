@@ -22,7 +22,7 @@ public class PlayerAnimation : AnimationManager, ICombatAnimation
 
     public void Attack()
     {
-        StartCoroutine(Attack1AnimationStartCoroutine());
+        StartCoroutine(AttackAnimationStartCoroutine());
 
         RightHandLayerStart(DateTime.UtcNow.AddSeconds(_attackAnimationLength));
     }
@@ -52,13 +52,13 @@ public class PlayerAnimation : AnimationManager, ICombatAnimation
         }
     }
 
-    protected IEnumerator Attack1AnimationStartCoroutine()
+    protected IEnumerator AttackAnimationStartCoroutine()
     {
-        _animator.SetBool("Attack1", true);
+        _animator.SetBool("Attack", true);
 
         yield return null;
 
-        _animator.SetBool("Attack1", false);
+        _animator.SetBool("Attack", false);
 
     }
 

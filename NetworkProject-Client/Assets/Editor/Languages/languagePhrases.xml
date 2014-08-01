@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="windows-1250"?>
 <LanguagePhrases xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Phrases>
+  <AllPhrases>
     <string>itemName1</string>
-  </Phrases>
+    <string>spellName1</string>
+    <string>spellDescription1</string>
+    <string>spellName2</string>
+    <string>spellDescription2</string>
+    <string>spellDescription3</string>
+    <string>spellName3</string>
+    <string>spellName4</string>
+    <string>spellName5</string>
+    <string>spellDescription4</string>
+    <string>itemName2</string>
+    <string>itemName3</string>
+    <string>hp</string>
+    <string>mp</string>
+    <string>defense</string>
+    <string>power</string>
+    <string>cooldown reduction</string>
+    <string>hp regeneration</string>
+    <string>mp regeneration</string>
+    <string>attack speed</string>
+    <string>movement speed</string>
+    <string>monsterName0</string>
+  </AllPhrases>
 </LanguagePhrases>

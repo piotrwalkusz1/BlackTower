@@ -47,12 +47,13 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\AI\JumperAI.cs" />
+     <Compile Include="Assets\Scripts\Buffs\BuffServer.cs" />
+     <Compile Include="Assets\Scripts\Buffs\IBuffableServer.cs" />
+     <Compile Include="Assets\Scripts\Buffs\PlayerBuff.cs" />
      <Compile Include="Assets\Scripts\Configuration\ApplicationController.cs" />
-     <Compile Include="Assets\Scripts\Configuration\Prefabs.cs" />
      <Compile Include="Assets\Scripts\HealthSystem\DamageType.cs" />
      <Compile Include="Assets\Scripts\HealthSystem\HealthSystem.cs" />
      <Compile Include="Assets\Scripts\HealthSystem\PlayerHealthSystem.cs" />
-     <Compile Include="Assets\Scripts\Items\Equipment.cs" />
      <Compile Include="Assets\Scripts\Items\ItemExtension.cs" />
      <Compile Include="Assets\Scripts\MonoBehaviour\Vision.cs" />
      <Compile Include="Assets\Scripts\Monsters\Drop.cs" />
@@ -75,24 +76,31 @@
      <Compile Include="Assets\Scripts\NetObject\NetVisualObject.cs" />
      <Compile Include="Assets\Scripts\Other\AttackInfo.cs" />
      <Compile Include="Assets\Scripts\Other\Attacker.cs" />
+     <Compile Include="Assets\Scripts\Other\BuffActionRepository.cs" />
      <Compile Include="Assets\Scripts\Other\BulletInfo.cs" />
-     <Compile Include="Assets\Scripts\Other\BulletManager.cs" />
      <Compile Include="Assets\Scripts\Other\Combat.cs" />
-     <Compile Include="Assets\Scripts\Other\Damage.cs" />
+     <Compile Include="Assets\Scripts\Other\DamageBullet.cs" />
+     <Compile Include="Assets\Scripts\Other\DamageSphere.cs" />
      <Compile Include="Assets\Scripts\Other\Experience.cs" />
      <Compile Include="Assets\Scripts\Other\GameObjectRepository.cs" />
      <Compile Include="Assets\Scripts\Other\GameObjectRepositoryByFind.cs" />
      <Compile Include="Assets\Scripts\Other\IAttacker.cs" />
+     <Compile Include="Assets\Scripts\Other\IEquipmentManager.cs" />
      <Compile Include="Assets\Scripts\Other\IGameObjectRepository.cs" />
      <Compile Include="Assets\Scripts\Other\IoC.cs" />
+     <Compile Include="Assets\Scripts\Other\KillInfo.cs" />
+     <Compile Include="Assets\Scripts\Other\MonsterKillInfo.cs" />
+     <Compile Include="Assets\Scripts\Other\Prefabs.cs" />
      <Compile Include="Assets\Scripts\Other\SceneBuilder.cs" />
      <Compile Include="Assets\Scripts\Other\Settings.cs" />
+     <Compile Include="Assets\Scripts\Other\SpellActionRepository.cs" />
      <Compile Include="Assets\Scripts\Other\StaticRepository.cs" />
      <Compile Include="Assets\Scripts\Other\TextRepository.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerCombat.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerEquipment.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerExperience.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerRespawn.cs" />
+     <Compile Include="Assets\Scripts\Quest\KillQuestTargetSystem.cs" />
      <Compile Include="Assets\Scripts\Server\AccountRepository.cs" />
      <Compile Include="Assets\Scripts\Server\AccountRepositoryException.cs" />
      <Compile Include="Assets\Scripts\Server\AccountRepositoryExceptionCode.cs" />
@@ -108,24 +116,22 @@
      <Compile Include="Assets\Scripts\Server\Server.cs" />
      <Compile Include="Assets\Scripts\Server\ServerConfig.cs" />
      <Compile Include="Assets\Scripts\Server\ServerController.cs" />
-     <Compile Include="Assets\Scripts\Spells\ISpellCaster.cs" />
      <Compile Include="Assets\Scripts\Spells\SpellCaster.cs" />
      <Compile Include="Assets\Scripts\Spells\SpellRepositoryServer.cs" />
      <Compile Include="Assets\Scripts\Stats\MonsterStats.cs" />
      <Compile Include="Assets\Scripts\Stats\PlayerStats.cs" />
      <Compile Include="Assets\Scripts\Stats\SpellCasterStats.cs" />
+     <Compile Include="Assets\Scripts\Stats\Stats.cs" />
      <Compile Include="Assets\Test\Test.cs" />
-     <None Include="Assets\Resources\spells.xml" />
-     <None Include="Assets\Resources\monsters.xml" />
-     <None Include="Assets\Resources\items.xml" />
+     <None Include="Assets\Resources\buffs.txt" />
+     <None Include="Assets\Resources\monsters.txt" />
+     <None Include="Assets\Resources\items.txt" />
+     <None Include="Assets\Resources\spells.txt" />
  <Reference Include="Lidgren.Network">
  <HintPath>C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Server/Assets/Plugins/Lidgren.Network.dll</HintPath>
  </Reference>
  <Reference Include="NetworkProject">
  <HintPath>C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Server/Assets/Plugins/NetworkProject.dll</HintPath>
- </Reference>
- <Reference Include="SpellActions">
- <HintPath>C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Server/Assets/Plugins/SpellActions.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

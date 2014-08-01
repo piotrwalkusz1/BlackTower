@@ -4,15 +4,28 @@ using NetworkProject;
 using NetworkProject.BodyParts;
 using NetworkProject.Items;
 using NetworkProject.Connection;
+using NetworkProject.Connection.ToClient;
 
-[System.CLSCompliant(false)]
-public class PlayerEquipment : Equipment
+public class PlayerEquipment : MonoBehaviour, IEquipmentManager
 {
     private PlayerEquipedItems _equipedItems = new PlayerEquipedItems();
 
-    public EquipedItems GetEquipedItems()
+    private Equipment _equipment = new Equipment(NetworkProject.Settings.widthEquipment * NetworkProject.Settings.heightEquipment);
+
+    public void Set(Equipment equipment, PlayerEquipedItems equipedItems)
+    {
+        _equipment = equipment;
+        _equipedItems = equipedItems;
+    }
+
+    public PlayerEquipedItems GetEquipedItems()
     {
         return _equipedItems;
+    }
+
+    public Equipment GetEquipment()
+    {
+        return _equipment;
     }
 
     public Item GetEquipedItem(int slot)
@@ -20,19 +33,49 @@ public class PlayerEquipment : Equipment
         return _equipedItems.GetEquipedItem(slot);
     }
 
-    public bool IsEmptySlot(int bodyPart)
+    public Item GetItemInEquipment(int slot)
+    {
+        return _equipment.GetItemBySlot(slot);
+    }
+
+    public bool IsEmptySlotOnBody(int bodyPart)
     {
         return _equipedItems.IsEmptySlot(bodyPart);
+    }
+
+    public bool IsEmptySlotInEquipment(int slot)
+    {
+        return _equipment.IsThisPlaceFree(slot);
+    }
+
+    public bool IsAnyEmptySlotInEquipment()
+    {
+        return _equipment.IsFreePlace();
+    }
+
+    public int AddItem(Item item)
+    {
+        return _equipment.AddItem(item);
+    }
+
+    public void AddItemAndSendUpdate(Item item)
+    {
+        int slot = AddItem(item);
+
+        var netPlayer = GetComponent<NetPlayer>();
+
+        SendUpdateSlot(slot, netPlayer.OwnerAddress);
     }
 
     public bool CanEquipeItem(Item item, int slot)
     {
         if (item == null)
         {
-            return true; // puste pole zawsze możne "założyć", inaczej jest to ściągnięcie itemu    
+            return true; // puste pole zawsze możne "założyć", innymi słowy jest to ściągnięcie itemu    
         }
 
-        EquipableItemData itemData = (EquipableItemData)ItemRepository.GetItemByIdItem(item.IdItem);
+        IEquipableItemManager itemDataManager = (IEquipableItemManager)ItemRepository.GetItemByIdItem(item.IdItem);
+        EquipableItemData itemData = itemDataManager.GetEquipableItemData();
         BodyPart bodyPart = IoC.GetBodyPart(slot);
 
         return itemData.CanEquipe(GetComponent<PlayerStats>()) && bodyPart.CanEquipeItemOnThisBodyPart(itemData);
@@ -45,18 +88,18 @@ public class PlayerEquipment : Equipment
 
     public bool CanEquipeItemInEquipmentOnThisBodyPart(int equipmentSlot, int bodyPartSlot)
     {
-        Item itemInEquipment = GetItemBySlot(equipmentSlot);
+        Item itemInEquipment = _equipment.GetItemBySlot(equipmentSlot);
 
         return CanEquipeItem(itemInEquipment, bodyPartSlot);
     }
 
     public void EquipeItemInEquipmentOnThisBodyPart(int equipmentSlot, int bodyPartSlot)
     {
-        Item itemInEquipment = GetItemBySlot(equipmentSlot);
+        Item itemInEquipment = _equipment.GetItemBySlot(equipmentSlot);
         Item equipedItem = GetEquipedItem(bodyPartSlot);
 
         EquipeItem(itemInEquipment, bodyPartSlot);
-        SetSlot(equipedItem, equipmentSlot);
+        _equipment.SetSlot(equipedItem, equipmentSlot);
     }
 
     public bool TryEquipeItemInEquipmentOnThisBodyPart(int equipmentSlot, int bodyPartSlot)
@@ -102,7 +145,7 @@ public class PlayerEquipment : Equipment
         }
     }
 
-    public override void ApplyToStats(IEquipableStats stats)
+    public void ApplyToStats(IEquipableStats stats)
     {
         _equipedItems.ApplyToStats(stats);
     }
@@ -110,5 +153,14 @@ public class PlayerEquipment : Equipment
     public bool IsEquipedWeapon()
     {
         return _equipedItems.IsEquipedWeapon();
+    }
+
+    public void SendUpdateSlot(int slot, IConnectionMember address)
+    {
+        var netObject = GetComponent<NetObject>();
+
+        var request = new UpdateItemInEquipmentToClient(netObject.IdNet, slot, GetItemInEquipment(slot));
+
+        Server.SendRequestAsMessage(request, address);
     }
 }

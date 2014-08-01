@@ -46,6 +46,10 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Editor\Buffs\BuffMultiData.cs" />
+     <Compile Include="Assets\Editor\Buffs\BuffWindow.cs" />
+     <Compile Include="Assets\Editor\Buffs\BuffsWindow.cs" />
+     <Compile Include="Assets\Editor\EditorSaveLoad.cs" />
      <Compile Include="Assets\Editor\Inputs\AxisInputsWindow.cs" />
      <Compile Include="Assets\Editor\Inputs\ButtonInputsWindow.cs" />
      <Compile Include="Assets\Editor\Inputs\Extension\Dictionary.cs" />
@@ -66,11 +70,21 @@
      <Compile Include="Assets\Editor\Languages\LanguageWindow.cs" />
      <Compile Include="Assets\Editor\Languages\LanguagesWindow.cs" />
      <Compile Include="Assets\Editor\Languages\PhrasesCategoryWindow.cs" />
+     <Compile Include="Assets\Editor\Monsters\MonsterMultiData.cs" />
+     <Compile Include="Assets\Editor\Monsters\MonsterWindow.cs" />
+     <Compile Include="Assets\Editor\Monsters\MonstersWindow.cs" />
      <Compile Include="Assets\Editor\Settings\SettingsEditor.cs" />
+     <Compile Include="Assets\Editor\Spells\SpellWindow.cs" />
+     <Compile Include="Assets\Editor\Spells\SpellsWindow.cs" />
      <Compile Include="Assets\Editor\Utility\Indentation.cs" />
+     <None Include="Assets\Resources\spells.txt" />
      <None Include="Assets\Resources\defaultSettings.xml" />
+     <None Include="Assets\Resources\buffs.txt" />
+     <None Include="Assets\Standard Assets\Skyboxes\_skybox info.txt" />
      <None Include="Assets\Resources\Language-Polski.xml" />
      <None Include="Assets\Editor\Languages\languagePhrases.xml" />
+     <None Include="Assets\Resources\monsters.txt" />
+     <None Include="Assets\Standard Assets\Water (Basic)\Sources\Shaders\FX-Water Simple.shader" />
      <None Include="Assets\Resources\items.txt" />
      <None Include="Assets\Resources\defaultInputs.txt" />
  <Reference Include="Lidgren.Network">
@@ -78,9 +92,6 @@
  </Reference>
  <Reference Include="NetworkProject">
  <HintPath>C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Client/Assets/Plugins/NetworkProject.dll</HintPath>
- </Reference>
- <Reference Include="SpellActions">
- <HintPath>C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Client/Assets/Plugins/SpellActions.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>D:/Programy/Unity/Data/Managed/UnityEditor.Graphs.dll</HintPath>

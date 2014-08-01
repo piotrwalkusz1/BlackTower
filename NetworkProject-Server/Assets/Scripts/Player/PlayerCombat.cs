@@ -9,12 +9,13 @@ using NetworkProject.Connection.ToServer;
 [System.CLSCompliant(false)]
 public class PlayerCombat : Combat
 {
-    public float AttackSpeed { get; set; }
+    public int AttackSpeed { get; set; }
     public int MinDmg { get; set; }
-    public int MaxDmg { get; set; }
-    public Transform BulletRespawn { get; set; }
+    public int MaxDmg { get; set; }  
     public float BulletSpeed { get; set; }
     public float BulletLifeTime { get; set; }
+
+    public Transform _bulletRespawn;
 
     private Func<Bullet> _createBulletFunction;
 
@@ -24,6 +25,9 @@ public class PlayerCombat : Combat
         {
             return new NormalBullet(BulletSpeed);
         };
+
+        BulletLifeTime = 5f;
+        BulletSpeed = 5f;
     }
     
     public void Attack(AttackToServer attack)
@@ -38,7 +42,7 @@ public class PlayerCombat : Combat
             bulletInfo.Bullet = _createBulletFunction();
             bulletInfo.AttackInfo = attackInfo;
             bulletInfo.LiveTime = BulletLifeTime;
-            bulletInfo.Position = BulletRespawn.position;
+            bulletInfo.Position = _bulletRespawn.position;
             bulletInfo.Rotation = Quaternion.LookRotation(attack.Direction);
 
             SceneBuilder.CreateBullet(bulletInfo, gameObject);

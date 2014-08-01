@@ -7,19 +7,19 @@ using UnityEngine;
 
 public class MonsterAnimation : AnimationManager, ICombatAnimation
 {
-    private Animator _animator;
+    protected Animator _animator;
 
     void Awake()
     {
         _animator = GetComponent<Animator>();
     }
 
-    public void Attack()
+    public virtual void Attack()
     {
         StartCoroutine(AttackCoroutine());
     }
 
-    IEnumerator AttackCoroutine()
+    protected IEnumerator AttackCoroutine()
     {
         _animator.SetBool("Attack", true);
 

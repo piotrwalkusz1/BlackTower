@@ -16,27 +16,31 @@ namespace Standard
         public static readonly string pathToLanguagesInApplication = Application.dataPath + "/Languages/";
         public static readonly string pathToLanguagePhrases = Application.dataPath + "/Editor/Languages/languagePhrases.xml";
         public static readonly string pathToItemsInResources = "items";
-        public static readonly string pathToItemsInUnity = Application.dataPath + "/Resources/items.txt";
+        public static readonly string pathToSpellsInResources = "spells";
+        public static readonly string pathToBuffsInResources = "buffs";
+        
+        public static readonly string pathToMonstersInResources = "monsters";
+        
         public static readonly float jumpAndFallSpeed = 2f;
         public static readonly float playerHalfHeight = 0.9f;
         public static readonly float playerDistanceToGround = 0.1f;
 
         public static Configuration UserConfiguration { get; private set; }
 
-        private static readonly string pathToSettingsSavableInResources = "defaultSettings";
+        private static readonly string pathToConfigurationInResources = "defaultSettings";
         private static readonly string pathToConfigurationInUnity = Application.dataPath + "/Resources/defaultSettings.xml";
-        private static readonly string pathToSettingsSavableInApplication = Application.dataPath + "/defaultSettings.xml";
+        private static readonly string pathToConfigurationInApplication = Application.dataPath + "/settings.xml";
 
         public static void SetSettings(Configuration settings)
         {
             UserConfiguration = settings;
         }
 
-        public static void SetSettingsFromFileOrResources(string path)
+        public static void SetSettingsFromFileOrResources()
         {
             try
             {
-                SetSettingsFromFile(path);
+                SetSettingsFromFile();
             }
             catch
             {
@@ -44,23 +48,23 @@ namespace Standard
             }
         }
 
-        public static void SetSettingsFromFile(string path)
+        public static void SetSettingsFromFile()
         {
-            string text = File.ReadAllText(path);
+            string text = File.ReadAllText(pathToConfigurationInApplication);
 
             SetConfigurationFromText(text);
         }
 
         public static void SetSettingsFromResources()
         {
-            TextAsset textAsset = Resources.Load<TextAsset>(pathToSettingsSavableInResources);
+            TextAsset textAsset = Resources.Load<TextAsset>(pathToConfigurationInResources);
 
             SetConfigurationFromText(textAsset.text);
         }
 
         public static Configuration LoadConfigurationFromResources()
         {
-            TextAsset textAsset = Resources.Load<TextAsset>(pathToSettingsSavableInResources);
+            TextAsset textAsset = Resources.Load<TextAsset>(pathToConfigurationInResources);
 
             if (textAsset == null)
             {

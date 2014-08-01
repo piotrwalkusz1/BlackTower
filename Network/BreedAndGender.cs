@@ -5,6 +5,7 @@ using System.Text;
 
 namespace NetworkProject
 {
+    [Serializable]
     public struct BreedAndGender
     {
         public int Breed

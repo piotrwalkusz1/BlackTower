@@ -16,6 +16,7 @@ namespace Standard
         public const string ITEM_NAME = "itemName";
         public const string SPELL_NAME = "spellName";
         public const string SPELL_DESCRIPTION = "spellDescription";
+        public const string MONSTER_NAME = "monsterName";
         public const string ERROR_TEXT = "errorText";
 
         private static Language _currentLanguage;
@@ -56,6 +57,11 @@ namespace Standard
         public static string GetSpellDescription(int idSpell)
         {
             return _currentLanguage.GetSpellDescription(idSpell);
+        }
+
+        public static string GetMonsterName(int idMonster)
+        {
+            return _currentLanguage.GetMonsterName(idMonster);
         }
 
         public static string GetErrorText(int idError)

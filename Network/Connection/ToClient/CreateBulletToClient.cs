@@ -21,7 +21,7 @@ namespace NetworkProject.Connection.ToClient
                 FullRotation = new Vector3(FullRotation.x, value, FullRotation.z);
             }
         }   
-        public Vector3 FullRotation { get; set; }
+        public Vector3Serializable FullRotation { get; set; }
         public Bullet Bullet { get; set; }
 
         public CreateBulletToClient(int idNet, Vector3 position, Vector3 rotation, Bullet bullet)

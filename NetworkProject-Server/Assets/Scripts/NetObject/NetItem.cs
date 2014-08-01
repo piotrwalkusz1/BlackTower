@@ -35,9 +35,9 @@ public class NetItem : NetObject
     {
         PlayerEquipment eq = player.GetComponent<PlayerEquipment>();
 
-        if (eq.IsFreePlace() && PlayerIsEnoughCloseToPick(player))
+        if (eq.IsAnyEmptySlotInEquipment() && PlayerIsEnoughCloseToPick(player))
         {
-            eq.AddItem(Item);
+            eq.AddItemAndSendUpdate(Item);
 
             Destroy(gameObject);
         }

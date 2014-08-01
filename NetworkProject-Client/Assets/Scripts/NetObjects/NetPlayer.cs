@@ -5,6 +5,11 @@ using NetworkProject;
 public class NetPlayer : NetNamedObject
 {
     public BreedAndGender BreedAndGender { get; set; }
+    public int TransformModel { get; set; }
+    public bool IsTransformed
+    {
+        get { return TransformModel == -1; }
+    }
 
     private Vector3 _positionInLastFrame;
     private bool _wasMovementInLastFrame;

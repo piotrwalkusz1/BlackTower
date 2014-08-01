@@ -3,23 +3,23 @@ using System.Collections;
 
 public class Health : MonoBehaviour
 {	
-	public int _hp;
-	public int _maxHp;
-    public float _hpRegeneration;
+	public virtual int HP { get; set; }
+    public virtual int MaxHP { get; set; }
+    public float HPRegeneration { get; set; }
 
     public void Awake()
     {
-        _maxHp = 1;
-        _hp = 1;
+        MaxHP = 1;
+        HP = 1;
     }
 
     public bool IsDead()
     {
-        return _hp <= 0;
+        return HP <= 0;
     }
 
     public virtual void Dead()
     {
-        _hp = 0;
+        HP = 0;
     }
 }

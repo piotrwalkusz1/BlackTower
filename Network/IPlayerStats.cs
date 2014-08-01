@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NetworkProject
 {
-    public interface IPlayerStats : IEquipableStats
+    public interface IPlayerStats : IEquipableStats, ISpellCasterStats
     {
         BreedAndGender BreedAndGender { get; }
         int HP { get; set; }

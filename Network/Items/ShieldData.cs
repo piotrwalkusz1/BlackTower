@@ -10,11 +10,6 @@ namespace NetworkProject.Items
     {
         public int _defense;
 
-        public ShieldData()
-        {
-
-        }
-
         public ShieldData(int idItem) : base(idItem)
         {
 

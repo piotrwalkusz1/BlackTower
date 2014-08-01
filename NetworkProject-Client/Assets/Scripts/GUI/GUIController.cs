@@ -125,7 +125,7 @@ public class GUIController : MonoBehaviour
         _equipmentWindow.gameObject.SetActive(false);
     }
 
-    static public void IsActiveEquipmentRefresh()
+    static public void IfActiveEquipmentRefresh()
     {
         if (IsEquipmentActive())
         {
@@ -155,7 +155,7 @@ public class GUIController : MonoBehaviour
         _characterWindow.gameObject.SetActive(false);
     }
 
-    static public void IsActiveCharacterGUIRefresh()
+    static public void IfActiveCharacterGUIRefresh()
     {
         if (IsCharacterGUIActive())
         {

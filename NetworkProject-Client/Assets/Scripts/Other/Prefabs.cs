@@ -12,7 +12,6 @@ public class Prefabs : MonoBehaviour
     
     public GameObject _playerOwner;
     public GameObject _playerOther;
-    public GameObject _bullet;
     public List<GameObject> _playerModels;
     public List<GameObject> _monsters;
     public List<GameObject> _items;
@@ -68,13 +67,6 @@ public class Prefabs : MonoBehaviour
         get
         {
             return _prefabs._playerOther;
-        }
-    }
-    public static GameObject Bullet
-    {
-        get
-        {
-            return _prefabs._bullet;
         }
     }
     public static List<GameObject> Monsters

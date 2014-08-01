@@ -17,8 +17,6 @@ public class Vision : MonoBehaviour
     void Awake()
     {
         Observers = new List<IConnectionMember>();
-
-        ApplicationController.AddVision(this);
     }
 
     void Start()

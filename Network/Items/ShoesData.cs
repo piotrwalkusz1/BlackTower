@@ -10,14 +10,10 @@ namespace NetworkProject.Items
     {
         public float _movementSpeed;
 
-        public ShoesData()
-        {
-
-        }
-
         public ShoesData(int idItem)
+            : base(idItem)
         {
-            IdItem = idItem;
+
         }
 
         protected override void ApplyItemStats(IEquipableStats stats)

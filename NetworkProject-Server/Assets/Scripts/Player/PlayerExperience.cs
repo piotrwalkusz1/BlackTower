@@ -2,15 +2,8 @@
 using System.Collections;
 using NetworkProject.Connection.ToClient;
 
-[System.CLSCompliant(false)]
 public class PlayerExperience : Experience
 {
-    public PlayerExperience(int lvl, int exp)
-    {
-        Lvl = lvl;
-        Exp = exp;
-    }
-
     public override int MaxExp
     {
         get

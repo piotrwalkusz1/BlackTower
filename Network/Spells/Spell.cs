@@ -30,12 +30,17 @@ namespace NetworkProject.Spells
             IdSpell = idSpell;
         }
 
+        public Spell(int idSpell, DateTime nextUseTime)
+        {
+            IdSpell = idSpell;
+            _nextUseTime = nextUseTime;
+        }
+
         public Spell(SpellData spellData)
         {
             IdSpell = spellData.IdSpell;
         }
 
-        [NonSerialized]
         protected DateTime _nextUseTime = DateTime.UtcNow;
 
         public DateTime GetNextUseTime()
@@ -46,6 +51,17 @@ namespace NetworkProject.Spells
         public bool CanUseSpell(ISpellCasterStats stats)
         {
             return DateTime.UtcNow > _nextUseTime && SpellData.CanCastSpell(stats);
+        }
+
+        public virtual void UseSpell(ISpellCaster caster, params ISpellCastOption[] options)
+        {
+            _nextUseTime = DateTime.UtcNow.AddSeconds(Cooldown);
+
+            var spellActionData = (SpellActionData)SpellData;
+
+            var spellAction = spellActionData.GetSpellAction();
+
+            spellAction(caster, options);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace Standard
 {
@@ -36,9 +37,9 @@ namespace Standard
                 {
                     return _dictionary[name];
                 }
-                catch (ArgumentException)
+                catch (KeyNotFoundException)
                 {
-                    return "";
+                    return "[" + name + "]";
                 }
             }
             set
@@ -47,11 +48,19 @@ namespace Standard
                 {
                     _dictionary[name] = value;
                 }
-                catch (ArgumentException)
+                catch (KeyNotFoundException)
                 {
                     _dictionary.Add(name, value);
                 }
             }
+        }
+
+        //xml serializer require 0-argumnet constructor
+        public Language()
+        {
+            Name = "Language-NewLanguage";
+
+            _dictionary = new Dictionary<string, string>();
         }
 
         public bool ContainPhrase(string phrase)
@@ -59,17 +68,14 @@ namespace Standard
             return _dictionary.ContainsKey(phrase);
         }
 
-        //xml serializer require 0-argumnet constructor
-        public Language()
+        public void DeletePhrase(string phrase)
         {
-            _dictionary = new Dictionary<string, string>();
+            _dictionary.Remove(phrase);
         }
 
-        
-
-        public string GetPhrase(string name)
+        public string GetPhrase(string phrase)
         {
-            return this[name];
+            return this[phrase];
         }
 
         public string GetItemName(int idItem)
@@ -90,6 +96,11 @@ namespace Standard
         public string GetSpellName(int idSpell)
         {
             return this[Languages.SPELL_NAME + idSpell.ToString()];
+        }
+
+        public string GetMonsterName(int idMonster)
+        {
+            return this[Languages.MONSTER_NAME + idMonster.ToString()];
         }
 
         public void SetPhrase(string phrase, string value)
@@ -115,6 +126,25 @@ namespace Standard
         public void SetSpellName(int idSpell, string value)
         {
             this[Languages.SPELL_NAME + idSpell.ToString()] = value;
+        }
+
+        public void UpdatePhrases(string[] phrases)
+        {
+            foreach (var phrase in phrases)
+            {
+                if (!ContainPhrase(phrase))
+                {
+                    SetPhrase(phrase, "");
+                }
+            }
+
+            foreach(var phrase in _dictionary.Keys.ToArray())
+            {
+                if(!phrases.Contains(phrase))
+                {
+                    DeletePhrase(phrase);
+                }
+            }
         }
     }
 }

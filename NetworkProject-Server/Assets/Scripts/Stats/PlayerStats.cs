@@ -7,7 +7,7 @@ using NetworkProject.Connection;
 using NetworkProject.Connection.ToClient;
 
 [Serializable]
-public class PlayerStats : MonoBehaviour, IPlayerStats
+public class PlayerStats : Stats, IPlayerStats
 {
     public virtual int Lvl
     {
@@ -50,7 +50,7 @@ public class PlayerStats : MonoBehaviour, IPlayerStats
         }
     }
     public virtual float MovementSpeed { get; set; }
-    public virtual float AttackSpeed
+    public virtual int AttackSpeed
     {
         get
         {
@@ -83,18 +83,6 @@ public class PlayerStats : MonoBehaviour, IPlayerStats
             GetComponent<NetPlayer>().BreadAndGender = value;
         }
     }
-    public virtual List<int> Damages
-    {
-        get
-        {
-            return new List<int>() { MinDmg, MaxDmg };
-        }
-        set
-        {
-            MinDmg = value[0];
-            MaxDmg = value[1];
-        }
-    }
     public virtual int MinDmg
     {
         get
@@ -121,6 +109,7 @@ public class PlayerStats : MonoBehaviour, IPlayerStats
     public void CalculateStatsAndSendUpdate()
     {
         CalculateStats();
+
         SendUpdateToOwner();
         SendUpdateToOtherPlayer();
     }
@@ -166,7 +155,7 @@ public class PlayerStats : MonoBehaviour, IPlayerStats
     {
         MaxHP = Settings.basicPlayerMaxExp;
         MovementSpeed = Settings.basicPlayerMovementSpeed;
-        AttackSpeed = 0f;
+        AttackSpeed = 0;
         MinDmg = 0;
         MaxDmg = 0;
         Defense = 0;

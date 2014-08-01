@@ -47,7 +47,7 @@ namespace NetworkProject.Requirements
                 return IsRequirementSatisfy((ISpellCasterStats)stats);
             }
 
-            return false;
+            throw new ArgumentException("Podano złe statystyki.");
         }
 
         public bool IsRequirementSatisfy(IEquipableStats stats)

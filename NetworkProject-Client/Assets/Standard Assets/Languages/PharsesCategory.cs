@@ -12,31 +12,60 @@ namespace Standard
         public LanguagePhrases RootPharses { get; private set; }
         public string MatchExpression { get; private set; }
 
+        private List<PhrasesCategory> _exludeCategories;
+
         public PhrasesCategory(string name, LanguagePhrases pharses, string matchExpression)
         {
             Name = name;
             RootPharses = pharses;
             MatchExpression = matchExpression;
+            _exludeCategories = new List<PhrasesCategory>();
+        }
+
+        public PhrasesCategory(string name, LanguagePhrases phrases, params PhrasesCategory[] exludeCategories)
+        {
+            MatchExpression = "";
+            Name = name;
+            RootPharses = phrases;
+            _exludeCategories = new List<PhrasesCategory>(exludeCategories);
         }
 
         public string[] GetPharses()
         {
-            var pharses = from pharse in RootPharses.Phrases
+            var phrases = from pharse in RootPharses.AllPhrases
                           where IsPharseMatchToCategory(pharse)
                           select pharse;
 
-            return pharses.ToArray();
+            var copyPhrases = phrases.ToList();
+
+            foreach (var phrase in phrases)
+            {
+                foreach (var exludeCategory in _exludeCategories)
+                {
+                    if (exludeCategory.ContainPhrase(phrase))
+                    {
+                        copyPhrases.Remove(phrase);
+                    }
+                }
+            }
+
+            return copyPhrases.ToArray();
+        }
+
+        public bool ContainPhrase(string phrase)
+        {
+            return GetPharses().Contains(phrase);
         }
 
         public void Change(string oldPharse, string newPharse)
         {
             if (IsPharseMatchToCategory(newPharse))
             {
-                for (int i = 0; i < RootPharses.Phrases.Count; i++)
+                for (int i = 0; i < RootPharses.AllPhrases.Count; i++)
                 {
-                    if (RootPharses.Phrases[i] == oldPharse)
+                    if (RootPharses.AllPhrases[i] == oldPharse)
                     {
-                        RootPharses.Phrases[i] = newPharse;
+                        RootPharses.AllPhrases[i] = newPharse;
                         break;
                     }
                 }

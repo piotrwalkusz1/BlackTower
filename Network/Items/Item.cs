@@ -16,9 +16,9 @@ namespace NetworkProject.Items
 
         public bool CanEquipe(IEquipableStats stats)
         {
-            EquipableItemData item = (EquipableItemData)ItemRepository.GetItemByIdItem(IdItem);
+            IEquipableItemManager item = (IEquipableItemManager)ItemRepository.GetItemByIdItem(IdItem);
 
-            return item.CanEquipe(stats);
+            return item.GetEquipableItemData().CanEquipe(stats);
         }
     }
 }

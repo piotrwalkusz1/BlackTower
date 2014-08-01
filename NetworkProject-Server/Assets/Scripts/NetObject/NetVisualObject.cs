@@ -14,9 +14,4 @@ public class NetVisualObject : NetObject
 
         Server.SendRequestAsMessage(request, address);
     }
-
-    public override void SendMessageUpdate(IConnectionMember address)
-    {
-        //empty
-    }
 }

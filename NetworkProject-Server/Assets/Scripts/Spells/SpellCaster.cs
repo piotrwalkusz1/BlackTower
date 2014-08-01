@@ -6,8 +6,8 @@ using NetworkProject;
 using NetworkProject.Spells;
 using NetworkProject.Connection;
 using NetworkProject.Connection.ToClient;
+using NetworkProject.Buffs;
 
-[CLSCompliant(false)]
 public class SpellCaster : MonoBehaviour, ISpellCaster
 {
     public int Lvl
@@ -36,8 +36,12 @@ public class SpellCaster : MonoBehaviour, ISpellCaster
     {
         get
         {
-            return GetComponent<SpellCasterStats>();
+            return (ISpellCasterStats)GetComponent(typeof(ISpellCasterStats));
         }
+    }
+    public IBuffable Buffs
+    {
+        get { return (IBuffable)GetComponent(typeof(IBuffable)); }
     }
 
     private List<Spell> _spells;
@@ -73,17 +77,13 @@ public class SpellCaster : MonoBehaviour, ISpellCaster
     {
         Spell spell = _spells.Find(x => x.IdSpell == idSpell);
 
-        ISpellCasterStats stats = Stats;
-
-        if(spell == null || !spell.CanUseSpell(stats))
+        if(spell == null || !spell.CanUseSpell(Stats))
         {
             return false;
         }
         else
         {
-            SpellActionData spellData = (SpellActionData)SpellRepository.GetSpell(idSpell);
-
-            spellData.CastSpell(stats, options);
+            spell.UseSpell(this, options);
 
             return true;
         }    

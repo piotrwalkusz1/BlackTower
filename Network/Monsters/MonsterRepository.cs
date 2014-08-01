@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Xml.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 
@@ -11,32 +12,39 @@ namespace NetworkProject.Monsters
 {
     public static class MonsterRepository
     {
-        private static List<Monster> _monsters;
+        private static List<MonsterData> _monsters;
 
-        public static void LoadMonstersFromFile(string pathToMonstersInResources)
+        public static void SetMonstersFromResource(string resourceName)
         {
-            var textAsset = Resources.Load<TextAsset>(pathToMonstersInResources);
-            var reader = new StringReader(textAsset.text);
-            var serializer = new XmlSerializer(typeof(List<Monster>));
-
-            List<Monster> monsters = (List<Monster>)serializer.Deserialize(reader);
-
-            _monsters = monsters;
+            _monsters = LoadMonstersFromResourcse(resourceName);
         }
 
-        public static void SaveMonsters(string path, List<Monster> monsters)
+        public static List<MonsterData> LoadMonstersFromResourcse(string resourceName)
         {
-            var serializer = new XmlSerializer(typeof(List<Monster>));
+            var textAsset = Resources.Load<TextAsset>(resourceName);
+            var stream = new MemoryStream(textAsset.bytes);
 
-            using (var writter = new StreamWriter(path))
+            return LoadMonstersFromStream(stream);
+        }
+
+        public static List<MonsterData> LoadMonstersFromFile(string path)
+        {
+            using (var stream = new FileStream(path, FileMode.OpenOrCreate))
             {
-                serializer.Serialize(writter, monsters);
+                return LoadMonstersFromStream(stream);
             }
         }
 
-        public static Monster GetMonster(int monsterId)
+        public static MonsterData GetMonster(int monsterId)
         {
             return _monsters[monsterId];
+        }
+
+        private static List<MonsterData> LoadMonstersFromStream(Stream stream)
+        {
+            var serializer = new BinaryFormatter();
+
+            return new List<MonsterData>((MonsterData[])serializer.Deserialize(stream));
         }
     }
 }

@@ -9,7 +9,7 @@ namespace NetworkProject.Connection.ToServer
     [Serializable]
     public class PlayerMoveToServer : INetworkRequestToServer
     {
-        public Vector3 NewPosition { get; set; }
+        public Vector3Serializable NewPosition { get; set; }
 
         public PlayerMoveToServer(Vector3 newPosition)
         {

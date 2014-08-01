@@ -49,12 +49,31 @@
     <Compile Include="Benefits\IBuffBenefit.cs" />
     <Compile Include="Benefits\IEquipBenefit.cs" />
     <Compile Include="BreedAndGender.cs" />
+    <Compile Include="Buffs\Buff.cs" />
+    <Compile Include="Buffs\BuffData.cs" />
+    <Compile Include="Buffs\BuffVisualData.cs" />
+    <Compile Include="Buffs\BuffFullData.cs" />
+    <Compile Include="Buffs\BuffRepository.cs" />
+    <Compile Include="Buffs\IBuffable.cs" />
     <Compile Include="Combat\Bullet.cs" />
     <Compile Include="Combat\Bullets.cs" />
     <Compile Include="Combat\NormalBullet.cs" />
     <Compile Include="Connection\INetworkRequestToClient.cs" />
     <Compile Include="Connection\INetworkRequestToServer.cs" />
-    <Compile Include="Connection\ISpellCasterStatsPackage.cs" />
+    <Compile Include="Connection\ToClient\ChangeVisibilityModelToClient.cs" />
+    <Compile Include="ITarget.cs" />
+    <Compile Include="Quests\IQuestTarget.cs" />
+    <Compile Include="Quests\IQuestTargetSystem.cs" />
+    <Compile Include="Quests\IQuestTargetDescripted.cs" />
+    <Compile Include="Quests\KillQuestTarget.cs" />
+    <Compile Include="Spells\ISpellCaster.cs" />
+    <Compile Include="Items\Equipment.cs" />
+    <Compile Include="Items\IEquipableItemData.cs" />
+    <Compile Include="SpellCasterStatsPackage.cs" />
+    <Compile Include="MonsterStatsPackage.cs" />
+    <Compile Include="PlayerStatsPackage.cs" />
+    <Compile Include="Spells\SpellCastOptionTarget.cs" />
+    <Compile Include="StatsPackage.cs" />
     <Compile Include="Copier.cs" />
     <Compile Include="ErrorCode.cs" />
     <Compile Include="Connection\IncomingMessageFromServer.cs" />
@@ -123,7 +142,10 @@
     <Compile Include="Connection\ToServer\RegisterToServer.cs" />
     <Compile Include="Connection\ToServer\RespawnToServer.cs" />
     <Compile Include="Connection\ToServer\UseSpellToServer.cs" />
+    <Compile Include="Monsters\MonsterFullData.cs" />
+    <Compile Include="Monsters\MonsterData.cs" />
     <Compile Include="Monsters\MonsterRepository.cs" />
+    <Compile Include="Monsters\MonsterStatsInRepository.cs" />
     <Compile Include="Movement\SimpleMovement.cs" />
     <Compile Include="Pointer.cs" />
     <Compile Include="Properter.cs" />
@@ -140,7 +162,6 @@
     <Compile Include="Items\ArmorData.cs" />
     <Compile Include="Items\HelmetData.cs" />
     <Compile Include="Items\ItemData.cs" />
-    <Compile Include="Monsters\Monster.cs" />
     <Compile Include="Connection\IConnectionMember.cs" />
     <Compile Include="Connection\IncomingMessage.cs" />
     <Compile Include="Connection\INetworkRequest.cs" />
@@ -151,11 +172,15 @@
     <Compile Include="Spells\ISpellRepository.cs" />
     <Compile Include="Spells\Spell.cs" />
     <Compile Include="IStats.cs" />
+    <Compile Include="Spells\SpellActionData.cs" />
     <Compile Include="Spells\SpellData.cs" />
+    <Compile Include="Spells\SpellFunction.cs" />
     <Compile Include="Spells\SpellRepository.cs" />
+    <Compile Include="TextUtility.cs" />
     <Compile Include="TypeFinder.cs" />
     <Compile Include="Updating.cs" />
     <Compile Include="Items\WeaponData.cs" />
+    <Compile Include="Vector3Serializable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

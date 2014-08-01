@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NetworkProject.BodyParts;
+using UnityEngine;
 
 namespace NetworkProject.Items
 {
+    [Serializable]
     public class PlayerEquipedItems : EquipedItems
     {
         private List<BodyPart> _bodyParts;
@@ -23,6 +25,11 @@ namespace NetworkProject.Items
         public BodyPart[] GetBodyParts()
         {
             return _bodyParts.ToArray();
+        }
+
+        public BodyPart GetBodyPart(int bodyPartSlot)
+        {
+            return _bodyParts[bodyPartSlot];
         }
 
         public bool CanEquipeItem(Item item, IEquipableStats stats)
@@ -56,9 +63,15 @@ namespace NetworkProject.Items
         {
             foreach (var bodyPart in _bodyParts)
             {
-                ItemData item = ItemRepository.GetItemByIdItem(bodyPart.EquipedItem.IdItem);
+                if (bodyPart.EquipedItem == null)
+                {
+                    continue;
+                }
 
-                if (item is WeaponData)
+                IEquipableItemManager item = (IEquipableItemManager)ItemRepository.GetItemByIdItem(bodyPart.EquipedItem.IdItem);
+                EquipableItemData equipableItem = item.GetEquipableItemData();
+
+                if (equipableItem is WeaponData)
                 {
                     return true;
                 }

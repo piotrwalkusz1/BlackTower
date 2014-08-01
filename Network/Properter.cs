@@ -19,6 +19,8 @@ namespace NetworkProject
 
             var typeBuilder = GetTypeBuilder();
 
+            AddSerializableAttribute(typeBuilder);
+
             var interfaces = source.GetType().GetInterfaces();
 
             foreach (var sourceInterface in source.GetType().GetInterfaces())
@@ -104,6 +106,11 @@ namespace NetworkProject
         private static string GetFieldName(string propertyName)
         {
             return '_' + propertyName;
+        }
+
+        private static void AddSerializableAttribute(TypeBuilder builder)
+        {
+            builder.SetCustomAttribute(new CustomAttributeBuilder(typeof(SerializableAttribute).GetConstructor(new Type[0]), new object[0]));
         }
     }
 }

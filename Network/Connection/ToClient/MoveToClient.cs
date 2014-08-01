@@ -10,7 +10,7 @@ namespace NetworkProject.Connection.ToClient
     public class MoveToClient : INetworkRequestToClient
     {
         public int IdNet { get; set; }
-        public Vector3 NewPosition { get; set; }
+        public Vector3Serializable NewPosition { get; set; }
 
         public MoveToClient(int idNet, Vector3 newPosition)
         {

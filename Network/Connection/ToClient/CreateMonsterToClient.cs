@@ -10,7 +10,7 @@ namespace NetworkProject.Connection.ToClient
     public class CreateMonsterToClient : CreateToClient
     {
         public int IdMonster { get; set; }
-        public IMonsterStats MonsterStats { get; set; }
+        public MonsterStatsPackage MonsterStats { get; set; }
 
         public CreateMonsterToClient(int idNet, Vector3 position, float rotation, int idMonster, IMonsterStats monsterStats)
         {
@@ -18,7 +18,7 @@ namespace NetworkProject.Connection.ToClient
             Position = position;
             Rotation = rotation;
             IdMonster = idMonster;
-            MonsterStats = (IMonsterStats)Properter.GetProperter(MonsterStats);
+            MonsterStats = (MonsterStatsPackage)StatsPackage.GetStatsPackage(monsterStats);
         }
     }
 }

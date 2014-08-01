@@ -43,5 +43,10 @@ namespace EditorExtension
             MaxDmg = EditorGUILayout.IntField("Max damage", MaxDmg);
             AttackSpeed = EditorGUILayout.IntField("Attack speed", AttackSpeed);
         }
+
+        public override string GetItemTypeName()
+        {
+            return "Weapon";
+        }
     }
 }

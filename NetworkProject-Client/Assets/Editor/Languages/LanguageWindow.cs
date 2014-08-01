@@ -18,44 +18,26 @@ namespace EditorExtension
         {
             Language = language;
 
-            UpdatePhrases();
+            Language.UpdatePhrases(LanguagesWindow.Phrases.AllPhrases.ToArray());
         }
 
         public void Draw()
         {
             if (_isActive = EditorGUILayout.Foldout(_isActive, Language.Name))
             {
+                Indentation.BeginIndentation();
+
                 Language.Name = EditorGUILayout.TextField("Language name", Language.Name);
 
                 var phrases = Language.Pharses;
-                var keys = phrases.Keys.ToList();
+                var keys = phrases.Keys.OrderBy(x => x).ToArray();
 
                 foreach (var key in keys)
                 {
                     phrases[key] = EditorGUILayout.TextField(key, phrases[key]);
                 }
-            }
-        }
 
-        public void UpdatePhrases()
-        {
-            var phrasesAlrightContained = new List<string>();
-
-            foreach (var phrase in LanguagesWindow.Phrases.Phrases)
-            {
-                if (Language.ContainPhrase(phrase))
-                {
-                    phrasesAlrightContained.Add(phrase);
-                }
-                else
-                {
-                    Language.SetPhrase(phrase, "");
-                }
-            }
-
-            foreach()
-            {
-
+                Indentation.EndIndentation();
             }
         }
     }

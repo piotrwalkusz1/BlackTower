@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class JumperMovement : Movement
+public class JumperMovement : MonsterMovement
 {
-    public float Speed { get; set; }
-
     protected RaycastHit _hitInfo;
 
     private Vector3 _targetPosition;
@@ -23,7 +21,7 @@ public class JumperMovement : Movement
 
     void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, _targetPosition, Speed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, _targetPosition, MovementSpeed * Time.deltaTime);
 
         if (_isJumpUp && _netMonster.IsFall())
         {

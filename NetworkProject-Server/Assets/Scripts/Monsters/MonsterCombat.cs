@@ -10,9 +10,9 @@ public class MonsterCombat : Combat
 {
     public int MinDmg { get; set; }
     public int MaxDmg { get; set; }
-    public float AttackSpeed { get; set; }
+    public int AttackSpeed { get; set; }
 
-    public float AttackRange { get; set; }
+    public float AttackRange = 2f;
 
     public DateTime NextAttackTime { get; private set; }
 
@@ -29,7 +29,7 @@ public class MonsterCombat : Combat
 
         var attackInfo = new AttackInfo(attacker, dmg, DamageType.Physical);
 
-        target.Attack(attackInfo);
+        target.AttackWithoutSendUpdate(attackInfo);
         target.SendUpdateHP();
 
         NextAttackTime = DateTime.UtcNow.AddSeconds(Settings.GetTimeBetweenAttacks(AttackSpeed));

@@ -5,10 +5,30 @@ using System.Text;
 
 public class PlayerHealth : Health
 {
+    public override int HP
+    {
+        get
+        {
+            return base.HP;
+        }
+        set
+        {
+            base.HP = value;
+
+            if (GetComponent<NetOwnPlayer>() != null)
+            {
+                GUIController.IfActiveCharacterGUIRefresh();
+            }
+        }
+    }
+
     public override void Dead()
     {
         base.Dead();
 
-        GUIController.ShowDeadMessage();
+        if (GetComponent<NetOwnPlayer>() != null)
+        {
+            GUIController.ShowDeadMessage();
+        }
     }
 }

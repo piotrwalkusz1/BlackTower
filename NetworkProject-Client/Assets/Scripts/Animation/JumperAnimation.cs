@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class JumperAnimation : MonoBehaviour
+public class JumperAnimation : MonsterAnimation
 {
-    private Animator _animator;
-
     void Awake()
     {
         _animator = GetComponentInChildren<Animator>();
@@ -29,17 +27,8 @@ public class JumperAnimation : MonoBehaviour
         _animator.SetBool("Jump", false);
     }
 
-    public void Attack()
+    public override void Attack()
     {
         StartCoroutine(AttackCoroutine());
-    }
-
-    IEnumerator AttackCoroutine()
-    {
-        _animator.SetBool("Attack", true);
-
-        yield return new WaitForSeconds(0.1f);
-
-        _animator.SetBool("Attack", false);
     }
 }

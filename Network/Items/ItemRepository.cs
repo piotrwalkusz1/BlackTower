@@ -8,7 +8,6 @@ using UnityEngine;
 
 namespace NetworkProject.Items
 {
-    [Serializable]
     public static class ItemRepository
     {
         private static List<ItemData> _items;
@@ -18,9 +17,29 @@ namespace NetworkProject.Items
             return _items.Find(x => x.IdItem == idItem);
         }
 
-        public static void LoadAndSetItemsFromFile(string path)
+        public static void SetItemsFromFileOrResources(string path, string resourceName)
+        {
+            try
+            {
+                using (var reader = new FileStream(path, FileMode.OpenOrCreate))
+                {
+                    _items = new List<ItemData>(LoadItemsFromStream(reader));
+                }
+            }
+            catch
+            {
+                _items = new List<ItemData>(LoadItemsFromResources(resourceName));
+            }
+        }
+
+        public static void SetItemsFromFile(string path)
         {
             _items = new List<ItemData>(LoadItemsFromFile(path));
+        }
+
+        public static void SetItemsFromResource(string name)
+        {
+            _items = new List<ItemData>(LoadItemsFromResources(name));
         }
 
         public static ItemData[] LoadItemsFromResources(string name)
@@ -39,8 +58,10 @@ namespace NetworkProject.Items
 
                     return LoadItemsFromStream(stream);
                 }
-                catch
+                catch(Exception exception)
                 {
+                    MonoBehaviour.print(exception.Message + '\n' + exception.StackTrace);
+
                     MonoBehaviour.print("Plik ma niewłaściwą zawartość. Zostanie utworzona pusta kolekcja.");
 
                     return new ItemData[0];
@@ -53,7 +74,7 @@ namespace NetworkProject.Items
         {
             try
             {
-                using (var reader = new FileStream(path, FileMode.OpenOrCreate))
+                using (var reader = new FileStream(path, FileMode.Open))
                 {
                     return LoadItemsFromStream(reader);
                 }

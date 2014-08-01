@@ -41,7 +41,7 @@ public class InputPlayer : MonoBehaviour
 
             if (item != null && distance <= NetworkProject.Settings.pickItemRange)
             {
-                var request = new PickItemToServer(item.IdItem);
+                var request = new PickItemToServer(item.IdNet);
 
                 Client.SendRequestAsMessage(request);
             }
@@ -67,6 +67,11 @@ public class InputPlayer : MonoBehaviour
             {
                 GUIController.ShowCharacterGUI();
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            GetComponent<SpellCaster>().TryCastSpellFromSpellBook(0);
         }
 	}
 

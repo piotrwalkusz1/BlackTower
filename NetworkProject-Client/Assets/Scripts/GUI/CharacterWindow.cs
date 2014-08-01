@@ -6,6 +6,8 @@ using Standard;
 
 public class CharacterWindow : GUIObject
 {
+    public List<ItemInCharacterWindow> _equipedItems;
+
     public Texture Texture
     {
         get
@@ -24,6 +26,7 @@ public class CharacterWindow : GUIObject
             return _stats.GetComponent<OwnPlayerEquipment>();
         }
     }
+
 
     public GUIText _hp;
     public GUIText _hpAnswer;
@@ -45,7 +48,7 @@ public class CharacterWindow : GUIObject
     public GUIText _movementSpeedAnswer;
 
     private OwnPlayerStats _stats;
-    private List<ItemInCharacterWindow> _equipedItems;
+    
 
     private Vector3 _lastMousePosition;
 
@@ -81,14 +84,14 @@ public class CharacterWindow : GUIObject
         _power.text = Languages.GetPhrase("power");
         _defense.text = Languages.GetPhrase("defense");
         _defenseAnswer.text = _stats.Defense.ToString();
-        _cooldownReduction.text = Languages.GetPhrase("cooldownReduction");
-        _regenerationHP.text = Languages.GetPhrase("hpRegeneration");
+        _cooldownReduction.text = Languages.GetPhrase("cooldown reduction");
+        _regenerationHP.text = Languages.GetPhrase("hp regeneration");
         _regenerationHPAnswer.text = _stats.HPRegeneration.ToString();
-        _regenerationMP.text = Languages.GetPhrase("mpRegeneration");
+        _regenerationMP.text = Languages.GetPhrase("mp regeneration");
         //_regenerationMPAnswer.text = _stats.RegenerationMP.ToString();
-        _attackSpeed.text = Languages.GetPhrase("attackSpeed");
+        _attackSpeed.text = Languages.GetPhrase("attack speed");
         _attackSpeedAnswer.text = _stats.AttackSpeed.ToString();
-        _movementSpeed.text = Languages.GetPhrase("movementSpeed");
+        _movementSpeed.text = Languages.GetPhrase("movement speed");
         _movementSpeedAnswer.text = _stats.MovementSpeed.ToString();
     }
 

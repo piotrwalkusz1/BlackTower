@@ -5,6 +5,7 @@ using System.Text;
 
 namespace NetworkProject.Items
 {
+    [Serializable]
     public struct ItemDrop
     {
         public Item Item

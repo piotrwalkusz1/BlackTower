@@ -68,50 +68,52 @@ public static class Client
 
     private static Action<IncomingMessageFromServer> ChooseReceiveMessageMethod(INetworkRequest request)
     {
-        if(request is ErrorMessageToClient)
+        if (request is ErrorMessageToClient)
             return ReceiveMessageErrorMessage;
-        else if(request is GoToChoiceCharacterMenuToClient)
+        else if (request is GoToChoiceCharacterMenuToClient)
             return ReceiveMessageGoToChoiceCharacterMenu;
-        else if(request is GoIntoWorldToClient)
+        else if (request is GoIntoWorldToClient)
             return ReceiveMessageGoIntoWorld;
-        else if(request is CreateOwnPlayerToClient)
+        else if (request is CreateOwnPlayerToClient)
             return ReceiveMessageCreateOwnPlayer;
-        else if(request is CreateOtherPlayerToClient)
+        else if (request is CreateOtherPlayerToClient)
             return ReceiveMessageCreateOtherPlayer;
-        else if(request is CreateBulletToClient)
+        else if (request is CreateBulletToClient)
             return ReceiveMessageCreateBullet;
-        else if(request is CreateItemToClient)
+        else if (request is CreateItemToClient)
             return ReceiveMessageCreateItemObject;
-        else if(request is CreateMonsterToClient)
+        else if (request is CreateMonsterToClient)
             return ReceiveMessageCreateMonster;
-        else if(request is CreateVisualObjectToClient)
+        else if (request is CreateVisualObjectToClient)
             return ReceiveMessageCreateVisualObject;
-        else if(request is DeleteObjectToClient)
+        else if (request is DeleteObjectToClient)
             return ReceiveMessageDeleteObject;
-        else if(request is MoveToClient)
+        else if (request is MoveToClient)
             return ReceiveMessageMove;
-        else if(request is RotateToClient)
+        else if (request is RotateToClient)
             return ReceiveMessageRotate;
-        else if(request is NewPositionToClient)
+        else if (request is NewPositionToClient)
             return ReceiveMessageNewPosition;
-        else if(request is UpdateItemInEquipmentToClient)
+        else if (request is UpdateItemInEquipmentToClient)
             return ReceiveMessageUpdateItemInEquipment;
-        else if(request is UpdateEquipedItemToClient)
+        else if (request is UpdateEquipedItemToClient)
             return ReceiveMessageUpdateEquipedItem;
-        else if(request is AttackToClient)
+        else if (request is AttackToClient)
             return ReceiveMessageAttack;
-        else if(request is DeadToClient)
+        else if (request is DeadToClient)
             return ReceiveMessageDead;
-        else if(request is RespawnToClient)
+        else if (request is RespawnToClient)
             return ReceiveMessageRespawn;
-        else if(request is UpdateAllSpellsToClient)
+        else if (request is UpdateAllSpellsToClient)
             throw new NotImplementedException();
-        else if(request is UpdateAllStatsToClient)
+        else if (request is UpdateAllStatsToClient)
             return ReceiveMessageUpdateAllStats;
-        else if(request is UpdateHPToClient)
+        else if (request is UpdateHPToClient)
             return ReceiveMessageUpdateHP;
-        else if(request is UpdateExpToClient)
+        else if (request is UpdateExpToClient)
             return ReceiveMessageUpdateExp;
+        else if (request is ChangeVisibilityModelToClient)
+            return ReceiveMessageChangeVisibilityModelToClient;
         else throw new NotImplementedException("Brak obsługi podanego typu wiadomości : " + request.GetType().ToString());
     }
 
@@ -407,7 +409,7 @@ public static class Client
             return;
         }
 
-        netObject.GetComponent<Health>()._hp = request.HP;  
+        netObject.GetComponent<Health>().HP = request.HP;  
     }
 
     private static void ReceiveMessageUpdateAllStats(IncomingMessageFromServer message)
@@ -421,7 +423,11 @@ public static class Client
             return;
         }
 
-        netObject.GetComponent<Stats>().Set(request.Stats);
+        var stats = (IStats)netObject.GetComponent(typeof(IStats));
+
+        request.Stats.CopyToStats(stats);
+
+        GUIController.IfActiveCharacterGUIRefresh();
     }
 
     private static void ReceiveMessageUpdateSpells(IncomingMessageFromServer message)
@@ -435,7 +441,11 @@ public static class Client
             return;
         }
 
-        netObject.GetComponent<SpellCaster>().SetSpells(request.Spells.ToArray());
+        List<SpellClient> spells = new List<SpellClient>();
+
+        request.Spells.ForEach(x => spells.Add(new SpellClient(x)));
+
+        netObject.GetComponent<SpellCaster>().SetSpells(spells.ToArray());
     }
 
     private static void ReceiveMessageUpdateExp(IncomingMessageFromServer message)
@@ -450,6 +460,20 @@ public static class Client
         }
 
         netObject.GetComponent<Experience>().Exp = request.Exp;
+    }
+
+    private static void ReceiveMessageChangeVisibilityModelToClient(IncomingMessageFromServer message)
+    {
+        var request = (ChangeVisibilityModelToClient)message.Request;
+
+        var netObject = SceneBuilder.GetNetObjectByIdNet(request.IdNet);
+
+        if(IfNullDelayMessage(netObject, message))
+        {
+            return;
+        }
+
+        netObject.IsModelVisible = request.IsVisibleModel;
     }
 
     #endregion

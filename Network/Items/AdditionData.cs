@@ -9,14 +9,10 @@ namespace NetworkProject.Items
     [Serializable]
     public class AdditionData : EquipableItemData
     {
-        public AdditionData()
-        {
-
-        }
-
         public AdditionData(int idItem)
+            : base(idItem)
         {
-            IdItem = idItem;
+
         }
        
         protected override void ApplyItemStats(IEquipableStats stats)
