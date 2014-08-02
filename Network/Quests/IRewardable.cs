@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using UnityEngine;
 
 namespace NetworkProject.Quests
 {
-    public interface IQuestTarget
+    public interface IRewardable
     {
-        bool IsComplete();
+        void AddGold(int gold);
+
+        void AddExp(int exp);
     }
 }

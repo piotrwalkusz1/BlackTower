@@ -9,5 +9,9 @@ namespace NetworkProject.Quests
     public interface IQuestTargetSystem
     {
         void Initialize(GameObject player);
+
+        void Dispose();
+
+        IQuestTarget GetBaseQuestTarget();
     }
 }

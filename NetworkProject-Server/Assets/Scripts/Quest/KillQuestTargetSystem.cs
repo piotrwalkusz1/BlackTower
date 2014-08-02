@@ -7,6 +7,8 @@ using NetworkProject.Quests;
 
 public class KillQuestTargetSystem : KillQuestTarget, IQuestTargetSystem
 {
+    private Combat _combatToDispose;
+
     public KillQuestTargetSystem(int killTarget, int monsterId)
         : base(killTarget, monsterId)
     {
@@ -15,6 +17,28 @@ public class KillQuestTargetSystem : KillQuestTarget, IQuestTargetSystem
 
     public void Initialize(GameObject player)
     {
-        throw new NotImplementedException();
+        Combat combat = player.GetComponent<Combat>();
+
+        combat.OnKill += OnKill;
+
+        _combatToDispose = combat;
+    }
+
+    public void Dispose()
+    {
+        _combatToDispose.OnKill -= OnKill;
+    }
+
+    private void OnKill(KillInfo killInfo)
+    {
+        if (!IsComplete() && killInfo is MonsterKillInfo)
+        {
+            var monsterKillInfo = (MonsterKillInfo)killInfo;
+
+            if (monsterKillInfo.IdMonster == MonsterId)
+            {
+                AlreadyKill++;
+            }
+        }
     }
 }

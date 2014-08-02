@@ -30,10 +30,5 @@ namespace NetworkProject.Quests
         {
             return AlreadyKill >= TargetKill;
         }
-
-        public IQuestTarget GetCopy()
-        {
-            return new KillQuestTarget(this);
-        }
     }
 }

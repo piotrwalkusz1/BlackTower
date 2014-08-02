@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using NetworkProject.Connection.ToServer;
+using NetworkProject.Quests;
 
-public abstract class Combat : MonoBehaviour
+public class Combat : MonoBehaviour
 {
-    
+    public event Action<KillInfo> OnKill;
 }

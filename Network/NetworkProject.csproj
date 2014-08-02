@@ -62,10 +62,16 @@
     <Compile Include="Connection\INetworkRequestToServer.cs" />
     <Compile Include="Connection\ToClient\ChangeVisibilityModelToClient.cs" />
     <Compile Include="ITarget.cs" />
+    <Compile Include="Quests\ExpReward.cs" />
+    <Compile Include="Quests\IDescribedReward.cs" />
     <Compile Include="Quests\IQuestTarget.cs" />
     <Compile Include="Quests\IQuestTargetSystem.cs" />
     <Compile Include="Quests\IQuestTargetDescripted.cs" />
+    <Compile Include="Quests\IReward.cs" />
+    <Compile Include="Quests\IRewardable.cs" />
     <Compile Include="Quests\KillQuestTarget.cs" />
+    <Compile Include="Quests\Quest.cs" />
+    <Compile Include="Quests\QuestSystem.cs" />
     <Compile Include="Spells\ISpellCaster.cs" />
     <Compile Include="Items\Equipment.cs" />
     <Compile Include="Items\IEquipableItemData.cs" />
