@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using NetworkProject;
 using NetworkProject.Connection;
 
-[System.CLSCompliant(false)]
-public abstract class MonsterStats : Stats, IMonsterStats
+public class MonsterStats : Stats, IMonsterStats
 {
     public virtual int HP
     {
@@ -27,7 +26,19 @@ public abstract class MonsterStats : Stats, IMonsterStats
         }
         set
         {
-            GetComponent<HealthSystem>().ChangeHp(value);
+            GetComponent<HealthSystem>().ChangeMaxHP(value);
+        }
+    }
+
+    public virtual float[] MovementSpeed
+    {
+        get
+        {
+            return GetComponent<MonsterMovement>().MovementSpeedByType;
+        }
+        set
+        {
+            GetComponent<MonsterMovement>().MovementSpeedByType = value;
         }
     }
 
@@ -42,8 +53,6 @@ public abstract class MonsterStats : Stats, IMonsterStats
         get { return GetComponent<MonsterCombat>().MaxDmg; }
         set { GetComponent<MonsterCombat>().MaxDmg = value; }
     }
-
-    public abstract float MovementSpeed { get; set; }
 
     public virtual int AttackSpeed
     {

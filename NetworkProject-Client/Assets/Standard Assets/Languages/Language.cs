@@ -83,9 +83,9 @@ namespace Standard
             return this[Languages.ITEM_NAME + idItem.ToString()];
         }
 
-        public string GetErrorText(int errorId)
+        public string GetMessageText(int idMessageText)
         {
-            return this[Languages.ERROR_TEXT + errorId.ToString()];
+            return this[Languages.MESSAGE_TEXT + idMessageText.ToString()];
         }
 
         public string GetSpellDescription(int idSpell)
@@ -103,6 +103,31 @@ namespace Standard
             return this[Languages.MONSTER_NAME + idMonster.ToString()];
         }
 
+        public string GetQuestName(int idQuest)
+        {
+            return this[Languages.QUEST_NAME + idQuest.ToString()];
+        }
+
+        public string GetQuestDescription(int idQuest)
+        {
+            return this[Languages.QUEST_DESCRIPTION + idQuest.ToString()];
+        }
+
+        public string GetDialog(int idDialog)
+        {
+            return this[Languages.DIALOG + idDialog.ToString()];
+        }
+
+        public string GetBuffName(int idBuff)
+        {
+            return this[Languages.BUFF_NAME + idBuff.ToString()];
+        }
+
+        public string GetBuffDescription(int idBuff)
+        {
+            return this[Languages.BUFF_DESCRIPTION + idBuff.ToString()];
+        }
+
         public void SetPhrase(string phrase, string value)
         {
             this[phrase] = value;
@@ -115,7 +140,7 @@ namespace Standard
 
         public void SetErrorText(int errorId, string value)
         {
-            this[Languages.ERROR_TEXT + errorId.ToString()] = value;
+            this[Languages.MESSAGE_TEXT + errorId.ToString()] = value;
         }
 
         public void SetSpellDescription(int idSpell, string value)

@@ -16,8 +16,9 @@ namespace EditorExtension
     {
         public static List<Language> AllLanguages { get; private set; }
         public static List<ItemWindow> Items { get; private set; }
-        public static TypeFinder<IEquipRequirement> RequirementsList { get; private set; }
-        public static TypeFinder<IEquipBenefit> BenefitsList { get; set; }
+        public static TypeFinder<IRequirement> RequirementsList { get; private set; }
+        public static TypeFinder<IBenefit> BenefitsList { get; set; }
+        public static TypeFinder<IUseAction> UseActionsList { get; set; }
 
         private static List<ItemWindow> _itemsToDelete;
 
@@ -32,8 +33,9 @@ namespace EditorExtension
         {
             _itemsToDelete = new List<ItemWindow>();
 
-            RequirementsList = new TypeFinder<IEquipRequirement>();
-            BenefitsList = new TypeFinder<IEquipBenefit>();
+            RequirementsList = new TypeFinder<IRequirement>();
+            BenefitsList = new TypeFinder<IBenefit>();
+            UseActionsList = new TypeFinder<IUseAction>();
 
             AllLanguages = Languages.LoadAllLanguagesFromResourcesDirectly();
 
@@ -41,7 +43,7 @@ namespace EditorExtension
 
             foreach(var item in EditorSaveLoad.LoadItems())
             {
-                ChooseItemDataTypeAndAdd((VisualItemData)item);
+                ChooseItemDataTypeAndAdd((ItemData)item);
             }
         }
 
@@ -94,6 +96,7 @@ namespace EditorExtension
                 menu.AddItem(new GUIContent("Add helmet"), false, AddHelmet);
                 menu.AddItem(new GUIContent("Add shoes"), false, AddShoes);
                 menu.AddItem(new GUIContent("Add addition"), false, AddAddition);
+                menu.AddItem(new GUIContent("Add usable item"), false, AddUsableItem);
 
                 menu.ShowAsContext();
 
@@ -103,33 +106,37 @@ namespace EditorExtension
 
         private void Save()
         {
-            var items = new List<VisualItemData>();
+            var items = new List<ItemData>();
 
-            Items.ForEach(x => items.Add((VisualItemData)x.ItemData));
+            Items.ForEach(x => items.Add(x.ItemData));
 
             EditorSaveLoad.SaveItems(items);
         }
 
-        private void ChooseItemDataTypeAndAdd(VisualItemData item)
+        private void ChooseItemDataTypeAndAdd(ItemData item)
         {
-            if(item is VisualEquipableItemData)
+            if(item is EquipableItemData)
             {
-                VisualEquipableItemData equipableItem = (VisualEquipableItemData)item;
+                EquipableItemData equipableItem = (EquipableItemData)item;
 
-                if (equipableItem.EquipableItemData is WeaponData)
-                    Items.Add(new ItemWindow(new ItemWindowWeaponData(equipableItem)));
-                else if (equipableItem.EquipableItemData is ArmorData)
-                    Items.Add(new ItemWindow(new ItemWindowArmorData(equipableItem)));
-                else if (equipableItem.EquipableItemData is ShieldData)
-                    Items.Add(new ItemWindow(new ItemWindowShieldData(equipableItem)));
-                else if (equipableItem.EquipableItemData is HelmetData)
-                    Items.Add(new ItemWindow(new ItemWindowHelmetData(equipableItem)));
-                else if (equipableItem.EquipableItemData is ShoesData)
-                    Items.Add(new ItemWindow(new ItemWindowShoesData(equipableItem)));
-                else if (equipableItem.EquipableItemData is AdditionData)
-                    Items.Add(new ItemWindow(new ItemWindowAdditionData(equipableItem)));
+                if (equipableItem is WeaponData)
+                    Items.Add(new ItemWindow(new ItemWindowWeaponData((WeaponData)equipableItem)));
+                else if (equipableItem is ArmorData)
+                    Items.Add(new ItemWindow(new ItemWindowArmorData((ArmorData)equipableItem)));
+                else if (equipableItem is ShieldData)
+                    Items.Add(new ItemWindow(new ItemWindowShieldData((ShieldData)equipableItem)));
+                else if (equipableItem is HelmetData)
+                    Items.Add(new ItemWindow(new ItemWindowHelmetData((HelmetData)equipableItem)));
+                else if (equipableItem is ShoesData)
+                    Items.Add(new ItemWindow(new ItemWindowShoesData((ShoesData)equipableItem)));
+                else if (equipableItem is AdditionData)
+                    Items.Add(new ItemWindow(new ItemWindowAdditionData((AdditionData)equipableItem)));
                 else
                     throw new Exception("Nie ma takiego itemu do założenia");
+            }
+            else if (item is ItemUsableData)
+            {
+                Items.Add(new ItemWindow(new ItemWindowUsableData((ItemUsableData)item)));
             }
             else
             {
@@ -183,6 +190,13 @@ namespace EditorExtension
         {
             var item = new AdditionData(0);
             var itemWindow = new ItemWindowAdditionData(item);
+            Items.Add(new ItemWindow(itemWindow));
+        }
+
+        private void AddUsableItem()
+        {
+            var item = new ItemUsableData();
+            var itemWindow = new ItemWindowUsableData(item);
             Items.Add(new ItemWindow(itemWindow));
         }
     } 

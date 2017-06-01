@@ -17,15 +17,6 @@ public class NetMonster : NetObject
         Server.SendRequestAsMessage(receive, address);
     }
 
-    public override void SendMessageUpdate(IConnectionMember address)
-    {
-        IfChangeSendPositionUpdate(address);
-
-        IfChangeSendRotationUpdate(address);
-
-        InvokeSendMessageUpdateEvent(address);
-    }
-
     public void SendJumpMessage()
     {
         var request = new JumpToClient(IdNet);
@@ -43,6 +34,13 @@ public class NetMonster : NetObject
     public void SendAllStatsMessage()
     {
         var request = new UpdateAllStatsToClient(IdNet, (IStats)GetComponent(typeof(IStats)));
+
+        GenerateSendFunctionAndAddToUpdateEvent(request);
+    }
+
+    public void SendChangeMovementType(int movementType)
+    {
+        var request = new ChangeMoveTypeToClient(IdNet, movementType);
 
         GenerateSendFunctionAndAddToUpdateEvent(request);
     }

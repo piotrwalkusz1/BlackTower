@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using NetworkProject;
 using NetworkProject.Items;
@@ -9,9 +10,14 @@ public class ItemInEquipmentWindow : GUIObject
     public EquipmentWindow _equipmentWindow;
 
     private Vector3 _lastMousePosition;
+    private DateTime _lateMouseDown;
+    private bool _wasUseItemInLastMouseDown;
+
+    private const float MOUSE_DOWN_INTERVAL_TO_USE = 0.6f;
 
     protected void Awake()
     {
+        _lateMouseDown = new DateTime(0);
         _lastMousePosition = Input.mousePosition;       
     }
 
@@ -28,7 +34,7 @@ public class ItemInEquipmentWindow : GUIObject
             return;
         }
 
-        GUIElement element = GuiRaycast(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
+        GUIElement element = GuiRaycastUnderObject(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
 
         if (element == null)
         {
@@ -47,6 +53,43 @@ public class ItemInEquipmentWindow : GUIObject
         {
             guiObject.OnDropItem(this);
         }
+    }   
+
+    protected void OnMouseEnter()
+    {
+        ShowDescription();
+    }
+
+    protected override void OnMouseDown()
+    {
+        base.OnMouseDown();
+
+        GUIController.HideDescription();
+
+        if (_wasUseItemInLastMouseDown)
+        {
+            _wasUseItemInLastMouseDown = false;
+        }
+        else
+        {
+            var interval = DateTime.UtcNow - _lateMouseDown;
+
+            if (interval.TotalSeconds < MOUSE_DOWN_INTERVAL_TO_USE)
+            {
+                var info = new UseItemInfo(Client.GetNetOwnPlayer().gameObject, GetSlot());
+
+                GetItem().ItemData.UseItem(info);
+
+                _wasUseItemInLastMouseDown = true;
+            }
+        }
+
+        _lateMouseDown = DateTime.UtcNow;
+    }
+
+    protected void OnMouseExit()
+    {
+        GUIController.HideDescription();
     }
 
     protected void OnMouseDrag()
@@ -74,14 +117,9 @@ public class ItemInEquipmentWindow : GUIObject
 
     public override void OnDropEquipedItem(ItemInCharacterWindow item)
     {
-        if (IsEmpty() || item.CanBeEquipedByPlayer(GetItem()))
+        if (_equipmentWindow.GetEquipment().TryEquipItemFromBagAndSendMessage(GetSlot(), item.GetSlot()))
         {
-            var request = new ChangeEquipedItemToServer(GetSlot(), item.GetSlot());
-
-            Client.SendRequestAsMessage(request);
-
             ChangeTextures(guiTexture, item.guiTexture);
-
         }
 
         item.GoToDefaultPlace();
@@ -94,14 +132,6 @@ public class ItemInEquipmentWindow : GUIObject
         guiTexture.pixelInset = new Rect(position.x, position.y, guiTexture.pixelInset.width, guiTexture.pixelInset.height);
     }
 
-    public bool CanBeEquipedByPlayer(int bodyPart)
-    {
-        Item item = GetItem();
-        var itemData = (IEquipableItemManager)ItemRepository.GetItemByIdItem(item.IdItem);
-        IEquipableStats stats = _equipmentWindow.GetPlayerStats();
-
-        return item.CanEquipe(stats) && DoesBodyPartMatchToItem(itemData.GetEquipableItemData(), bodyPart);
-    }
 
     public Item GetItem()
     {
@@ -130,8 +160,21 @@ public class ItemInEquipmentWindow : GUIObject
         }
     }
 
-    private bool DoesBodyPartMatchToItem(EquipableItemData itemData, int bodyPart)
+    protected void ShowDescription()
     {
-        return IoC.GetBodyPart(bodyPart).CanEquipeItemOnThisBodyPart(itemData);
+        Item item = GetItem();
+
+        if(item != null)
+        {
+            Rect rect = guiTexture.GetScreenRect();
+
+            Vector2 position = new Vector2(rect.x + rect.width, rect.y + rect.height);
+
+            string description = item.GetDescription();
+
+            int sizeItemImage = _equipmentWindow._sizeItemImage;
+
+            GUIController.ShowDescription(position, description, sizeItemImage, sizeItemImage, _equipmentWindow);
+        }
     }
 }

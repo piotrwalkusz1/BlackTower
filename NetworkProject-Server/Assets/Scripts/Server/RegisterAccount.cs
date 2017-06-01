@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using NetworkProject;
 using NetworkProject.Connection;
 
-[System.CLSCompliant(false)]
+[Serializable]
 public class RegisterAccount
 {
     public int IdAccount { get; set; }

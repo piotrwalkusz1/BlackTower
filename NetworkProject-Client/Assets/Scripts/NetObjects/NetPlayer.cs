@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using NetworkProject;
+using NetworkProject.Connection.ToClient;
 
 public class NetPlayer : NetNamedObject
 {
@@ -23,11 +24,6 @@ public class NetPlayer : NetNamedObject
         _rotationInLastFrame = transform.eulerAngles.y;
     }
 
-    protected void LateUpdate()
-    {
-        CheckChangePositionAndRotation();
-    }
-
     public bool IsMovement()
     {
         return _wasMovementInLastFrame;
@@ -41,6 +37,20 @@ public class NetPlayer : NetNamedObject
     public bool IsFall()
     {
         return transform.position.y < _positionInLastFrame.y;
+    }
+
+    public override void Respawn(RespawnToClient respawnInfo)
+    {
+        base.Respawn(respawnInfo);
+
+        GetComponent<PlayerGeneratorModel>().ShowModel();
+        
+        var characterMotor = GetComponent<CharacterMotor>();
+
+        if (characterMotor != null)
+        {
+            characterMotor.enabled = true;
+        }
     }
 
     protected void CheckChangePositionAndRotation()

@@ -11,16 +11,11 @@ namespace EditorExtension
     {
         public int Defense
         {
-            get { return ((HelmetData)VisualEquipableItem.EquipableItemData)._defense; }
-            set { ((HelmetData)VisualEquipableItem.EquipableItemData)._defense = value; }
+            get { return ((HelmetData)Item)._defense; }
+            set { ((HelmetData)Item)._defense = value; }
         }
 
         public ItemWindowHelmetData(HelmetData helmet) : base(helmet)
-        {
-
-        }
-
-        public ItemWindowHelmetData(VisualEquipableItemData helmet) : base(helmet)
         {
 
         }

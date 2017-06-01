@@ -3,7 +3,7 @@ using System.Collections;
 
 public class RespawnConnection : MonoBehaviour
 {
-    public MonsterRespawnLimit _respawn;
+    public IMonsterRespawnLimit _respawn;
 
     protected void OnDead()
     {

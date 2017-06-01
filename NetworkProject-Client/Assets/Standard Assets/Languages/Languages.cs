@@ -17,7 +17,12 @@ namespace Standard
         public const string SPELL_NAME = "spellName";
         public const string SPELL_DESCRIPTION = "spellDescription";
         public const string MONSTER_NAME = "monsterName";
-        public const string ERROR_TEXT = "errorText";
+        public const string QUEST_NAME = "questName";
+        public const string QUEST_DESCRIPTION = "questDescription";
+        public const string DIALOG = "dialog";
+        public const string BUFF_NAME = "buffName";
+        public const string BUFF_DESCRIPTION = "buffDescription";
+        public const string MESSAGE_TEXT = "messageText";
 
         private static Language _currentLanguage;
         private static List<Language> _allLanguages;
@@ -64,9 +69,34 @@ namespace Standard
             return _currentLanguage.GetMonsterName(idMonster);
         }
 
-        public static string GetErrorText(int idError)
+        public static string GetMessageText(int idMessageText)
         {
-            return _currentLanguage.GetErrorText(idError);
+            return _currentLanguage.GetMessageText(idMessageText);
+        }
+
+        public static string GetQuestName(int idQuest)
+        {
+            return _currentLanguage.GetQuestName(idQuest);
+        }
+
+        public static string GetQuestDescription(int idQuest)
+        {
+            return _currentLanguage.GetQuestDescription(idQuest);
+        }
+
+        public static string GetDialog(int idDialog)
+        {
+            return _currentLanguage.GetDialog(idDialog);
+        }
+
+        public static string GetBuffName(int idBuff)
+        {
+            return _currentLanguage.GetBuffName(idBuff);
+        }
+
+        public static string GetBuffDescription(int idBuff)
+        {
+            return _currentLanguage.GetBuffDescription(idBuff);
         }
 
         public static void LoadAndSetAllLanguagesFromResources()

@@ -7,7 +7,7 @@ using NetworkProject.Spells;
 using NetworkProject.Connection.ToServer;
 using NetworkProject.Buffs;
 
-public class SpellCaster : MonoBehaviour, ISpellCaster
+public class SpellCaster : ManaInfo
 {
     public int Lvl
     {
@@ -15,12 +15,6 @@ public class SpellCaster : MonoBehaviour, ISpellCaster
         {
             return GetComponent<Experience>().Lvl;
         }
-    }
-    public int Mana { get; private set; }
-
-    public IBuffable Buffs
-    {
-        get { throw new System.NotImplementedException(); }
     }
 
     public Vector3 Position
@@ -33,53 +27,56 @@ public class SpellCaster : MonoBehaviour, ISpellCaster
         get { return transform.eulerAngles.y; }
     }
 
-    public ISpellCasterStats Stats
+    public PlayerStats Stats
     {
         get { return GetComponent<PlayerStats>(); }
     }
 
+    public List<Spell> Spells { get; protected set; }
+
+    void Awake()
+    {
+        Spells = new List<Spell>();
+    }
+
     public bool TryCastSpellFromSpellBook(int idSpell, params ISpellCastOption[] options)
     {
-        Spell spell = _spells.FirstOrDefault(x => x.IdSpell == idSpell);
+        Spell spell = Spells.FirstOrDefault(x => x.IdSpell == idSpell);
 
-        if(spell == null || !spell.CanUseSpell(Stats))
+        if(spell != null)
         {
-            return false;
+            return spell.TryUseSpell(this, options); ;
         }
         else
         {
-            spell.UseSpell(this, options);
-
-            return true;
+            return false;
         }
     }
 
-    private List<Spell> _spells = new List<Spell>();
-
-    public void AddSpell(Spell spell)
+    public void SetSpells(Spell[] spells)
     {
-        AddSpell((SpellClient)spell);
-    }
+        Spells.Clear();
 
-    public void AddSpell(SpellClient spell)
-    {
-        _spells.Add(spell);
-    }
-
-    public void SetSpells(SpellClient[] spells)
-    {
-        _spells.Clear();
-
-        _spells.AddRange(spells);
+        Spells.AddRange(spells);
     }
 
     public Spell GetSpellById(int idSpell)
     {
-        return _spells.Find(x => x.IdSpell == idSpell);
+        return Spells.Find(x => x.IdSpell == idSpell);
     }
 
-    public Spell[] GetSpells()
+    public Spell GetSpellBySlot(int slot)
     {
-        return _spells.ToArray();
+        if (slot >= Spells.Count)
+        {
+            return null;
+        }
+
+        return Spells[slot];
+    }
+
+    public bool IsSpell(int idSpell)
+    {
+        return Spells.Exists(x => x.IdSpell == idSpell);
     }
 }

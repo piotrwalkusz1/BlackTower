@@ -8,8 +8,8 @@ namespace NetworkProject.Buffs
 {
     public static class BuffActionRepository
     {
-        private static List<Action<BuffServer, IBuffableServer>> _buffsCast = new List<Action<BuffServer, IBuffableServer>>();
-        private static List<Action<BuffServer, IBuffableServer>> _buffsEnd = new List<Action<BuffServer, IBuffableServer>>();
+        private static List<Action<Buff, IBuffable>> _buffsCast = new List<Action<Buff, IBuffable>>();
+        private static List<Action<Buff, IBuffable>> _buffsEnd = new List<Action<Buff, IBuffable>>();
 
         static BuffActionRepository()
         {
@@ -17,21 +17,21 @@ namespace NetworkProject.Buffs
             _buffsEnd.Add(TransformToFire_End);
         }
 
-        public static Action<BuffServer, IBuffableServer> GetOnCast(int idBuff)
+        public static Action<Buff, IBuffable> GetOnCast(int idBuff)
         {
             return _buffsCast[idBuff];
         }
 
-        public static Action<BuffServer, IBuffableServer> GetOnEnd(int idBuff)
+        public static Action<Buff, IBuffable> GetOnEnd(int idBuff)
         {
             return _buffsEnd[idBuff];
         }
 
-        public static void TransformToFire_Cast(BuffServer buff, IBuffableServer target) // 0
+        public static void TransformToFire_Cast(Buff buff, IBuffable target) // 0
         {
             GameObject fire = SceneBuilder.CreateVisualObject(1, Vector3.zero, 0f);
 
-            fire.GetComponent<NetVisualObject>().IdVisualObject = 1;
+            fire.GetComponent<NetVisualObject>()._idVisualObject = 1;
 
             DamageSphere damager = fire.AddComponent<DamageSphere>();
             damager.DamageType = DamageType.Mental;
@@ -53,7 +53,7 @@ namespace NetworkProject.Buffs
             target.SetVisibleModel(false);
         }
 
-        public static void TransformToFire_End(BuffServer buff, IBuffableServer target)
+        public static void TransformToFire_End(Buff buff, IBuffable target)
         {
             target.SetVisibleModel(true);
         }

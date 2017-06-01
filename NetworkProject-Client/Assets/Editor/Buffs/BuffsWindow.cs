@@ -28,7 +28,7 @@ namespace EditorExtension
 
             _windows = new List<BuffWindow>();
 
-            List<BuffMultiData> buffs = EditorSaveLoad.LoadBuffs();
+            List<BuffData> buffs = EditorSaveLoad.LoadBuffs();
 
             foreach (var buff in buffs)
             {
@@ -71,7 +71,7 @@ namespace EditorExtension
 
         private void Save()
         {
-            var buffs = new List<BuffMultiData>();
+            var buffs = new List<BuffData>();
 
             foreach (var window in _windows)
             {

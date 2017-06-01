@@ -21,6 +21,11 @@ public abstract class PlayerStats : Stats, IPlayerStats
             GetComponent<Experience>().Lvl = value;
         }
     }
+    public int Exp
+    {
+        get { return GetComponent<PlayerExperience>().Exp; }
+        set { GetComponent<PlayerExperience>().Exp = value; }
+    }
     public virtual int MinDmg
     {
         get { return GetComponent<PlayerCombat>().MinDmg; }
@@ -83,5 +88,20 @@ public abstract class PlayerStats : Stats, IPlayerStats
     {
         get { return GetComponent<Health>().HPRegeneration; }
         set { GetComponent<Health>().HPRegeneration = value; }
+    }
+    public virtual int Mana
+    {
+        get { return GetComponent<ManaInfo>().Mana; }
+        set { GetComponent<ManaInfo>().Mana = value; }
+    }
+    public virtual int MaxMana
+    {
+        get { return GetComponent<ManaInfo>().MaxMana; }
+        set { GetComponent<ManaInfo>().MaxMana = value; }
+    }
+    public virtual float ManaRegeneration
+    {
+        get { return GetComponent<ManaInfo>().ManaRegeneration; }
+        set { GetComponent<ManaInfo>().ManaRegeneration = value; }
     }
 }

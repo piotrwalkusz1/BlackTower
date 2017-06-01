@@ -3,7 +3,6 @@ using System.Collections;
 using NetworkProject;
 using NetworkProject.Connection;
 
-[System.CLSCompliant(false)]
 public class OnlineAccount
 {
     public int IdAccount { get; private set; }
@@ -45,5 +44,13 @@ public class OnlineAccount
     public RegisterCharacter[] GetCharacters()
     {
         return AccountData.Characters.ToArray();
+    }
+
+    public void UpdateRegisterCharacter()
+    {
+        if (OnlineCharacter != null)
+        {
+            OnlineCharacter.UpdateRegisterCharacter();
+        }
     }
 }

@@ -21,7 +21,7 @@ public class JumperMovement : MonsterMovement
 
     void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, _targetPosition, MovementSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, _targetPosition, CurrentMovementSpeed * Time.deltaTime);
 
         if (_isJumpUp && _netMonster.IsFall())
         {

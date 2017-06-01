@@ -11,18 +11,13 @@ namespace EditorExtension
     {
         public int Defense
         {
-            get { return ((ShieldData)VisualEquipableItem.EquipableItemData)._defense; }
-            set { ((ShieldData)VisualEquipableItem.EquipableItemData)._defense = value; }
+            get { return ((ShieldData)Item)._defense; }
+            set { ((ShieldData)Item)._defense = value; }
         }
 
         public ItemWindowShieldData(ShieldData shield) : base(shield)
         {
 
-        }
-
-        public ItemWindowShieldData(VisualEquipableItemData shield) : base(shield)
-        {
-            Defense = ((ShieldData)shield.EquipableItemData)._defense;
         }
 
         public override void Draw()

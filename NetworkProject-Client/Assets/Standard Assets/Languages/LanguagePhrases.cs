@@ -21,6 +21,14 @@ namespace Standard
         [XmlIgnore]
         public PhrasesCategory MonstersNames { get; private set; }
         [XmlIgnore]
+        public PhrasesCategory QuestsNames { get; private set; }
+        [XmlIgnore]
+        public PhrasesCategory QuestsDescriptions { get; private set; }
+        [XmlIgnore]
+        public PhrasesCategory Dialogs { get; set; }
+        [XmlIgnore]
+        public PhrasesCategory MessageText { get; set; }
+        [XmlIgnore]
         public PhrasesCategory Other { get; private set; }
 
 
@@ -36,12 +44,22 @@ namespace Standard
 
             MonstersNames = new PhrasesCategory("Monsters names", this, @"^" + Languages.MONSTER_NAME);
 
-            Other = new PhrasesCategory("Other", this, ItemsNames, SpellsNames, SpellsDescriptions, MonstersNames);
+            QuestsNames = new PhrasesCategory("Quests names", this, @"^" + Languages.QUEST_NAME);
+
+            QuestsDescriptions = new PhrasesCategory("Quests descriptions", this, @"^" + Languages.QUEST_DESCRIPTION);
+
+            Dialogs = new PhrasesCategory("Dialogs", this, @"^" + Languages.DIALOG);
+
+            MessageText = new PhrasesCategory("Message text", this, @"^" + Languages.MESSAGE_TEXT);
+
+            Other = new PhrasesCategory("Other", this, ItemsNames, SpellsNames, SpellsDescriptions, MonstersNames,
+                QuestsNames, QuestsDescriptions, Dialogs, MessageText);
         }
 
         public PhrasesCategory[] GetCategories()
         {
-            return new PhrasesCategory[] { ItemsNames, SpellsNames, SpellsDescriptions, MonstersNames, Other };
+            return new PhrasesCategory[] { ItemsNames, SpellsNames, SpellsDescriptions, MonstersNames, QuestsNames,
+                QuestsDescriptions, Dialogs, Other };
         }
 
         public bool IsContain(string phrase)

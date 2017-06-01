@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using NetworkProject;
 using NetworkProject.Connection;
 using NetworkProject.Spells;
@@ -15,33 +18,19 @@ public class AccountRepositoryInServer : IAccountRepository
     private int _nextIdAccount = 0;
     private int _nextIdCharacter = 0;
 
+    private readonly string _pathToAccounts = Application.dataPath + "/accounts.txt";
+
     public AccountRepositoryInServer()
     {
-        RegisterAccount account = new RegisterAccount("Login", "Password");
-        RegisterAccount(account);
+        Load();
+    }
 
-        RegisterCharacter character = new RegisterCharacter();
-        character.Name = "Neon";
-        character.EndPosition = new Vector3(0, 400, 0);
-        character.BreedAndGender = new BreedAndGender(0, true);
-        character.Lvl = 1;
-        character.Exp = 0;
-        character.Equipment.SetSlot(new Item(0), 0);
-        character.Equipment.SetSlot(new Item(1), 1);
-        character.Equipment.SetSlot(new Item(2), 2);
-        var spells = new List<Spell>();
-        spells.Add(new Spell(0));
-        character.Spells = spells;
-        RegisterCharacter(account, character);
-
-        RegisterAccount account2 = new RegisterAccount("Login1", "Password");
-        RegisterAccount(account2);
-
-        RegisterCharacter character2 = new RegisterCharacter();
-        character2.Name = "Spejkon";
-        character2.EndPosition = new Vector3(3, 400, 3);
-        character2.BreedAndGender = new BreedAndGender(0, true);
-        RegisterCharacter(account2, character2);  
+    public void OnGUI()
+    {
+        if(GUILayout.Button("Save"))
+        {
+            Save();
+        }
     }
 
     public void RegisterAccount(RegisterAccount registerAccount)
@@ -84,11 +73,20 @@ public class AccountRepositoryInServer : IAccountRepository
 
     public void LogoutAndDeleteCharacter(OnlineCharacter character)
     {
-        character.UpdateRegisterCharacter();
+        try
+        {
+            character.UpdateRegisterCharacter();
 
-        SceneBuilder.DeletePlayer(character);
-
-        character.MyAccount.LogoutCharacter();
+            SceneBuilder.DeletePlayer(character);
+        }
+        catch(Exception ex)
+        {
+            MonoBehaviour.print(ex.Message + '\n' + ex.StackTrace);
+        }
+        finally
+        {
+            character.MyAccount.LogoutCharacter();
+        }
     }
 
     public RegisterAccount[] GetAccounts()
@@ -99,6 +97,42 @@ public class AccountRepositoryInServer : IAccountRepository
     public OnlineAccount[] GetOnlineAccounts()
     {
         return _onlineAccounts.ToArray();
+    }
+
+    private void Save()
+    {
+        _onlineAccounts.ForEach(x => x.UpdateRegisterCharacter());
+
+        var formatter = new BinaryFormatter();
+
+        var package = new AccountRepositoryToSave(_registerAccounts.ToArray(), _nextIdAccount, _nextIdCharacter);
+
+        using (var stream = new FileStream(_pathToAccounts, FileMode.Create))
+        {
+            formatter.Serialize(stream, package);
+        }
+    }
+
+    private void Load()
+    {
+        var formatter = new BinaryFormatter();
+
+        try
+        {
+            using (var stream = new FileStream(_pathToAccounts, FileMode.Open))
+            {
+                var package = (AccountRepositoryToSave)formatter.Deserialize(stream);
+
+                _registerAccounts = new List<RegisterAccount>(package.RegisterAccounts);
+                _nextIdAccount = package.NextIdAccount;
+                _nextIdCharacter = package.NextIdCharacter;
+            }
+        }
+        catch
+        {
+            MonoBehaviour.print("Błąd z odczytem kont lub plik nie istnieje");
+        }
+        
     }
 
     private int NextAccountId()

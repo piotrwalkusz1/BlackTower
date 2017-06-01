@@ -17,11 +17,12 @@ public interface IClient
 {
     ClientStatus Status { get; }
 
-    void Start(ClientConfig config);
+    void Start();
     void Connect(string host, int port);
     void Send(OutgoingMessage message);
     IncomingMessageFromServer ReadMessage();
     void Disconnect();
     void Close();
+    bool IsRunning();
 }
 

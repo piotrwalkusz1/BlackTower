@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NetworkProject.Connection
+namespace NetworkProject
 {
     [Serializable]
     public class MonsterStatsPackage : StatsPackage, IMonsterStats
@@ -23,6 +23,6 @@ namespace NetworkProject.Connection
 
         public int AttackSpeed { get; set; }
 
-        public float MovementSpeed { get; set; }
+        public float[] MovementSpeed { get; set; }
     }
 }

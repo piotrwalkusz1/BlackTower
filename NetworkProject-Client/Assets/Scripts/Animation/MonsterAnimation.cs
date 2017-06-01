@@ -7,12 +7,7 @@ using UnityEngine;
 
 public class MonsterAnimation : AnimationManager, ICombatAnimation
 {
-    protected Animator _animator;
-
-    void Awake()
-    {
-        _animator = GetComponent<Animator>();
-    }
+    public Animator _animator;
 
     public virtual void Attack()
     {

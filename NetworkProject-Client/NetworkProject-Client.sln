@@ -9,6 +9,8 @@ Project("{793A8506-D050-12D5-EEC9-EB201940A28B}") = "NetworkProject-Client", "As
 EndProject
 Project("{793A8506-D050-12D5-EEC9-EB201940A28B}") = "NetworkProject-Client", "Assembly-UnityScript-firstpass.unityproj", "{A93D780A-BB70-76E4-A00A-3DBE9655FA24}"
 EndProject
+Project("{793A8506-D050-12D5-EEC9-EB201940A28B}") = "NetworkProject-Client", "Assembly-UnityScript.unityproj", "{F810313A-D1CA-A7C6-113B-CD637BAAEDE4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,11 +33,15 @@ Global
 		{A93D780A-BB70-76E4-A00A-3DBE9655FA24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A93D780A-BB70-76E4-A00A-3DBE9655FA24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A93D780A-BB70-76E4-A00A-3DBE9655FA24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F810313A-D1CA-A7C6-113B-CD637BAAEDE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F810313A-D1CA-A7C6-113B-CD637BAAEDE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F810313A-D1CA-A7C6-113B-CD637BAAEDE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F810313A-D1CA-A7C6-113B-CD637BAAEDE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-																																																																																																																														GlobalSection(MonoDevelopProperties) = preSolution
+																																																																																																																																																																																																																																																																																																													GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1

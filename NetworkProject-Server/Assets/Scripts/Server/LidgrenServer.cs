@@ -7,7 +7,6 @@ using Lidgren.Network;
 using NetworkProject.Connection;
 using UnityEngine;
 
-[System.CLSCompliant(false)]
 public class LidgrenServer : IServer
 {
     public ServerStatus Status
@@ -38,7 +37,7 @@ public class LidgrenServer : IServer
 
     public void Start(ServerConfig config)
     {
-        NetPeerConfiguration netConfig = new NetPeerConfiguration("NetworkProject");
+        NetPeerConfiguration netConfig = new NetPeerConfiguration("NP");
         netConfig.MaximumConnections = config.MaxPlayers;
         netConfig.Port = config.Port;
         NetServer server = new NetServer(netConfig);

@@ -6,23 +6,7 @@ using NetworkProject.Items;
 
 public class ImageRepository : MonoBehaviour
 {	
-	public List<Texture2D> _images;
-
-    public Texture2D _equipmentWindow;
-    public Texture2D _characterWindow;
-
-    public static Texture2D EquipmentWindow
-    {
-        get { return _repository._equipmentWindow; }
-        set { _repository._equipmentWindow = value; }
-    }
-    public static Texture2D CharacterWindow
-    {
-        get { return _repository._characterWindow; }
-        set { _repository._characterWindow = value; }
-    }
-
-    
+	public List<Texture2D> _images;    
 
     private static ImageRepository _repository;
 
@@ -40,13 +24,23 @@ public class ImageRepository : MonoBehaviour
 
     static public Texture2D GetImageByIdImage(int idImage)
     {
-        return _repository._images[idImage];
+        if (idImage == -1)
+        {
+            return null;
+        }
+        else
+        {
+            return _repository._images[idImage];
+        }       
+    }
+
+    public static Texture2D GetImageBySpell(Spell spell)
+    {
+        return GetImageByIdImage(spell.SpellData.IdImage);
     }
 
     public static Texture2D GetImageByItem(Item item)
     {
-        VisualItemData itemData = (VisualItemData)ItemRepository.GetItemByIdItem(item.IdItem);
-
-        return GetImageByIdImage(itemData.IdTexture);
+        return GetImageByIdImage(item.ItemData.IdTexture);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using NetworkProject;
 using NetworkProject.Connection.ToClient;
@@ -9,15 +10,13 @@ using Standard;
 
 public class ApplicationControler : MonoBehaviour
 {
-    public void Awake()
+    void Awake()
     {
         DontDestroyOnLoad(gameObject);
 
         Standard.Settings.SetSettingsFromFileOrResources();
 
-        var spellRepository = Standard.IoC.GetSpellRepository();
-        spellRepository.SetSpellsFromResources();
-        SpellRepository.Set(spellRepository);
+        SpellRepository.SetSpellsFromResources();
 
         InputsSystem.Inputs.LoadInputsFromFileOrResources(Standard.Settings.pathToInputsInApplication);
 
@@ -26,6 +25,15 @@ public class ApplicationControler : MonoBehaviour
         Languages.SetLanguage(Standard.Settings.pathToLanguagesInApplication, Standard.Settings.UserConfiguration.DefaultLanguageName);
 
         BuffRepository.LoadAndSetFromResources(Standard.Settings.pathToBuffsInResources);
+
+        ConversationRepository.LoadAndSetConversations();
+    }
+
+    public static void GoToLoginMenu()
+    {
+        Application.LoadLevel("Restart");
+        GUIController.SwitchLoginMenuGUI(new LoginMenuInfo());
+        GUIController.HidePlayerInterface();
     }
 
     public static void GoToChoiceCharacterMenu(GoToChoiceCharacterMenuToClient characterChoiceMenuPackage)
@@ -38,5 +46,10 @@ public class ApplicationControler : MonoBehaviour
     {
         SceneBuilder.CreateScene(worldInfoPackage);
         GUIController.SwitchWorldGUI(worldInfoPackage);
+    }
+
+    public static void Quit()
+    {
+        Application.Quit();
     }
 }

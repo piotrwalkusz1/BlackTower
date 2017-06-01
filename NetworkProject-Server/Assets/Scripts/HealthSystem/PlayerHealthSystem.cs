@@ -3,7 +3,6 @@ using System.Collections;
 using NetworkProject;
 using NetworkProject.Connection.ToClient;
 
-[System.CLSCompliant(false)]
 public class PlayerHealthSystem : HealthSystem
 {
     public int Defense { get; set; }
@@ -43,6 +42,30 @@ public class PlayerHealthSystem : HealthSystem
         SendUpdateHPToOwner();
     }
 
+    public void IncreaseHPAndSendUpdate(int value)
+    {
+        int oldHP = HP;
+
+        IncreaseHP(value);
+
+        if (oldHP != HP)
+        {
+            SendUpdateHP();
+        }
+    }
+
+    public void DecreaseHPAndSendUpdate(int value)
+    {
+        int oldHP = HP;
+
+        DecreaseHP(value);
+
+        if (oldHP != HP)
+        {
+            SendUpdateHP();
+        }
+    }
+
     public void SendUpdateHPToOwner()
     {
         SendMessage("OnDead", SendMessageOptions.DontRequireReceiver);
@@ -59,6 +82,18 @@ public class PlayerHealthSystem : HealthSystem
         Recuparate();
 
         SendUpdateHP();
+    }
+
+    protected override void Die()
+    {
+        ChangeHp(0);
+    }
+
+    protected override KillInfo GetKillInfo()
+    {
+        var address = GetComponent<NetPlayer>().OwnerAddress;
+
+        return new PlayerKillInfo(AccountRepository.GetOnlineCharacterByAddress(address).IdCharacter);
     }
 
     protected int ApplyDefense(int baseDmg)

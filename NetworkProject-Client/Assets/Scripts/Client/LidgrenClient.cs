@@ -8,7 +8,8 @@ using NetworkProject;
 using NetworkProject.Connection;
 using UnityEngine;
 
-public class LidgrenClient : IClient
+public class 
+    LidgrenClient : IClient
 {
     public ClientStatus Status
     {
@@ -18,18 +19,16 @@ public class LidgrenClient : IClient
             {
                 return ClientStatus.Disconnected;
             }
-            switch (_netClient.Status)
+            switch (_netClient.ConnectionStatus)
             {
-                case NetPeerStatus.NotRunning:
+                case NetConnectionStatus.Disconnected:
                     return ClientStatus.Disconnected;
-                case NetPeerStatus.Starting:
-                    return ClientStatus.Connecting;
-                case NetPeerStatus.Running:
+                case NetConnectionStatus.Connected:
                     return ClientStatus.Connected;
-                case NetPeerStatus.ShutdownRequested:
+                case NetConnectionStatus.Disconnecting:
                     return ClientStatus.Disconnecting;
                 default:
-                    return ClientStatus.Disconnecting;
+                    return ClientStatus.Disconnected;
             }
         }
     }
@@ -37,10 +36,9 @@ public class LidgrenClient : IClient
 
     private NetClient _netClient;
 
-    public void Start(ClientConfig config)
+    public void Start()
     {
-        NetPeerConfiguration netConfig = new NetPeerConfiguration("NetworkProject");
-        netConfig.Port = config.Port;
+        NetPeerConfiguration netConfig = new NetPeerConfiguration("NP");
         NetClient client = new NetClient(netConfig);
         client.Start();
         _netClient = client;
@@ -90,5 +88,10 @@ public class LidgrenClient : IClient
     public void Close()
     {
         _netClient.Shutdown("");
+    }
+
+    public bool IsRunning()
+    {
+        return _netClient != null && _netClient.Status == NetPeerStatus.Running;
     }
 }

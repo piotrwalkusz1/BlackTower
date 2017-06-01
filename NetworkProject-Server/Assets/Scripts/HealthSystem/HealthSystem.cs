@@ -2,8 +2,7 @@
 using System;
 using System.Collections;
 
-[System.CLSCompliant(false)]
-public class HealthSystem : MonoBehaviour
+public abstract class HealthSystem : HealthSystemBase
 {
     public event Func<AttackInfo, HealthSystem, AttackInfo> AttackEvent;
 
@@ -20,14 +19,12 @@ public class HealthSystem : MonoBehaviour
     private float _hp;
     protected bool _isSendedDeadMessage;
 
-    protected void Awake()
+    protected void Start()
     {
-        _hp = (float)MaxHP;       
 
-        HPRegenerationPerSecond = 0f;
     }
 
-    void Update()
+    protected void Update()
     {
         if (!IsDead())
         {
@@ -45,17 +42,24 @@ public class HealthSystem : MonoBehaviour
         _hp = (float)hp;
     }
 
-    public virtual void AttackWithoutSendUpdate(AttackInfo attackInfo)
+    public override void AttackWithoutSendUpdate(AttackInfo attackInfo)
     {
         if (!IsDead())
         {
             attackInfo = ApplyAttackEvent(attackInfo);
 
             DecreaseHP(attackInfo.Dmg);
+
+            if (IsDead() && attackInfo.Attacker is Attacker)
+            {               
+                var attacker = (Attacker)attackInfo.Attacker;
+
+                attacker._attackerObject.GetComponent<Combat>().OnKillInvoke(GetKillInfo());
+            }
         }       
     }
 
-    public void AttackAndSendUpdate(AttackInfo attackInfo)
+    public override void AttackAndSendUpdate(AttackInfo attackInfo)
     {
         AttackWithoutSendUpdate(attackInfo);
 
@@ -100,7 +104,7 @@ public class HealthSystem : MonoBehaviour
         CheckWhetherIsDead();
     }
 
-    public virtual void DieAndSendUpdate()
+    public override void DieAndSendUpdate()
     {
         SendMessage("OnDead", SendMessageOptions.DontRequireReceiver);
 
@@ -120,6 +124,8 @@ public class HealthSystem : MonoBehaviour
 
         Destroy(gameObject, 1f);
     }
+
+    
 
     public virtual void SendUpdateHP()
     {
@@ -144,6 +150,19 @@ public class HealthSystem : MonoBehaviour
 
         _isSendedDeadMessage = false;
     }
+
+    protected virtual void Die()
+    {
+        SendMessage("OnDead", SendMessageOptions.DontRequireReceiver);
+
+        ChangeHp(0);
+
+        transform.position = new Vector3(1000000, 1000000, 1000000);
+
+        Destroy(gameObject, 1f);
+    }
+
+    protected abstract KillInfo GetKillInfo();
 
     protected void CheckWhetherIsDead()
     {

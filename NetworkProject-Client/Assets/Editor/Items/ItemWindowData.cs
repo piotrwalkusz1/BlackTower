@@ -10,41 +10,36 @@ namespace EditorExtension
 {
     public class ItemWindowData
     {
-        public virtual VisualItemData VisualItem { get; protected set; }
+        public virtual ItemData Item { get; protected set; }
 
         public string[] NameInAllLanguages { get; set; }
 
         public int IdItem
         {
-            get { return VisualItem.ItemData.IdItem; }
-            set { VisualItem.ItemData.IdItem = value; }
+            get { return Item.IdItem; }
+            set { Item.IdItem = value; }
         }
         public int IdTexture
         {
-            get { return VisualItem.IdTexture; }
-            set { VisualItem.IdTexture = value; }
+            get { return Item.IdTexture; }
+            set { Item.IdTexture = value; }
         }
         public int IdPrefabOnScene
         {
-            get { return VisualItem.IdPrefabOnScene; }
-            set { VisualItem.IdPrefabOnScene = value; }
+            get { return Item.IdPrefabOnScene; }
+            set { Item.IdPrefabOnScene = value; }
         }
 
         private bool _isNameInAllLanguagesActive;
 
-        public ItemWindowData(ItemData item) : this(new VisualItemData(item))
+        public ItemWindowData(ItemData item)
         {
-
+            Item = item;
         }
-
-        public ItemWindowData(VisualItemData item)
-	    {
-            VisualItem = item;
-	    }
 
         public virtual void Draw()
         {
-            VisualItem.IdItem = EditorGUILayout.IntField("Id item", VisualItem.IdItem);
+            Item.IdItem = EditorGUILayout.IntField("Id item", Item.IdItem);
             IdTexture = EditorGUILayout.IntField("Id texture", IdTexture);
             IdPrefabOnScene = EditorGUILayout.IntField("Id Prefab on scene", IdPrefabOnScene);
         }

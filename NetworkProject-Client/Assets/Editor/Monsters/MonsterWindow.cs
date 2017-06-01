@@ -14,6 +14,7 @@ namespace EditorExtension
         public MonsterMultiData Monster { get; private set; }
 
         private bool _isActive;
+        private bool _isMovementSpeedListActive;
 
         public MonsterWindow(MonsterMultiData monster)
         {
@@ -32,9 +33,42 @@ namespace EditorExtension
                 Monster.MinDmg = EditorGUILayout.IntField("Min dmg", Monster.MinDmg);
                 Monster.MaxDmg = EditorGUILayout.IntField("Max dmg", Monster.MaxDmg);
                 Monster.AttackSpeed = EditorGUILayout.IntField("Attack speed", Monster.AttackSpeed);
-                Monster.MovementSpeed = EditorGUILayout.FloatField("Movement speed", Monster.MovementSpeed);
+
+                ShowMovementSpeedList();
 
                 ShowDrop();
+
+                Indentation.EndIndentation();
+            }
+        }
+
+        private void ShowMovementSpeedList()
+        {
+            if (_isMovementSpeedListActive = EditorGUILayout.Foldout(_isMovementSpeedListActive, "Movement speed"))
+            {
+                Indentation.BeginIndentation();
+
+                int oldLength = Monster.MovementSpeed.Length;
+
+                int length = EditorGUILayout.IntField("Movement type number", oldLength);
+
+                var movementTypes = new float[length];
+
+                for (int i = 0; i < length; i++)
+                {
+                    float movementSpeed = 0f;
+
+                    if (oldLength > i)
+                    {
+                        movementSpeed = Monster.MovementSpeed[i];
+                    }
+
+                    movementSpeed = EditorGUILayout.FloatField("Movement speed " + i.ToString(), movementSpeed);
+
+                    movementTypes[i] = movementSpeed;
+                }
+
+                Monster.MovementSpeed = movementTypes;
 
                 Indentation.EndIndentation();
             }
@@ -63,7 +97,7 @@ namespace EditorExtension
                 chances = EditorGUILayout.FloatField("Chances", chances);
 
                 var item = new Item(idItem);
-                drop[i] = new ItemDrop(item, chances);
+                drop[i] = new ItemDrop(PackageConverter.ItemToPackage(item), chances);
 
                 EditorGUILayout.EndHorizontal();
             }

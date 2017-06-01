@@ -1,11 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[System.CLSCompliant(false)]
-public class JumperMovement : Movement
+public class JumperMovement : MonsterMovement
 {
-    public float _moveSpeed;
-
     public float _jumpHeight;
     public float _halfHeight;
 
@@ -38,9 +35,7 @@ public class JumperMovement : Movement
 
         if (!IsStop())
         {
-            RotateToTarget();
-
-            movement += transform.TransformDirection(Vector3.forward * _moveSpeed);
+            movement += transform.TransformDirection(Vector3.forward * MoveSpeed);
         }
 
         if (_jumpSpeed.y < 0 && IsGrounded())
@@ -90,6 +85,15 @@ public class JumperMovement : Movement
         _moveTargetPosition = transform.position;
     }
 
+    public void RotateToTarget(Vector3 target)
+    {
+        Vector3 newDir = target - transform.position;
+
+        newDir.y = 0;
+
+        transform.rotation = Quaternion.LookRotation(newDir);
+    }
+
     protected float CalculateJumpSpeed()
     {
         return Mathf.Sqrt(2 * _jumpHeight * Gravity);
@@ -98,14 +102,5 @@ public class JumperMovement : Movement
     protected void ApplyGravity(ref Vector3 direction)
     {
         direction += Physics.gravity * Time.deltaTime;
-    }
-
-    protected void RotateToTarget()
-    {
-        Vector3 newDir = _moveTargetPosition - transform.position;
-
-        newDir.y = 0;
-
-        transform.rotation = Quaternion.LookRotation(newDir);
     }
 }

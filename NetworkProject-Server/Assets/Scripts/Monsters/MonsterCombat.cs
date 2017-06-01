@@ -12,7 +12,7 @@ public class MonsterCombat : Combat
     public int MaxDmg { get; set; }
     public int AttackSpeed { get; set; }
 
-    public float AttackRange = 2f;
+    public float AttackRange;
 
     public DateTime NextAttackTime { get; private set; }
 

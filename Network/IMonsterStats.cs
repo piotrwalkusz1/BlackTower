@@ -12,6 +12,6 @@ namespace NetworkProject
         int MinDmg { get; set; }
         int MaxDmg { get; set; }
         int AttackSpeed { get; set; }
-        float MovementSpeed { get; set; }
+        float[] MovementSpeed { get; set; }
     }
 }

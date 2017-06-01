@@ -13,5 +13,19 @@ namespace NetworkProject.Connection.ToClient
         public bool IsModelVisible { get; set; }
         public Vector3Serializable Position { get; set; }
         public virtual float Rotation { get; set; }
+
+        public CreateToClient(int idNet, Vector3Serializable position, float rotation)
+            : this(idNet, true, position, rotation)
+        {
+
+        }
+
+        public CreateToClient(int idNet, bool isModelVisible, Vector3Serializable position, float rotation)
+        {
+            IdNet = idNet;
+            IsModelVisible = isModelVisible;
+            Position = position;
+            Rotation = rotation;
+        }
     }
 }

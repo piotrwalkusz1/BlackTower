@@ -9,10 +9,13 @@ namespace Standard
     public class Configuration
     {
         public string DefaultLanguageName { get; set; }
+        public string IP { get; set; }
+        public int Port { get; set; }
 
         public Configuration()
         {
             DefaultLanguageName = "";
+            IP = "";
         }
     }
 }

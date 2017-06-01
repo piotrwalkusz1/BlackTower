@@ -9,7 +9,6 @@ using NetworkProject.BodyParts;
 using NetworkProject.Items;
 using NetworkProject.Spells;
 
-[System.CLSCompliant(false)]
 public class NetPlayer : NetObject
 {
     public IConnectionMember OwnerAddress { get; set; }
@@ -26,7 +25,7 @@ public class NetPlayer : NetObject
         var stats = GetComponent<PlayerStats>();
         var eq = GetComponent<PlayerEquipment>();
         var request = new CreateOtherPlayerToClient(IdNet, IsModelVisible, transform.position, transform.eulerAngles.y, stats, Name,
-            eq.GetEquipedItems());
+            PackageConverter.PlayerEquipedItemsToPackage(eq));
         var message = new OutgoingMessage(request);
 
         Server.Send(message, address);
@@ -95,13 +94,20 @@ public class NetPlayer : NetObject
     {
         Action<IConnectionMember> function = delegate(IConnectionMember address)
         {
-            var request = new UpdateEquipedItemToClient(IdNet, slot, item);
+            var request = new UpdateEquipedItemToClient(IdNet, slot, PackageConverter.ItemToPackage(item));
             var message = new OutgoingMessage(request);
 
             Server.Send(message, address);
         };
 
         _sendMessageUpdateEvent += function;
+    }
+
+    public void SendChatMessageToOwner(string sender, string message)
+    {
+        var request = new ChatMessageToClient(sender + " : " + message);
+
+        Server.SendRequestAsMessage(request, OwnerAddress);
     }
 
     public void SendRespawnMessageToOwner()
@@ -111,25 +117,34 @@ public class NetPlayer : NetObject
         Server.SendRequestAsMessage(request, OwnerAddress);
     }
 
+    public void SendCreateMessageToOwner()
+    {
+        var tran = transform;
+        var stats = GetComponent<PlayerStats>();
+        var eq = GetComponent<PlayerEquipment>();
+        var spellCaster = GetComponent<SpellCaster>();
+        var createOwnPlayerRequest = new CreateOwnPlayerToClient(IdNet, IsModelVisible,
+            tran.position, tran.eulerAngles.y, stats, Name, PackageConverter.EquipmentToPackage(eq),
+            PackageConverter.PlayerEquipedItemsToPackage(eq), PackageConverter.SpellToPackage(spellCaster.GetSpells()));
+
+        Server.SendRequestAsMessage(createOwnPlayerRequest, OwnerAddress);
+    }
+
     public void Initialize(int idNet, RegisterCharacter characterData, IConnectionMember ownerAddress)
     {
         Name = characterData.Name;
 
         InitializeNetPlayer(idNet, ownerAddress);
 
-        InitalizeVision(ownerAddress);
+        InitalizeVision(ownerAddress);       
 
-        InitializeStats(characterData);
-
-        InitializeSpellCaster(characterData.Spells);
-
-        InitializePlayerExperience(characterData.Lvl, characterData.Exp);
+        InitializeSpellCaster(PackageConverter.PackageToSpell(characterData.Spells.ToArray()));
 
         InitializePlayerEquipment(characterData.Equipment, characterData.EquipedItems);
 
-        GetComponent<PlayerStats>().CalculateStats(); // musi być przedostatnie!
+        InitializeStats(characterData);
 
-        GetComponent<PlayerHealthSystem>().Recuparate(); // musi być na końcu!
+        InitializeQuests(characterData.CurrentQuests, characterData.ReturnedQuests);
     }
 
     private void InitializeNetPlayer(int idNet, IConnectionMember ownerAddress)
@@ -148,7 +163,9 @@ public class NetPlayer : NetObject
     private void InitializeStats(RegisterCharacter characterData)
     {
         var stats = GetComponent<PlayerStats>();
-        stats.Set(characterData);
+        characterData.Stats.CopyToStats(stats);
+
+        stats.CalculateStats();
     }
 
     private void InitializeSpellCaster(List<Spell> spells)
@@ -157,16 +174,20 @@ public class NetPlayer : NetObject
         spellCaster.SetSpells(spells);
     }
 
-    private void InitializePlayerExperience(int lvl, int exp)
-    {
-        var playerExperience = GetComponent<PlayerExperience>();
-        playerExperience.Set(lvl, exp);
-    }
-
-    private void InitializePlayerEquipment(Equipment equipment, PlayerEquipedItems equipedItems)
+    private void InitializePlayerEquipment(EquipmentPackage equipment, PlayerEquipedItemsPackage equipedItems)
     {
         var playerEquipment = GetComponent<PlayerEquipment>();
 
         playerEquipment.Set(equipment, equipedItems);
+    }
+
+    private void InitializeQuests(List<Quest> currentQuests, List<int> returnedQuests)
+    {
+        var questExecutor = GetComponent<QuestExecutor>();
+
+        questExecutor.SetQuests(currentQuests == null ? new Quest[0] : currentQuests.ToArray(),
+            returnedQuests == null ? new int[0] : returnedQuests.ToArray());
+
+        questExecutor.InitializeAllQuests();
     }
 }

@@ -12,11 +12,9 @@ namespace NetworkProject.Connection.ToClient
         public int IdItem { get; set; }
 
         public CreateItemToClient(int idNet, Vector3 position, float rotation, int idItem)
+            : base(idNet, position, rotation)
         {
-            IdNet = idNet;
             IdItem = idItem;
-            Position = position;
-            Rotation = rotation;
         }
     }
 }

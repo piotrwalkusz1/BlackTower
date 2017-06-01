@@ -8,14 +8,9 @@ public class PlayerEquipment : MonoBehaviour, IEquiper
 {
     private PlayerEquipedItems _equipedItems;
 
-    public PlayerEquipment()
+    public void SetEquipedItems(PlayerEquipedItemsPackage package)
     {
-        _equipedItems = new PlayerEquipedItems();
-    }
-
-    public void SetEquipedItems(PlayerEquipedItems package)
-    {
-        _equipedItems = package;
+        _equipedItems = new PlayerEquipedItems(package);
     }
 
     public virtual void Equip(Item item, int bodyPartSlot)
@@ -23,6 +18,11 @@ public class PlayerEquipment : MonoBehaviour, IEquiper
         _equipedItems.EquipeItem(item, bodyPartSlot);
 
         GetComponent<PlayerGeneratorModel>().UpdateEquipedItem(_equipedItems.GetBodyPart(bodyPartSlot), bodyPartSlot);
+    }
+
+    public BodyPart GetBodyPart(int slot)
+    {
+        return _equipedItems.GetBodyPart(slot);
     }
 
     public BodyPart[] GetBodyParts()

@@ -7,6 +7,7 @@ namespace NetworkProject
 {
     public static class Settings
     {
+        public const string gameName = "NetworkProject-1273";
         public const char messageSeparator1 = ';';
         public const int maxCharactersInAccount = 8;
         public const int mapsNumber = 1;       
@@ -15,10 +16,14 @@ namespace NetworkProject
         public const int widthEquipment = 6;
         public const int heightEquipment = 8;
         public const float pickItemRange = 1.5f;
+        public const float talkNPCRange = 8;
         public const float gravitation = 10f;
-        public const float basicPlayerMovementSpeed = 4;
+        public const float basicPlayerMovementSpeed = 6;
         public const int basicPlayerMaxHP = 100;
         public const int basicPlayerMaxExp = 100;
+        public const int basicPlayerMaxMana = 100;
+        public const float basicHPRegeneration = 1f;
+        public const float basicManaRegeneration = 1f;
         public const int additionalMaxExpPerLvl = 5;
 
         public static int GetMaxExpInLvl(int lvl)

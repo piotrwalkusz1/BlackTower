@@ -7,7 +7,7 @@ using NetworkProject;
 using NetworkProject.Spells;
 using NetworkProject.Items;
 
-[System.CLSCompliant(false)]
+[Serializable]
 public class RegisterCharacter
 {
     public RegisterAccount MyAccount { get; set; }
@@ -15,38 +15,71 @@ public class RegisterCharacter
     public int IdCharacter { get; set; }
     public BreedAndGender BreedAndGender { get; set; }
 
-    public Vector3 EndPosition { get; set; } // position at time of exit the game  
-    public List<Spell> Spells { get; set; }
-    public Equipment Equipment { get; set; }
-    public PlayerEquipedItems EquipedItems { get; set; }
-    public int Exp { get; set; }
-    public int Lvl { get; set; }
+    public Vector3Serializable EndPosition { get; set; } // position at time of exit the game  
+    public List<SpellPackage> Spells { get; set; }
+    public EquipmentPackage Equipment { get; set; }
+    public PlayerEquipedItemsPackage EquipedItems { get; set; }
+    public PlayerStatsPackage Stats { get; set; }
+    public List<Quest> CurrentQuests { get; set; }
+    public List<int> ReturnedQuests { get; set; }
+    public List<HotkeysPackage> Hotkeys { get; set; }
 
-    public RegisterCharacter()
+    public RegisterCharacter(string name, BreedAndGender breedAndGender)
     {
-        Spells = new List<Spell>();
-        Equipment = new Equipment(NetworkProject.Settings.widthEquipment * NetworkProject.Settings.heightEquipment);
-        EquipedItems = new PlayerEquipedItems();
+        Name = name;
+        BreedAndGender = breedAndGender;
 
-        Lvl = 1;
+        Spells = new List<SpellPackage>();
+        Equipment = GetEmptyEquipmentPackage();
+        EquipedItems = new PlayerEquipedItemsPackage(IoC.GetBodyParts().ToList());
+        Stats = new PlayerStatsPackage();
+        CurrentQuests = new List<Quest>();
+        ReturnedQuests = new List<int>();
+        Hotkeys = new List<HotkeysPackage>();
+        for (int i = 0; i < 10; i++)
+        {
+            Hotkeys.Add(null);
+        }
+
+        Stats.Lvl = 1;
+
+        Standard.Settings.StatsToDefault(Stats);
+
+        Stats.HP = Stats.MaxHP;
+        Stats.Mana = Stats.MaxMana;
     }
 
     public void Update(GameObject player)
     {
         EndPosition = player.transform.position;
-        Spells = new List<Spell>(player.GetComponent<SpellCaster>().GetSpells());
+        Spells = PackageConverter.SpellToPackage(player.GetComponent<SpellCaster>().GetSpells());
 
         var playerEquipment = player.GetComponent<PlayerEquipment>();
-        Equipment = playerEquipment.GetEquipment();
-        EquipedItems = playerEquipment.GetEquipedItems();
+        Equipment = PackageConverter.EquipmentToPackage(playerEquipment);
+        EquipedItems = PackageConverter.PlayerEquipedItemsToPackage(playerEquipment);
 
-        var experience = player.GetComponent<PlayerExperience>();
-        Exp = experience.Exp;
-        Lvl = experience.Lvl;
+        var stats = player.GetComponent<PlayerStats>();
+        Stats.CopyFromStats(stats);
+
+        var questExecutor = player.GetComponent<QuestExecutor>();
+        CurrentQuests = new List<Quest>(questExecutor.GetCurrentQuests());
+        ReturnedQuests = new List<int>(questExecutor.GetReturnedQuest());
     }
 
     public void AddSpell(Spell spell)
     {
-        Spells.Add(spell);
+        Spells.Add(PackageConverter.SpellToPackage(spell));
+    }
+
+    protected EquipmentPackage GetEmptyEquipmentPackage()
+    {
+        var items = new List<ItemPackage>();
+
+        for (int i = 0; i < NetworkProject.Settings.widthEquipment * NetworkProject.Settings.heightEquipment; i++)
+        {
+            items.Add(null);
+        }
+
+        return new EquipmentPackage(items.ToArray(), 0);
     }
 }

@@ -120,6 +120,13 @@ public abstract class NetObject : MonoBehaviour
         GenerateSendFunctionAndAddToUpdateEvent(request);
     }
 
+    public void SendChangePosition()
+    {
+        var request = new NewPositionToClient(IdNet, transform.position);
+
+        GenerateSendFunctionAndAddToUpdateEvent(request);
+    }
+
     protected void SetVisionFunction(Func<Vision, bool> function)
     {
         _isVisible = function;

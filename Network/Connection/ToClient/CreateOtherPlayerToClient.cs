@@ -12,16 +12,22 @@ namespace NetworkProject.Connection.ToClient
     {
         public PlayerStatsPackage PlayerStats { get; set; }
         public string Name { get; set; }
-        public PlayerEquipedItems EquipedItems { get; set; }
+        public PlayerEquipedItemsPackage EquipedItems { get; set; }
+
+        public CreateOtherPlayerToClient(int idNet, Vector3 position, float rotation, IPlayerStats playerStats, string name,
+            PlayerEquipedItemsPackage equipedItems)
+            : base(idNet, position, rotation)
+        {
+            PlayerStats = (PlayerStatsPackage)StatsPackage.GetStatsPackage(playerStats);
+            Name = name;
+            EquipedItems = equipedItems;
+        }
 
         public CreateOtherPlayerToClient(int idNet, bool isModelVisible, Vector3 position, float rotation, IPlayerStats playerStats, string name,
-            PlayerEquipedItems equipedItems)
+            PlayerEquipedItemsPackage equipedItems)
+            : base(idNet, isModelVisible, position, rotation)
         {
-            IdNet = idNet;
-            IsModelVisible = isModelVisible;
             PlayerStats = (PlayerStatsPackage)StatsPackage.GetStatsPackage(playerStats);
-            Position = position;
-            Rotation = rotation;
             Name = name;
             EquipedItems = equipedItems;
         }

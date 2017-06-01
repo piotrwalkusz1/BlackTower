@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.Data;
+using UnityEngine;
 
 namespace NetworkProject
 {
@@ -13,6 +14,36 @@ namespace NetworkProject
         private static char END_VARIABLE = ']';
         private static char START_OPERATION = '<';
         private static char END_OPERATION = '>';
+
+        public static void SetMultilineText(string text, GUIText guiText, int maxWidth)
+        {
+            var words = text.Split(' ');
+
+            string result = "";
+
+            guiText.text = "";
+
+            for (int i = 0; i < words.Length; i++)
+            {
+                if (i != 0)
+                {
+                    guiText.text += " ";
+                }
+
+                guiText.text += words[i];
+
+                if (guiText.GetScreenRect().width > maxWidth)
+                {
+                    guiText.text = result;
+                    guiText.text += '\n';
+                    guiText.text += words[i];
+
+
+                }
+
+                result = guiText.text;
+            }
+        }
 
         public static string ReplaceVariablesAndMathExpresionsByNumbers(string input, object data)
         {
@@ -71,7 +102,7 @@ namespace NetworkProject
             }
 
             return returnString.ToString();
-        }      
+        }
 
         private static int FindValueBetweenChars(string input, int startPosition, char prefix, char sufix, out string value)
         {
@@ -124,5 +155,5 @@ namespace NetworkProject
 
             return textValue.Replace(',', '.');
         }
-    }
+    } 
 }

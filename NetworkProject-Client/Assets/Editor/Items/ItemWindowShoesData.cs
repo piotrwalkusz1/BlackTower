@@ -11,17 +11,12 @@ namespace EditorExtension
     {
         public float MovementSpeed
         {
-            get { return ((ShoesData)VisualEquipableItem)._movementSpeed; }
-            set { ((ShoesData)VisualEquipableItem)._movementSpeed = value; }
+            get { return ((ShoesData)Item)._movementSpeed; }
+            set { ((ShoesData)Item)._movementSpeed = value; }
         }
 
 
         public ItemWindowShoesData(ShoesData shoes) : base(shoes)
-        {
-
-        }
-
-        public ItemWindowShoesData(VisualEquipableItemData shoes) : base(shoes)
         {
 
         }

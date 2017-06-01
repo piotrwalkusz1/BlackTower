@@ -11,26 +11,21 @@ namespace EditorExtension
     {
         public int MinDmg
         {
-            get { return ((WeaponData)VisualEquipableItem)._minDmg; }
-            set { ((WeaponData)VisualEquipableItem)._minDmg = value; }
+            get { return ((WeaponData)Item)._minDmg; }
+            set { ((WeaponData)Item)._minDmg = value; }
         }
         public int MaxDmg
         {
-            get { return ((WeaponData)VisualEquipableItem)._maxDmg; }
-            set { ((WeaponData)VisualEquipableItem)._maxDmg = value; }
+            get { return ((WeaponData)Item)._maxDmg; }
+            set { ((WeaponData)Item)._maxDmg = value; }
         }
         public int AttackSpeed
         {
-            get { return ((WeaponData)VisualEquipableItem)._attackSpeed; }
-            set { ((WeaponData)VisualEquipableItem)._attackSpeed = value; }
+            get { return ((WeaponData)Item)._attackSpeed; }
+            set { ((WeaponData)Item)._attackSpeed = value; }
         }
 
         public ItemWindowWeaponData(WeaponData weapon) : base(weapon)
-        {
-
-        }
-
-        public ItemWindowWeaponData(VisualEquipableItemData weapon) : base(weapon)
         {
 
         }

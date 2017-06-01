@@ -40,7 +40,28 @@ namespace EditorExtension
             {
                 LanguagesList.Add(new LanguageWindow(language));
             }
-        }        
+        }
+
+        public void Save()
+        {
+            Languages.SaveLanguagesPhrases(Phrases);
+
+            List<Language> languages = new List<Language>();
+
+            foreach (var language in LanguagesList)
+            {
+                languages.Add(language.Language);
+            }
+
+            Languages.SaveAllLanguagesToResources(languages);
+        }
+
+        public void AddPhraseAndUpdateLanguages(string phrasePrefix)
+        {
+            AddPharse(phrasePrefix);
+
+            UpdateLanguages();
+        }
 
         private void OnGUI()
         {
@@ -83,19 +104,7 @@ namespace EditorExtension
             }
         }
 
-        private void Save()
-        {
-            Languages.SaveLanguagesPhrases(Phrases);
-
-            List<Language> languages = new List<Language>();
-
-            foreach(var language in LanguagesList)
-            {
-                languages.Add(language.Language);
-            }
-
-            Languages.SaveAllLanguagesToResources(languages);
-        }
+        
 
         private void ShowContextMenu()
         {
@@ -110,21 +119,16 @@ namespace EditorExtension
                 menu.AddItem(new GUIContent("Add spell name"), false, delegate() { AddPhraseAndUpdateLanguages(Languages.SPELL_NAME); });
                 menu.AddItem(new GUIContent("Add spell description"), false, delegate() { AddPhraseAndUpdateLanguages(Languages.SPELL_DESCRIPTION); });
                 menu.AddItem(new GUIContent("Add monster name"), false, delegate() { AddPhraseAndUpdateLanguages(Languages.MONSTER_NAME); });
+                menu.AddItem(new GUIContent("Add quest name"), false, delegate() { AddPhraseAndUpdateLanguages(Languages.QUEST_NAME); });
+                menu.AddItem(new GUIContent("Add quest description"), false, delegate() { AddPhraseAndUpdateLanguages(Languages.QUEST_DESCRIPTION); });
+                menu.AddItem(new GUIContent("Add dialog"), false, delegate() { AddPhraseAndUpdateLanguages(Languages.DIALOG); });
+                menu.AddItem(new GUIContent("Add message text"), false, delegate() { AddPhraseAndUpdateLanguages(Languages.MESSAGE_TEXT); });
                 menu.AddItem(new GUIContent("Add language"), false, () => LanguagesList.Add(new LanguageWindow(new Language())));
 
                 menu.ShowAsContext();
 
                 evt.Use();
             }
-        }
-
-
-
-        private void AddPhraseAndUpdateLanguages(string phrasePrefix)
-        {
-            AddPharse(phrasePrefix);
-
-            UpdateLanguages();
         }
 
         private void AddPharse(string prefix)

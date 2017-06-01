@@ -5,7 +5,6 @@ using System.Linq;
 using NetworkProject;
 using NetworkProject.Connection;
 
-[System.CLSCompliant(false)]
 public class Vision : MonoBehaviour
 {
     public List<IConnectionMember> Observers { get; private set; }
@@ -22,6 +21,13 @@ public class Vision : MonoBehaviour
     void Start()
     {
         _map = Standard.Settings.GetMap(transform.position);
+    }
+
+    public void UpdateMap(int newMap)
+    {
+        _map = newMap;
+
+        _seenNetObjects.Clear();
     }
 
     public void UpdateInApplicationController()
@@ -156,9 +162,9 @@ public class Vision : MonoBehaviour
 
     private void SendToObserversUpdate(NetObject[] netObjects)
     {
-        foreach (IConnectionMember observer in Observers)
-        {
-            foreach (NetObject netObject in netObjects)
+        foreach (NetObject netObject in netObjects)
+        {           
+            foreach (IConnectionMember observer in Observers)
             {
                 netObject.SendMessageUpdate(observer);
             }

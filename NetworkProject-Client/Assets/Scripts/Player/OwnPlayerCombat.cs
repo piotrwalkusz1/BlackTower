@@ -6,10 +6,15 @@ using NetworkProject.Connection.ToServer;
 
 public class OwnPlayerCombat : PlayerCombat
 {
+    public bool IsGUIAssent { get; set; }
+    public bool IsMouseLockAssent { get; set; }
+
     private DateTime _newAttackTime = DateTime.UtcNow;
 
 	void Start()
     {
+        IsGUIAssent = true;
+        IsMouseLockAssent = true;
 	}
 	
 	void Update()
@@ -35,6 +40,7 @@ public class OwnPlayerCombat : PlayerCombat
 
     private bool CanAttack()
     {
-        return DateTime.UtcNow > _newAttackTime && GetComponent<PlayerEquipment>().IsEquipedWeapon();
+        return DateTime.UtcNow > _newAttackTime && GetComponent<PlayerEquipment>().IsEquipedWeapon() && IsGUIAssent
+            && IsMouseLockAssent;
     }
 }

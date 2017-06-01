@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 using NetworkProject.Buffs;
 
-public interface IBuffableServer : IBuffable
+public interface IBuffable
 {
     void AddChild(GameObject child, Vector3 localPosition, Quaternion localRotation);
 

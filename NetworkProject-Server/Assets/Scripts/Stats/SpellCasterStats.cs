@@ -7,7 +7,7 @@ using NetworkProject.Spells;
 using NetworkProject.Connection;
 using UnityEngine;
 
-public class SpellCasterStats : Stats, ISpellCasterStats
+public class SpellCasterStats : Stats
 {
     public int Lvl
     {

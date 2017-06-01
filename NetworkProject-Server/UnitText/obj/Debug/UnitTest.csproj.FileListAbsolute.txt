@@ -26,10 +26,8 @@ C:\Users\Piotr\Source\Repos\NetworkProject\NetworkProject-Server\UnitText\bin\De
 C:\Users\Piotr\Source\Repos\NetworkProject\NetworkProject-Server\UnitText\bin\Debug\Castle.Windsor.dll
 C:\Users\Piotr\Source\Repos\NetworkProject\NetworkProject-Server\UnitText\bin\Debug\Moq.dll
 C:\Users\Piotr\Source\Repos\NetworkProject\NetworkProject-Server\UnitText\bin\Debug\NetworkProject.dll
-C:\Users\Piotr\Source\Repos\NetworkProject\NetworkProject-Server\UnitText\bin\Debug\SpellActions.dll
 C:\Users\Piotr\Source\Repos\NetworkProject\NetworkProject-Server\UnitText\bin\Debug\xunit.dll
 C:\Users\Piotr\Source\Repos\NetworkProject\NetworkProject-Server\UnitText\bin\Debug\NetworkProject.pdb
-C:\Users\Piotr\Source\Repos\NetworkProject\NetworkProject-Server\UnitText\bin\Debug\SpellActions.pdb
 C:\Users\Piotr\Source\Repos\NetworkProject\NetworkProject-Server\UnitText\bin\Debug\Assembly-CSharp-firstpass.pdb
 C:\Users\Piotr\Source\Repos\NetworkProject\NetworkProject-Server\UnitText\bin\Debug\Assembly-CSharp.pdb
 C:\Users\Piotr\Source\Repos\NetworkProject\NetworkProject-Server\UnitText\bin\Debug\Castle.Core.xml

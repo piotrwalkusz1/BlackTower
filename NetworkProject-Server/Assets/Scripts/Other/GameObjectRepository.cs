@@ -57,4 +57,9 @@ public static class GameObjectRepository
     {
         return _repository.GetNetObjects().First(x => x.IdNet == idNet);
     }
+
+    public static NetObject[] GetNetObjects()
+    {
+        return _repository.GetNetObjects();
+    }
 }

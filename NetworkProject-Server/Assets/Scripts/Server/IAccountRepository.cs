@@ -3,7 +3,6 @@ using System.Collections;
 using NetworkProject;
 using NetworkProject.Connection;
 
-[System.CLSCompliant(false)]
 public interface IAccountRepository 
 {
     void RegisterAccount(RegisterAccount registerAccount);
@@ -14,4 +13,5 @@ public interface IAccountRepository
     void LogoutAndDeleteCharacter(OnlineCharacter character);
     RegisterAccount[] GetAccounts();
     OnlineAccount[] GetOnlineAccounts();
+    void OnGUI();
 }

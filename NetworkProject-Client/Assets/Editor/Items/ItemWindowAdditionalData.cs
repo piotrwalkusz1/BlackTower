@@ -13,11 +13,6 @@ namespace EditorExtension
 
         }
 
-        public ItemWindowAdditionData(VisualEquipableItemData item) : base(item)
-        {
-
-        }
-
         public override string GetItemTypeName()
         {
             return "Addition";

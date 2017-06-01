@@ -32,7 +32,7 @@ public class NetObject : MonoBehaviour
 
     private bool _isModelVisible;
 
-    public void Respawn(RespawnToClient respawnInfo)
+    public virtual void Respawn(RespawnToClient respawnInfo)
     {
         transform.position = respawnInfo.Position;
     }

@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageToSave xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <_dictionary>
+    <KeyValuePairOfStringString>
+      <Key>spellDescription1</Key>
+      <Value>Przemieszczasz się o kilka metrów do przodu.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>itemName1</Key>
+      <Value>Niszczyciel</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>spellName1</Key>
+      <Value>Teleport</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>spellName2</Key>
+      <Value>Lodowa ściana</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>spellDescription2</Key>
+      <Value>Tworzysz przed sobą ścianę lodu aktywną przez kilka sekund.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>spellDescription3</Key>
+      <Value>Przez kilka sekund kontrolujesz latającą bombę, która wybucha przy zderzeniu.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>spellName3</Key>
+      <Value>Sterowana śmierć</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>spellName4</Key>
+      <Value />
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>spellName5</Key>
+      <Value />
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>spellDescription4</Key>
+      <Value />
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>itemName2</Key>
+      <Value>Skrzydlata zbroja</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>itemName3</Key>
+      <Value>Drewniana tarcza</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>hp regeneration</Key>
+      <Value>Regeneracja PŻ</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>mp regeneration</Key>
+      <Value>Regeneracja PM</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>defense</Key>
+      <Value>Obrona</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>cooldown reduction</Key>
+      <Value>Ładowanie czarów</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>power</Key>
+      <Value>Moc</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>mp</Key>
+      <Value>PM</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>attack speed</Key>
+      <Value>Szybkość ataku</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>movement speed</Key>
+      <Value>Szybkość biegu</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>hp</Key>
+      <Value>PŻ</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>monsterName0</Key>
+      <Value>Skoczek</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>questName0</Key>
+      <Value>Szkolenie (1)</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>questDescription0</Key>
+      <Value>Pójdź do instruktora, który da ci początkowe wyposażenie i przygotuje do walki.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog0</Key>
+      <Value>Jak się masz?</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog1</Key>
+      <Value>Chcę ci pomóc.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog2</Key>
+      <Value>Witam, w czym mogę pomóc?</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog3</Key>
+      <Value>Nie najlepiej. Jumpery mnie atakują.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog4</Key>
+      <Value>Żegnaj</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>accept</Key>
+      <Value>Akceptuj</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>deny</Key>
+      <Value>Odrzuć</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>killQuestDescription</Key>
+      <Value>Zabić - </Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>questCompleted</Key>
+      <Value>Misja zakończona.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>equipmentIsOverflowing</Key>
+      <Value>Ekwipunek jest przepełniony.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog5</Key>
+      <Value>Skończyłem robotę z tymi potworami.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog6</Key>
+      <Value>Wielkie dzięki. Oto twoja nagroda.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>exp</Key>
+      <Value>Doświadczenie</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>lvl</Key>
+      <Value>Poziom</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog7</Key>
+      <Value>Coś ty za jeden? Czego chcesz?</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog8</Key>
+      <Value>Szukam Czarnej Wieży.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog9</Key>
+      <Value>Ślepy jesteś? Widać ją już z daleka. Że też musiała wyrosnąć akurat tutaj. Chyba wezmę przykład z brata i opuszczę to miejsce.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog10</Key>
+      <Value>Witam. Jestem Ronald, dowódca tego oddziału. A ty pewnie jesteś nowym mięsem armatnim ... to znaczy wojownikiem. Spokojnie. Tylko żartowałem.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog11</Key>
+      <Value>Jak mogę pomóc?</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog12</Key>
+      <Value>Doceniamy każdą pomoc. Jakoś nie wiele osób garnie się, aby wejść do tej wieży. Porozmawiaj z naszym instruktorem. Da ci podstawowe wyposażenie i przeszkolenie.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog13</Key>
+      <Value>Zrozumiano.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog14</Key>
+      <Value>Może później.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog15</Key>
+      <Value>Baczność żołnierzu! A zaraz ... ty nie należysz do armii.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog16</Key>
+      <Value>Miałem się zgłosić po odprawę.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog17</Key>
+      <Value>Zapewne jesteś wolnym strzelcem. Normalnie wojsko nie zatrudnia najemników, ale kto normalny pcha się do tej przeklętej wieży. Tak więc skoro uznałeś, że twoje życie nie bardzo się tobie podoba, witamy w szeregach. Możesz teraz odebrać twoje podstawowe uzbrojenie. Jagbyś potrzebował więcej, to mam tego spory zapas. Dostaliśmy więcej broni, niż posiadamy żołnierzy.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog18</Key>
+      <Value>Dziękuję. Na pewno się przyda.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog19</Key>
+      <Value>Teraz musisz trochę poćwiczyć. Załóż broń i zabij kilka kreatur, które wylazły z wieży. Tylko niech ci czasem nie przyjdzie na myśl wejść do środka.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog20</Key>
+      <Value>Chciałbym trochę poćwiczyć.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog21</Key>
+      <Value>Świetnie. Zabij kilka kreatur, które wylazły z wieży. Tylko niech ci czasem nie przyjdzie na myśl wejść do środka.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog22</Key>
+      <Value>Skończyłem robotę z tymi potworami.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog23</Key>
+      <Value>Coś długo ci to zajęło, ale no cóż ... jesteś nowy. Teraz udaj się do naszego maga. Nauczy cię jak władać magią.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog24</Key>
+      <Value>Muszę się jeszcze czegoś nauczyć?</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog25</Key>
+      <Value>Pomyślmy ... ach tak, nie byłeś jeszcze u naszego maga. Nauczy cię jak władać magią.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>questName1</Key>
+      <Value>Szkolenie (2)</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>questName2</Key>
+      <Value>Szkolenie (3)</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>password</Key>
+      <Value>Hasło</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>loginToGame</Key>
+      <Value>Zaloguj się</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>register</Key>
+      <Value>Zarejestruj się</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>login</Key>
+      <Value>Login</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>characterName</Key>
+      <Value>Nazwa postaci</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>repeatPassword</Key>
+      <Value>Powtórz hasło</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>back</Key>
+      <Value>Wróc</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>createAccount</Key>
+      <Value>Stwórz konto</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>messageText0</Key>
+      <Value>Zły login lub hasło.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>messageText1</Key>
+      <Value>Konto jest już zalogowane.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>messageText2</Key>
+      <Value>Logowanie niepowiodło się.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>messageText3</Key>
+      <Value>Rejestracja nie powiodła się.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>messageText4</Key>
+      <Value>Login jest za krótki.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>messageText5</Key>
+      <Value>Login jest za długi.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>messageText6</Key>
+      <Value>Hasło jest za krótkie.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>messageText7</Key>
+      <Value>Hasło jest za długie.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>messageText8</Key>
+      <Value>Login zawiera niedozwolone znaki.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>messageText9</Key>
+      <Value>Hasło zawiera niedozwolone znaki.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>messageText10</Key>
+      <Value>Rejestracja przebiegła pomyślnie.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>messageText11</Key>
+      <Value>Login już istnieje.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>messageText12</Key>
+      <Value>Tekst w polach "Hasło" i "Powtórz hasło" musi być takie sam.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>createNewCharacter</Key>
+      <Value>Stwórz nową postać</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>chooseCharacter</Key>
+      <Value>Wybierz postać</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>nameCharacter</Key>
+      <Value>Imię postaci</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>gender</Key>
+      <Value>Płeć</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>male</Key>
+      <Value>Mężczyzna</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>female</Key>
+      <Value>Kobieta</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>breedTroll</Key>
+      <Value>Troll</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>messageText13</Key>
+      <Value>Imię postaci jest za krótkie.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>messageText14</Key>
+      <Value>Imię postaci jest za długie.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>messageText15</Key>
+      <Value>Imię postaci zawiera niedozwolone znaki.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>messageText16</Key>
+      <Value>Istnieje już takie imię postaci.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>messageText17</Key>
+      <Value>Tworzenie postaci nie powiodło się.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>breed</Key>
+      <Value>Rasa</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>messageText18</Key>
+      <Value>Ekwipunek jest pełny.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog26</Key>
+      <Value>Chciałbym nową broń.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog27</Key>
+      <Value>No dobrze. Tylko uważaj, aby jej nie zepsuć.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>questDescription1</Key>
+      <Value>Aby wprawić się w boju, zabij kilka kreatór wokół wieży. Lepiej, abyś nie wchodził do środka!</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>questDescription2</Key>
+      <Value>Porozmawiaj z magiem, który nauczy cię używać zaklęć.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>additionalMaxHP</Key>
+      <Value>Dodatkowe Max PŻ</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>damage</Key>
+      <Value>Obrażenia</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>itemName0</Key>
+      <Value>Działo kationów</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>maxHP</Key>
+      <Value>Max PŻ</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>itemName4</Key>
+      <Value>Smocza tarcza</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>connecting</Key>
+      <Value>Łączenie ...</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>manualWritteIP</Key>
+      <Value>Wpisz IP ręcznie</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>serverList</Key>
+      <Value>Lista serwerów</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>refresh</Key>
+      <Value>Odśwież</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>connect</Key>
+      <Value>Połącz</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>messageText19</Key>
+      <Value>Nie udało się połączyć.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>messageText20</Key>
+      <Value>Umarłeś. Kliknij, aby się wskrzesić.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>resurrect</Key>
+      <Value>Wskrześ się</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>price</Key>
+      <Value>Cena</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>questName3</Key>
+      <Value>Szkolenie (4)</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>questDescription3</Key>
+      <Value>Ukończyłeś już szkolenie. Zgłoś się do dowódcy odziału.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog28</Key>
+      <Value>Chciałbym się czegoś dowiedzieć o magii.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog29</Key>
+      <Value>Tak, magia to zaprawdę piękna rzecz. Ale ktoś taki jak ty zapewne tego nie zrozumie. Zwykłemu najemnikowi wystarczy wiedzieć jak używać zaklęć do walki. Na szczęście nie musisz kilku lat poświęcić na naukę. Do celów wojskowych stworzono specjalne talizmany, dzięki którym błyskawicznie nabędziesz nową umiejętność. Po wykorzystaniu talizman znika. Możesz je zdobyć od kupców lub jako łup z potworów, które mieszkają w Czarnej Wieży.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog30</Key>
+      <Value>Miałem z tobą porozmawiać.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog31</Key>
+      <Value>A więc jesteś nowym najemnikiem? Moim zadaniem jest przeszkolić nowych rekrutów pod względem używania magii. Ja uczyłem się mojej profesji blisko 15 lat. Ty masz niecałe 5 minut ... a więc zaczynajmy. Aby zaoszczędzić czas na naukę zaklęć, musisz wykorzystać specjalne talizmany. Jeden właśnie dostałeś ode mnie. Kiedy już nauczysz się nowej umiejętności, talizman znika. Teraz, gdy wszystko jest już dla ciebie jasne, idź do dowódcy oddziału.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog32</Key>
+      <Value>Magia jest wszystkim, wszystko jest magią.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog33</Key>
+      <Value>Co mam teraz zrobić?</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog34</Key>
+      <Value>Nauczyłeś się wszystkiego, czego powinieneś. Teraz udaj się do dowódcy oddziału</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog35</Key>
+      <Value>Ukończyłem już trening.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog36</Key>
+      <Value>Świetnie. Teraz możesz się udać do wnętrza Czarnej Wieży. Powinieneś tam znaleźć jeden z naszych oddziałów. Ich dowódca da ci kolejne zadania.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog37</Key>
+      <Value>Nie zawracaj mi głowy. Mam ważne rzeczy do roboty.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>itemName5</Key>
+      <Value>Eliksir życia</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>itemName6</Key>
+      <Value>Talizman</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>talismanDescription</Key>
+      <Value>Magiczny talizman. Pozwala nuczyć się nowego zaklęcia.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>spellName0</Key>
+      <Value>Postać ognia</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>spellDescription0</Key>
+      <Value>Na kilka sekund zmieniasz się w kulę ognia, zadając obrażenia wszystkim pobliskim jednostkom.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>messageText21</Key>
+      <Value>Posiadasz już to zaklęcie.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog38</Key>
+      <Value>Czy mógłbym jakoś pomóc?</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog39</Key>
+      <Value>Tak się składa, że przyda się nam dodatkowa para rąk. Idź i pozbąć się części tych kreatur. Trzeba utorować drogę przed dalszą ekspedycją.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog40</Key>
+      <Value>Zrobiłem, co pan kazał.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>questName4</Key>
+      <Value>Rzeź</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>questDescription4</Key>
+      <Value>Pozbądź się części kreatur, aby utorować drogę dla ekspedycji.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>monsterName1</Key>
+      <Value>Pnącze</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>monsterName2</Key>
+      <Value>Wielkogłowy</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog41</Key>
+      <Value>Świetnie. Jednak się do czegoś przydałeś. Masz tu pieniądze. Kup sobie coś porządnego u tego kupca obok nas.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog42</Key>
+      <Value />
+    </KeyValuePairOfStringString>
+  </_dictionary>
+  <_name>Language-Polski</_name>
+</LanguageToSave>

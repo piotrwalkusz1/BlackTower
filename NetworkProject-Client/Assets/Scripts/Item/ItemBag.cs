@@ -6,16 +6,13 @@ using NetworkProject.Items;
 
 public class ItemBag
 {
+    public int Gold { get; set; }
+
     private List<Item> _items;
 
     public ItemBag()
     {
         _items = new List<Item>();
-
-        for (int i = 0; i < Settings.widthEquipment * Settings.heightEquipment; i++)
-        {
-            _items.Add(null);
-        }
     }
 
     public void SetItems(Item[] items)
@@ -43,5 +40,25 @@ public class ItemBag
     public bool IsSlotEmpty(int slot)
     {
         return _items[slot] == null;
+    }
+
+    public bool IsEmptyAnyBagSlot()
+    {
+        return AreEmptyBagSlots(1);
+    }
+
+    public bool AreEmptyBagSlots(int number)
+    {
+        int emptyBagSlotNumber = 0;
+
+        foreach (var item in _items)
+        {
+            if (item == null)
+            {
+                emptyBagSlotNumber++;
+            }
+        }
+
+        return emptyBagSlotNumber >= number;
     }
 }

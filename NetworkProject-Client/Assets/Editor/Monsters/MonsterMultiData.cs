@@ -50,7 +50,7 @@ namespace EditorExtension
             set { MonsterServerVersion.AttackSpeed = value; }
         }
 
-        public float MovementSpeed
+        public float[] MovementSpeed
         {
             get { return MonsterServerVersion.MovementSpeed; }
             set { MonsterServerVersion.MovementSpeed = value; }

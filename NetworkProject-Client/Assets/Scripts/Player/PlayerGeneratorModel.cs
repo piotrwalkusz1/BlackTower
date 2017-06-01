@@ -4,10 +4,9 @@ using NetworkProject;
 using NetworkProject.BodyParts;
 using NetworkProject.Items;
 
-public class 
-    PlayerGeneratorModel : MonoBehaviour
+public class PlayerGeneratorModel : MonoBehaviour
 {
-    private BreedAndGender BreedAndGender
+    public virtual BreedAndGender BreedAndGender
     {
         get
         {
@@ -15,10 +14,16 @@ public class
         }
     }
 
-    private PlayerMesh _playerMesh;
-    private GameObject _playerModel;
+    protected PlayerMesh _playerMesh;
+    protected GameObject _playerModel;
 
-    public void CreateModel()
+    public void DeleteAndCreateModel()
+    {
+        DeleteModel();
+        CreateModel();
+    }
+
+    public virtual void CreateModel()
     {
         GameObject playerModel = GameObject.Instantiate(Prefabs.GetPlayerModelByBreed(BreedAndGender.Breed), Vector3.zero,
             Quaternion.identity) as GameObject;
@@ -42,6 +47,14 @@ public class
         {
             HideModel();
         }
+    }
+
+    public void DeleteModel()
+    {
+        if (_playerModel != null)
+        {
+            Destroy(_playerModel);
+        }     
     }
 
     public void HideModel()
@@ -90,7 +103,7 @@ public class
             return;
         }
 
-        VisualEquipableItemData item = (VisualEquipableItemData)ItemRepository.GetItemByIdItem(bodyPart.EquipedItem.IdItem);
+        EquipableItemData item = (EquipableItemData)ItemRepository.GetItemByIdItem(bodyPart.EquipedItem.IdItem);
 
         mesh.sharedMesh = MeshRepository.GetItemMesh(item.IdPrefabOnPlayer);
         mesh.sharedMaterial = MeshRepository.GetItemMaterial(item.IdPrefabOnPlayer);

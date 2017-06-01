@@ -9,27 +9,33 @@ using NetworkProject.Monsters;
 using NetworkProject.Spells;
 using NetworkProject.Buffs;
 
-[System.CLSCompliant(false)]
 public class ApplicationController : MonoBehaviour
 {
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
 
-        var spellRepository = Standard.IoC.GetSpellRepository();
-        spellRepository.SetSpellsFromResources();
-        SpellRepository.Set(spellRepository);
-
+        SpellRepository.SetSpellsFromResources();
         ItemRepository.SetItemsFromResource(Standard.Settings.PATH_TO_ITEMS_IN_RESOURCE);
         MonsterRepository.SetMonstersFromResource(Standard.Settings.PATH_TO_MONSTER_IN_RESOURCE);
         BuffRepository.LoadAndSetFromResources(Standard.Settings.PATH_TO_BUFFS_IN_RESOURCES);
-
-        Application.LoadLevelAdditive("Map1");
     }
 
     void LateUpdate()
     {
         UpdateVisionsAndRestetNetObjectsMessages();
+    }
+
+    public static void LoadAllLevelsAdditive()
+    {
+        Application.LoadLevelAdditive("Map1");
+        Application.LoadLevelAdditive("Map2");
+        Application.LoadLevelAdditive("Map3");
+    }
+
+    public static void LoadStartLvl()
+    {
+        Application.LoadLevel("Reset");
     }
 
     private void UpdateVisionsAndRestetNetObjectsMessages()

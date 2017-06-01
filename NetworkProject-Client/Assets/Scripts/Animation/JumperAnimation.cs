@@ -3,11 +3,6 @@ using System.Collections;
 
 public class JumperAnimation : MonsterAnimation
 {
-    void Awake()
-    {
-        _animator = GetComponentInChildren<Animator>();
-    }
-
     public void SetGrounded(bool grounded)
     {
         _animator.SetBool("Grounded", grounded);

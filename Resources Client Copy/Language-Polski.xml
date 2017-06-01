@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageToSave xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <_dictionary>
+    <KeyValuePairOfStringString>
+      <Key>spellDescription1</Key>
+      <Value />
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>itemName1</Key>
+      <Value />
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>spellName1</Key>
+      <Value />
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>spellName2</Key>
+      <Value />
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>spellDescription2</Key>
+      <Value />
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>spellDescription3</Key>
+      <Value />
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>spellName3</Key>
+      <Value />
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>spellName4</Key>
+      <Value />
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>spellName5</Key>
+      <Value />
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>spellDescription4</Key>
+      <Value />
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>itemName2</Key>
+      <Value />
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>itemName3</Key>
+      <Value />
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>hp regeneration</Key>
+      <Value>Regeneracja PŻ</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>mp regeneration</Key>
+      <Value>Regeneracja PM</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>defense</Key>
+      <Value>Obrona</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>cooldown reduction</Key>
+      <Value>Ładowanie czarów</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>power</Key>
+      <Value>Moc</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>mp</Key>
+      <Value>PM</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>attack speed</Key>
+      <Value>Szybkość ataku</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>movement speed</Key>
+      <Value>Szybkość biegu</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>hp</Key>
+      <Value>PŻ</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>monsterName0</Key>
+      <Value>Skoczek</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>questName0</Key>
+      <Value>Wielki pogrom</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>questDescription0</Key>
+      <Value>Witam cię. Jestem Dezmont. Pomóż mi! Długi text .......... ......... daaaalej jeszcze dłuższy aby była nowa linijka</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog0</Key>
+      <Value>Jak się masz?</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog1</Key>
+      <Value>Chcę ci pomóc.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog2</Key>
+      <Value>Witam, w czym mogę pomóc?</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog3</Key>
+      <Value>Nie najlepiej. Jumpery mnie atakują.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog4</Key>
+      <Value>Żegnaj</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>accept</Key>
+      <Value>Akceptuj</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>deny</Key>
+      <Value>Odrzuć</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>killQuestDescription</Key>
+      <Value>Zabić - </Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>questCompleted</Key>
+      <Value>Misja zakończona.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>equipmentIsOverflowing</Key>
+      <Value>Ekwipunek jest przepełniony.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog5</Key>
+      <Value>Skończyłem robotę z tymi potworami.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog6</Key>
+      <Value>Wielkie dzięki. Oto twoja nagroda.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>exp</Key>
+      <Value>Doświadczenie</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>lvl</Key>
+      <Value>Poziom</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog7</Key>
+      <Value>Coś ty za jeden? Czego chcesz?</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog8</Key>
+      <Value>Szukam Wieży XXX.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog9</Key>
+      <Value>Ślepy jesteś? Widać ją już z daleka. Że też musiała wyrosnąć akurat tutaj. Chyba wezmę przykład z brata i opuszczę to miejsce.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog10</Key>
+      <Value>Witam. Jestem Ronald, dowódca tego odziału. A ty pewnie jesteś nowym mięsem armatnim ... to znaczy wojownikiem. Spokojnie. Tylko żartowałem.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog11</Key>
+      <Value>Jak mogę pomóc?</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog12</Key>
+      <Value>Doceniamy każdą pomoc. Jakoś nie wiele osób garnie się, aby wejść do tej wieży. Porozmawiaj z naszym instruktorem. Da ci podstawowe wyposażenie i przeszkolenie.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog13</Key>
+      <Value>Zrozumiano.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog14</Key>
+      <Value>Może później.</Value>
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog15</Key>
+      <Value />
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog16</Key>
+      <Value />
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog17</Key>
+      <Value />
+    </KeyValuePairOfStringString>
+    <KeyValuePairOfStringString>
+      <Key>dialog18</Key>
+      <Value />
+    </KeyValuePairOfStringString>
+  </_dictionary>
+  <_name>Language-Polski</_name>
+</LanguageToSave>

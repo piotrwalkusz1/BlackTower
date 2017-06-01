@@ -7,7 +7,6 @@ using NetworkProject.Connection;
 using NetworkProject.Connection.ToClient;
 using NetworkProject.Items;
 
-[System.CLSCompliant(false)]
 public static class SceneBuilder
 {
     private static int _nextIdNet = 0;
@@ -34,6 +33,8 @@ public static class SceneBuilder
         netBullet.IdNet = GetNextIdNet();
         netBullet.Bullet = bulletInfo.Bullet;
 
+        instantiate.GetComponent<DamageBullet>()._insensitive.Add(attacker);
+
         GameObject.Destroy(instantiate, bulletInfo.LiveTime);
 
         return instantiate;
@@ -49,6 +50,7 @@ public static class SceneBuilder
 
         NetMonster netMonster = instantiate.GetComponent<NetMonster>();
         netMonster.IdNet = GetNextIdNet();
+        netMonster.IdMonster = idMonster;
 
         MonsterStats stats = instantiate.GetComponent<MonsterStats>();
 
@@ -65,7 +67,15 @@ public static class SceneBuilder
 
         NetItem netItem = item.GetComponent<NetItem>();
         netItem.IdNet = GetNextIdNet();
-        netItem.Item = new Item(idItem);
+
+        if (idItem == 6)
+        {
+            netItem.Item = new ItemTalisman(UnityEngine.Random.Range(0, SpellRepository.GetSpellsCount()));
+        }
+        else
+        {
+            netItem.Item = new Item(idItem);
+        }
 
         return item;
     }
@@ -76,7 +86,17 @@ public static class SceneBuilder
 
         NetVisualObject netVisualObject = instantiate.GetComponent<NetVisualObject>();
         netVisualObject.IdNet = GetNextIdNet();
-        netVisualObject.IdVisualObject = idVisualObject;       
+        netVisualObject._idVisualObject = idVisualObject;       
+
+        return instantiate;
+    }
+
+    public static GameObject CreateVisualObject(GameObject prefab, Vector3 position, float rotation)
+    {
+        GameObject instantiate = GameObject.Instantiate(prefab, position, Quaternion.Euler(0, rotation, 0)) as GameObject;
+
+        NetVisualObject netVisualObject = instantiate.GetComponent<NetVisualObject>();
+        netVisualObject.IdNet = GetNextIdNet();
 
         return instantiate;
     }

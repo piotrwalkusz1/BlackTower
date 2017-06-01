@@ -30,9 +30,9 @@ public class MonsterRespawn : MonoBehaviour
         return DateTime.UtcNow > _nextRespawnTime;
     }
 
-    protected GameObject CreateMonster()
+    protected virtual void CreateMonster()
     {
-        return SceneBuilder.CreateMonster(monsterId, transform.position, transform.eulerAngles.y);
+        SceneBuilder.CreateMonster(monsterId, transform.position, transform.eulerAngles.y);
     }
 
     protected void SetNextRespawnTime()

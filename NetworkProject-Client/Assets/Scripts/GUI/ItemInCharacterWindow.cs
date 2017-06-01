@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using NetworkProject;
 using NetworkProject.Items;
 using NetworkProject.Connection.ToServer;
+using NetworkProject.BodyParts;
 
 public class ItemInCharacterWindow : GUIObject
 {
@@ -22,6 +24,23 @@ public class ItemInCharacterWindow : GUIObject
         _lastMousePosition = Input.mousePosition;
     }
 
+    protected void OnMouseEnter()
+    {
+        ShowDescription();
+    }
+
+    protected override void OnMouseDown()
+    {
+        base.OnMouseDown();
+
+        GUIController.HideDescription();
+    }
+
+    protected void OnMouseExit()
+    {
+        GUIController.HideDescription();
+    }
+
     protected void OnMouseUp()
     {
         if (IsEmpty())
@@ -30,7 +49,7 @@ public class ItemInCharacterWindow : GUIObject
             return;
         }
 
-        GUIElement element = GuiRaycast(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
+        GUIElement element = GuiRaycastUnderObject(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
 
         if (element == null)
         {
@@ -62,12 +81,8 @@ public class ItemInCharacterWindow : GUIObject
 
     public override void OnDropItem(ItemInEquipmentWindow itemWindow)
     {
-        if (CanBeEquipedByPlayer(itemWindow.GetItem()))
+        if (_characterWindow.GetEquipment().TryEquipItemFromBagAndSendMessage(itemWindow.GetSlot(), GetSlot()))
         {
-            var request = new ChangeEquipedItemToServer(itemWindow.GetSlot(), GetSlot());
-
-            Client.SendRequestAsMessage(request);
-
             ChangeTextures(guiTexture, itemWindow.guiTexture);
         }
 
@@ -76,24 +91,12 @@ public class ItemInCharacterWindow : GUIObject
 
     public override void OnDropEquipedItem(ItemInCharacterWindow itemWindow)
     {
-        if (CanBeEquipedByPlayer(itemWindow.GetItem()) && itemWindow.CanBeEquipedByPlayer(GetItem()))
+        if (_characterWindow.GetEquipment().TryChangeEquipedItemsAndSendMessage(GetSlot(), itemWindow.GetSlot()))
         {
-            var request = new ChangeEquipedItemsToServer(itemWindow.GetSlot(), GetSlot());
-
-            Client.SendRequestAsMessage(request);
-
             ChangeTextures(itemWindow.guiTexture, guiTexture);
         }
         
         itemWindow.GoToDefaultPlace();
-    }
-
-    public bool CanBeEquipedByPlayer(Item item)
-    {
-        var itemData = (IEquipableItemManager)ItemRepository.GetItemByIdItem(item.IdItem);
-        PlayerStats stats = _characterWindow.GetPlayerStats();
-
-        return item.CanEquipe(stats) && DoesBodyPartMatchToItem(itemData.GetEquipableItemData());
     }
 
     public int GetSlot()
@@ -120,6 +123,29 @@ public class ItemInCharacterWindow : GUIObject
         }
     }
 
+    public void RefreshTexture()
+    {
+        Item item = GetItem();
+
+        guiTexture.texture = item == null ? null : ImageRepository.GetImageByItem(item);
+    }
+
+    protected void ShowDescription()
+    {
+        Item item = GetItem();
+
+        if (item != null)
+        {
+            Rect rect = guiTexture.GetScreenRect();
+
+            Vector2 position = new Vector2(rect.x + rect.width, rect.y + rect.height);
+
+            string description = item.GetDescription();
+
+            GUIController.ShowDescription(position, description, GUIController.SizeItemImage, GUIController.SizeItemImage, _characterWindow);
+        }
+    }
+
     private Vector2 GetDefaultPosition()
     {
         return _defaultPosition;
@@ -137,6 +163,10 @@ public class ItemInCharacterWindow : GUIObject
 
     private bool DoesBodyPartMatchToItem(EquipableItemData itemData)
     {
-        return IoC.GetBodyPart(GetSlot()).CanEquipeItemOnThisBodyPart(itemData);
+        var bodyPartPackage = IoC.GetBodyPart(GetSlot());
+
+        List<BodyPart> bodyPart = PackageConverter.PackageToBodyPart(new BodyPartPackage[] { bodyPartPackage });
+
+        return bodyPart[0].CanEquipeItemOnThisBodyPart(itemData);
     }
 }

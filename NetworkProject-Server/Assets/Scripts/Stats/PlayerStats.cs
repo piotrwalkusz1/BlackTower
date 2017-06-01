@@ -6,7 +6,6 @@ using NetworkProject;
 using NetworkProject.Connection;
 using NetworkProject.Connection.ToClient;
 
-[Serializable]
 public class PlayerStats : Stats, IPlayerStats
 {
     public virtual int Lvl
@@ -15,7 +14,16 @@ public class PlayerStats : Stats, IPlayerStats
         {
             return GetComponent<PlayerExperience>().Lvl;
         }
-    }   
+        set
+        {
+            GetComponent<PlayerExperience>().Lvl = value;
+        }
+    }
+    public virtual int Exp
+    {
+        get { return GetComponent<PlayerExperience>().Exp; }
+        set { GetComponent<PlayerExperience>().SetExp(value); }
+    }
     public virtual int HP
     {
         get
@@ -48,6 +56,21 @@ public class PlayerStats : Stats, IPlayerStats
         {
             GetComponent<HealthSystem>().HPRegenerationPerSecond = value;
         }
+    }
+    public virtual int Mana
+    { 
+        get { return GetComponent<SpellCaster>().Mana; }
+        set { GetComponent<SpellCaster>().Mana = value; }
+    }
+    public virtual int MaxMana
+    {
+        get { return GetComponent<SpellCaster>().MaxMana; }
+        set { GetComponent<SpellCaster>().MaxMana = value; }
+    }
+    public virtual float ManaRegeneration
+    {
+        get { return GetComponent<SpellCaster>().ManaRegeneration; }
+        set { GetComponent<SpellCaster>().ManaRegeneration = value; }
     }
     public virtual float MovementSpeed { get; set; }
     public virtual int AttackSpeed
@@ -136,28 +159,44 @@ public class PlayerStats : Stats, IPlayerStats
     public virtual void CalculateStats()
     {
         int hp = HP;
+        int mana = Mana;
 
         StatsToDefault();
 
         ApplyItems();
+        ApplyBuffs();
 
-        HP = hp;
+        if (hp > MaxHP)
+        {
+            HP = MaxHP;
+        }
+        else
+        {
+            HP = hp;
+        }
+
+        if (mana > MaxMana)
+        {
+            Mana = MaxMana;
+        }
+        else
+        {
+            Mana = mana;
+        }
     }
 
     private void ApplyItems()
     {
-        PlayerEquipment eq = GetComponent<PlayerEquipment>();
+        GetComponent<PlayerEquipment>().ApplyEquipedItemsToStats();
+    }
 
-        eq.ApplyToStats(this);
+    private void ApplyBuffs()
+    {
+        GetComponent<PlayerBuff>().ApplyToStats(this);
     }
 
     private void StatsToDefault()
     {
-        MaxHP = Settings.basicPlayerMaxExp;
-        MovementSpeed = Settings.basicPlayerMovementSpeed;
-        AttackSpeed = 0;
-        MinDmg = 0;
-        MaxDmg = 0;
-        Defense = 0;
+        Standard.Settings.StatsToDefault(this);
     }
 }

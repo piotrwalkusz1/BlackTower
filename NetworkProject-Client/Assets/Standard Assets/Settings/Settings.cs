@@ -18,8 +18,9 @@ namespace Standard
         public static readonly string pathToItemsInResources = "items";
         public static readonly string pathToSpellsInResources = "spells";
         public static readonly string pathToBuffsInResources = "buffs";
-        
+        public static readonly string pathToConversationsInResources = "conversations";        
         public static readonly string pathToMonstersInResources = "monsters";
+        public static readonly string pathToQuestsInResources = "quests";
         
         public static readonly float jumpAndFallSpeed = 2f;
         public static readonly float playerHalfHeight = 0.9f;
@@ -30,11 +31,6 @@ namespace Standard
         private static readonly string pathToConfigurationInResources = "defaultSettings";
         private static readonly string pathToConfigurationInUnity = Application.dataPath + "/Resources/defaultSettings.xml";
         private static readonly string pathToConfigurationInApplication = Application.dataPath + "/settings.xml";
-
-        public static void SetSettings(Configuration settings)
-        {
-            UserConfiguration = settings;
-        }
 
         public static void SetSettingsFromFileOrResources()
         {

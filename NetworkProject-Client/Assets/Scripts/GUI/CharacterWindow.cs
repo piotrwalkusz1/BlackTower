@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Standard;
 
-public class CharacterWindow : GUIObject
+public class CharacterWindow : GUIObject, IClosable
 {
     public List<ItemInCharacterWindow> _equipedItems;
 
@@ -28,10 +28,10 @@ public class CharacterWindow : GUIObject
     }
 
 
-    public GUIText _hp;
-    public GUIText _hpAnswer;
-    public GUIText _mp;
-    public GUIText _mpAnswer;
+    public GUIText _lvl;
+    public GUIText _lvlAnswer;
+    public GUIText _exp;
+    public GUIText _expAnswer;
     public GUIText _power;
     public GUIText _powerAnswer;
     public GUIText _defense;
@@ -44,11 +44,12 @@ public class CharacterWindow : GUIObject
     public GUIText _regenerationMPAnswer;
     public GUIText _attackSpeed;
     public GUIText _attackSpeedAnswer;
+    public GUIText _damage;
+    public GUIText _damageAnswer;
     public GUIText _movementSpeed;
     public GUIText _movementSpeedAnswer;
 
-    private OwnPlayerStats _stats;
-    
+    private OwnPlayerStats _stats; 
 
     private Vector3 _lastMousePosition;
 
@@ -78,21 +79,35 @@ public class CharacterWindow : GUIObject
 
     public void Refresh()
     {
-        _hp.text = Languages.GetPhrase("hp");
-        _hpAnswer.text = _stats.HP.ToString() + "/" + _stats.MaxHP.ToString();
-        _mp.text = Languages.GetPhrase("mp");
-        _power.text = Languages.GetPhrase("power");
-        _defense.text = Languages.GetPhrase("defense");
-        _defenseAnswer.text = _stats.Defense.ToString();
-        _cooldownReduction.text = Languages.GetPhrase("cooldown reduction");
-        _regenerationHP.text = Languages.GetPhrase("hp regeneration");
-        _regenerationHPAnswer.text = _stats.HPRegeneration.ToString();
-        _regenerationMP.text = Languages.GetPhrase("mp regeneration");
-        //_regenerationMPAnswer.text = _stats.RegenerationMP.ToString();
-        _attackSpeed.text = Languages.GetPhrase("attack speed");
-        _attackSpeedAnswer.text = _stats.AttackSpeed.ToString();
-        _movementSpeed.text = Languages.GetPhrase("movement speed");
-        _movementSpeedAnswer.text = _stats.MovementSpeed.ToString();
+        try
+        {
+            SetStats(Client.GetNetOwnPlayer().GetComponent<OwnPlayerStats>());
+
+            _lvl.text = Languages.GetPhrase("lvl");
+            _lvlAnswer.text = _stats.Lvl.ToString();
+            _exp.text = Languages.GetPhrase("exp");
+            _expAnswer.text = _stats.Exp.ToString() + "/" + _stats.MaxExp.ToString();
+            _power.text = Languages.GetPhrase("power");
+            _defense.text = Languages.GetPhrase("defense");
+            _defenseAnswer.text = _stats.Defense.ToString();
+            _cooldownReduction.text = Languages.GetPhrase("cooldown reduction");
+            _regenerationHP.text = Languages.GetPhrase("hp regeneration");
+            _regenerationHPAnswer.text = _stats.HPRegeneration.ToString();
+            _regenerationMP.text = Languages.GetPhrase("mp regeneration");
+            _regenerationMPAnswer.text = _stats.ManaRegeneration.ToString();
+            _attackSpeed.text = Languages.GetPhrase("attack speed");
+            _attackSpeedAnswer.text = _stats.AttackSpeed.ToString();
+            _damage.text = Languages.GetPhrase("damage");
+            _damageAnswer.text = _stats.MinDmg.ToString() + " - " + _stats.MaxDmg.ToString();
+            _movementSpeed.text = Languages.GetPhrase("movement speed");
+            _movementSpeedAnswer.text = _stats.MovementSpeed.ToString();
+
+            _equipedItems.ForEach(x => x.RefreshTexture());
+        }
+        catch
+        {
+            MonoBehaviour.print("Wystąił błąd prz odświeżaniu character window");
+        }
     }
 
     public int GetSlotToItem(ItemInCharacterWindow item)
@@ -111,5 +126,15 @@ public class CharacterWindow : GUIObject
     public OwnPlayerStats GetPlayerStats()
     {
         return _stats;
+    }
+
+    public OwnPlayerEquipment GetEquipment()
+    {
+        return _stats.GetComponent<OwnPlayerEquipment>();
+    }
+
+    public void Close()
+    {
+        GUIController.HideCharacterGUI();
     }
 }

@@ -12,27 +12,27 @@ namespace EditorExtension
 {
     public class ItemWindowEquipableData : ItemWindowData
     {
-        public virtual VisualEquipableItemData VisualEquipableItem { get; set; }
-        public override VisualItemData VisualItem
+        public virtual EquipableItemData EquipableItem { get; set; }
+        public override ItemData Item
         {
-            get { return VisualEquipableItem; }
-            protected set { VisualEquipableItem = (VisualEquipableItemData)value; }
+            get { return EquipableItem; }
+            protected set { EquipableItem = (EquipableItemData)value; }
         }
 
         public int IdPrefabOnPlayer
         {
-            get { return VisualEquipableItem.IdPrefabOnPlayer; }
-            set { VisualEquipableItem.IdPrefabOnPlayer = value; }
+            get { return EquipableItem.IdPrefabOnPlayer; }
+            set { EquipableItem.IdPrefabOnPlayer = value; }
         }
-        public List<IEquipRequirement> Requirements
+        public List<IRequirement> Requirements
         {
-            get { return VisualEquipableItem.EquipableItemData._requirements; }
-            set { VisualEquipableItem.EquipableItemData._requirements = value; }
+            get { return EquipableItem._requirements; }
+            set { EquipableItem._requirements = value; }
         }
-        public List<IEquipBenefit> Benefits
+        public List<IBenefit> Benefits
         {
-            get { return VisualEquipableItem.EquipableItemData._benefits; }
-            set { VisualEquipableItem.EquipableItemData._benefits = value; }
+            get { return EquipableItem._benefits; }
+            set { EquipableItem._benefits = value; }
         }
 
         private bool _isActiveRequirements;
@@ -40,12 +40,7 @@ namespace EditorExtension
         private int _addRequirementSelectedIndex;
         private int _addBenefitSelectedIndex;
 
-        public ItemWindowEquipableData(EquipableItemData item) : this(new VisualEquipableItemData(item))
-        {
-
-        }
-
-        public ItemWindowEquipableData(VisualEquipableItemData item) : base(item)
+        public ItemWindowEquipableData(EquipableItemData item) : base(item)
         {
 
         }
@@ -109,8 +104,6 @@ namespace EditorExtension
 
         private void ShowBenefits()
         {
-
-
             if (_isActiveBenefits = EditorGUILayout.Foldout(_isActiveBenefits, "Benefits"))
             {
                 Indentation.BeginIndentation();
@@ -122,7 +115,7 @@ namespace EditorExtension
                         try
                         {
                             EditorGUILayout.LabelField(benefit.GetType().Name);
-                            benefit.Set(EditorGUILayout.TextField(benefit.GetAsString()));
+                            benefit.Set(EditorGUILayout.TextField(benefit.GetValueAsString()));
                         }
                         catch { }
 

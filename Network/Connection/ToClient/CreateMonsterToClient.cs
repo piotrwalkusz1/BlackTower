@@ -13,10 +13,8 @@ namespace NetworkProject.Connection.ToClient
         public MonsterStatsPackage MonsterStats { get; set; }
 
         public CreateMonsterToClient(int idNet, Vector3 position, float rotation, int idMonster, IMonsterStats monsterStats)
+            : base(idNet, position, rotation)
         {
-            IdNet = idNet;
-            Position = position;
-            Rotation = rotation;
             IdMonster = idMonster;
             MonsterStats = (MonsterStatsPackage)StatsPackage.GetStatsPackage(monsterStats);
         }

@@ -35,7 +35,7 @@ public class NetItem : NetObject
     {
         PlayerEquipment eq = player.GetComponent<PlayerEquipment>();
 
-        if (eq.IsAnyEmptySlotInEquipment() && PlayerIsEnoughCloseToPick(player))
+        if (eq.IsAnyEmptyBagSlot() && PlayerIsEnoughCloseToPick(player))
         {
             eq.AddItemAndSendUpdate(Item);
 

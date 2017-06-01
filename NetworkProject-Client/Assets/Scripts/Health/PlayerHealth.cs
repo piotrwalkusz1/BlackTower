@@ -29,6 +29,12 @@ public class PlayerHealth : Health
         if (GetComponent<NetOwnPlayer>() != null)
         {
             GUIController.ShowDeadMessage();
+
+            GetComponent<CharacterMotor>().enabled = false;
         }
+
+        Instantiate(Prefabs.DeathEffect, transform.position, transform.rotation);
+
+        GetComponent<PlayerGeneratorModel>().HideModel();        
     }
 }

@@ -8,7 +8,8 @@ using Standard;
 
 namespace EditorExtension
 {
-    public class SettingsWindow : EditorWindow
+    public class 
+        SettingsWindow : EditorWindow
     {
         public static Configuration EditingConfiguration { get; set; }
 

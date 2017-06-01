@@ -4,24 +4,26 @@ using System.Linq;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
+using NetworkProject.Spells;
 
 namespace EditorExtension
 {
     public class SpellWindow
     {
-        public VisualSpellData Spell;
+        public SpellData Spell;
 
         private bool _isActiveRequirements;
+        private bool _isActiveRequiredInfo;
         private int _addRequirementSelectedIndex;
 
         private bool _isActive;
 
         public SpellWindow()
         {
-            Spell = new VisualSpellData(0);
+            Spell = new SpellData();
         }
 
-        public SpellWindow(VisualSpellData spell)
+        public SpellWindow(SpellData spell)
         {
             Spell = spell;
         }
@@ -42,9 +44,12 @@ namespace EditorExtension
 
                 Spell.IdSpell = EditorGUILayout.IntField("Id spell", Spell.IdSpell);
                 Spell.IdImage = EditorGUILayout.IntField("Id image", Spell.IdImage);
+                Spell.ManaCost = EditorGUILayout.IntField("Mana cost", Spell.ManaCost);
                 Spell.Cooldown = EditorGUILayout.FloatField("Cooldown", Spell.Cooldown);
 
                 ShowRequirements();
+
+                ShowRequiredInfo();
                 
                 Indentation.EndIndentation();
             }
@@ -56,7 +61,7 @@ namespace EditorExtension
             {
                 Indentation.BeginIndentation();
 
-                foreach (var requirement in Spell.GetRequirements())
+                foreach (var requirement in Spell.Requirements)
                 {
                     EditorGUILayout.BeginHorizontal();
 
@@ -84,6 +89,23 @@ namespace EditorExtension
             }
         }
 
+        public void ShowRequiredInfo()
+        {
+            if(_isActiveRequiredInfo = EditorGUILayout.Foldout(_isActiveRequiredInfo, "Required info"))
+            {
+                if (Spell.RequiredInfo == null)
+                {
+                    Spell.RequiredInfo = new SpellRequiredInfo();
+                }
+                Indentation.BeginIndentation();
+
+                Spell.RequiredInfo._targetObject = EditorGUILayout.Toggle("Target object", Spell.RequiredInfo._targetObject);
+                Spell.RequiredInfo._targetPosition = EditorGUILayout.Toggle("Target position", Spell.RequiredInfo._targetPosition);
+
+                Indentation.EndIndentation();
+            }
+        }
+
         private void ShowAddRequirement()
         {
             if (GUILayout.Button("Add new requirement"))
@@ -94,7 +116,7 @@ namespace EditorExtension
 
         private void AddRequiremnt()
         {
-            Spell.AddRequirement(SpellsWindow.RequirementsList.CreateInstantiateByIndex(_addRequirementSelectedIndex));
+            Spell.Requirements.Add(SpellsWindow.RequirementsList.CreateInstantiateByIndex(_addRequirementSelectedIndex));
         }
 
         private void ShowDeleteSpell()

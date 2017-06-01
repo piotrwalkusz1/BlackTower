@@ -19,11 +19,14 @@ namespace EditorExtension
         public static readonly string MONSTERS_CLIENT = Application.dataPath + "/Resources/monsters.txt";
         public static readonly string SPELLS_CLIENT = Application.dataPath + "/Resources/spells.txt";
         public static readonly string BUFFS_CLIENT = Application.dataPath + "/Resources/buffs.txt";
+        public static readonly string CONVERSATIONS_CLIENT = Application.dataPath + "/Resources/conversations.txt";
+        public static readonly string QUESTS_CLIENT = Application.dataPath + "/Resources/quests.txt";
 
         private static readonly string ITEMS_SERVER = "C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Server/Assets/Resources/items.txt";
         private static readonly string MONSTERS_SERVER = "C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Server/Assets/Resources/monsters.txt";
         private static readonly string SPELLS_SERVER = "C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Server/Assets/Resources/spells.txt";
         private static readonly string BUFFS_SERVER = "C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Server/Assets/Resources/buffs.txt";
+        private static readonly string QUESTS_SERVER = "C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Server/Assets/Resources/quests.txt";
 
         public static void SaveMonsters(List<MonsterMultiData> monsters)
         {
@@ -38,37 +41,30 @@ namespace EditorExtension
             Save(monstersInServer.ToList().ConvertAll<MonsterData>(x => (MonsterData)x).ToArray(), MONSTERS_SERVER);
         }
 
-        public static void SaveItems(List<VisualItemData> items)
+        public static void SaveItems(List<ItemData> items)
         {
             Save(items.ToArray(), ITEMS_CLIENT);
 
-            var itemsInServer = from item in items
-                                select item.ItemData;
-
-            Save(itemsInServer.ToArray(), ITEMS_SERVER);
+            Save(PackageConverter.ItemDataToPackage(items.ToArray()).ToArray(), ITEMS_SERVER);
         }
 
-        public static void SaveSpells(List<VisualSpellData> spells)
+        public static void SaveSpells(List<SpellData> spells)
         {
             Save(spells.ToArray(), SPELLS_CLIENT);
 
-            var spellsInServer = from spell in spells
-                                 select new SpellData(spell);
-
-            Save(spellsInServer.ToArray(), SPELLS_SERVER);
+            Save(PackageConverter.SpellDataToPackage(spells.ToArray()).ToArray(), SPELLS_SERVER);
         }
 
-        public static void SaveBuffs(List<BuffMultiData> buffs)
+        public static void SaveBuffs(List<BuffData> buffs)
         {
-            var buffsInClient = from buff in buffs
-                                select buff.GetClientVersion();
+            Save(buffs.ToArray(), BUFFS_CLIENT);
 
-            Save(buffsInClient.ToList().ConvertAll<BuffData>(x => (BuffData)x).ToArray(), BUFFS_CLIENT);
+            Save(PackageConverter.BuffDataToPackage(buffs.ToArray()).ToArray(), BUFFS_SERVER);
+        }
 
-            var buffsInServer = from buff in buffs
-                                select buff.GetServerVersion();
-
-            Save(buffsInServer.ToList().ConvertAll<BuffData>(x => (BuffData)x).ToArray(), BUFFS_SERVER);
+        public static void SaveConversations(List<Conversation> conversations)
+        {
+            Save(conversations.ToArray(), CONVERSATIONS_CLIENT);
         }
 
         public static List<MonsterMultiData> LoadMonsters()
@@ -96,38 +92,59 @@ namespace EditorExtension
             }
         }
 
-        public static List<VisualItemData> LoadItems()
-        {
-            return new List<VisualItemData>((VisualItemData[])Load(ITEMS_CLIENT));
-        }
-
-        public static List<VisualSpellData> LoadSpells()
-        {
-            return new List<VisualSpellData>((VisualSpellData[])Load(SPELLS_CLIENT));
-        }
-
-        public static List<BuffMultiData> LoadBuffs()
+        public static List<ItemData> LoadItems()
         {
             try
             {
-                var buffsClient = (BuffData[])Load(BUFFS_CLIENT);
-
-                var buffsServer = (BuffData[])Load(BUFFS_SERVER);
-
-                var buffs = new List<BuffMultiData>();
-
-                for (int i = 0; i < buffsClient.Length; i++)
-                {
-                    buffs.Add(new BuffMultiData((BuffVisualData)buffsClient[i], (BuffFullData)buffsServer[i]));
-                }
-
-                return buffs;
+                return new List<ItemData>((ItemData[])Load(ITEMS_CLIENT));
             }
             catch (Exception ex)
             {
                 MonoBehaviour.print(ex.Message + '\n' + ex.StackTrace);
 
-                return new List<BuffMultiData>();
+                return new List<ItemData>();
+            }
+        }
+
+        public static List<SpellData> LoadSpells()
+        {
+            try
+            {
+                return new List<SpellData>((SpellData[])Load(SPELLS_CLIENT));
+            }
+            catch (Exception ex)
+            {
+                MonoBehaviour.print(ex.Message + '\n' + ex.StackTrace);
+
+                return new List<SpellData>();
+            }
+        }
+
+        public static List<BuffData> LoadBuffs()
+        {
+            try
+            {
+                return new List<BuffData>((BuffData[])Load(BUFFS_CLIENT));
+            }
+            catch (Exception ex)
+            {
+                MonoBehaviour.print(ex.Message + '\n' + ex.StackTrace);
+
+                return new List<BuffData>();
+            }
+        }
+
+        public static List<Conversation> LoadConversation()
+        {
+            try
+            {
+                return new List<Conversation>((Conversation[])Load(CONVERSATIONS_CLIENT));
+            }
+            catch (Exception ex)
+            {
+                MonoBehaviour.print(ex.Message + '\n' + ex.StackTrace);
+
+                return new List<Conversation>();
             }
         }
 
@@ -135,9 +152,13 @@ namespace EditorExtension
         {
             var serializer = new BinaryFormatter();
 
-            using (var stream = new FileStream(path, FileMode.Create))
+            var bufferStream = new MemoryStream();
+
+            serializer.Serialize(bufferStream, obj);
+
+            using (var stream = new BinaryWriter(File.OpenWrite(path)))
             {
-                serializer.Serialize(stream, obj);
+                stream.Write(bufferStream.ToArray());
             }
         }
 

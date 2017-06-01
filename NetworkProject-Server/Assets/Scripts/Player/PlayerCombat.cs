@@ -6,7 +6,6 @@ using NetworkProject.BodyParts;
 using NetworkProject.Combat;
 using NetworkProject.Connection.ToServer;
 
-[System.CLSCompliant(false)]
 public class PlayerCombat : Combat
 {
     public int AttackSpeed { get; set; }
@@ -26,24 +25,24 @@ public class PlayerCombat : Combat
             return new NormalBullet(BulletSpeed);
         };
 
-        BulletLifeTime = 5f;
-        BulletSpeed = 5f;
+        BulletLifeTime = 3f;
+        BulletSpeed = 10f;
     }
     
     public void Attack(AttackToServer attack)
     {
-        if (WeaponIsEquiped())
+        if (IsWeaponEquiped())
         {
             Attacker attacker = new Attacker(gameObject);
             int dmg = UnityEngine.Random.Range(MinDmg, MaxDmg);
             AttackInfo attackInfo = new AttackInfo(attacker, dmg, DamageType.Physical);
 
-            BulletInfo bulletInfo = new BulletInfo();
-            bulletInfo.Bullet = _createBulletFunction();
-            bulletInfo.AttackInfo = attackInfo;
-            bulletInfo.LiveTime = BulletLifeTime;
-            bulletInfo.Position = _bulletRespawn.position;
-            bulletInfo.Rotation = Quaternion.LookRotation(attack.Direction);
+            BulletInfo bulletInfo = new BulletInfo(
+                bullet: _createBulletFunction(),
+                liveTime: BulletLifeTime,
+                position: GetCollisionPointToRespawn(),
+                rotation: Quaternion.LookRotation(attack.Direction),
+                attackInfo: attackInfo);
 
             SceneBuilder.CreateBullet(bulletInfo, gameObject);
 
@@ -51,9 +50,23 @@ public class PlayerCombat : Combat
         }
     }
 
-    private bool WeaponIsEquiped()
+    private bool IsWeaponEquiped()
     {
         return GetComponent<PlayerEquipment>().IsEquipedWeapon();
     }
 
+    private Vector3 GetCollisionPointToRespawn()
+    {
+        RaycastHit hitInfo;
+        Vector3 dir = _bulletRespawn.transform.position - transform.position;
+
+        if (Physics.Raycast(transform.position, dir, out hitInfo, dir.magnitude))
+        {
+            return hitInfo.point;
+        }
+        else
+        {
+            return _bulletRespawn.transform.position;
+        }
+    }
 }

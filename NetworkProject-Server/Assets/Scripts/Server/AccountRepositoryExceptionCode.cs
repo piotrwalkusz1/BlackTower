@@ -8,5 +8,17 @@ public enum AccountRepositoryExceptionCode
     WrongLoginOrPassword,
     AccountAlreadyLogin,
     CharacterAlreadyLogin,
-    AcconuntAlreadyLogout
+    AcconuntAlreadyLogout,
+    LoginIsTooShort,
+    LoginIsTooLong,
+    PasswordIsTooShort,
+    PasswordIsTooLong,
+    LoginContainsNotAllowedCharacters,
+    PasswordContainsNotAllowedCharacters,
+    LoginAlreadyExist,
+    CharacterNameIsTooShort,
+    CharacterNameIsTooLong,
+    CharacterNameContainsNotAllowedCharacters,
+    CharacterNameAlreadyExist,
+    CharacterSlotIsEmpty
 }

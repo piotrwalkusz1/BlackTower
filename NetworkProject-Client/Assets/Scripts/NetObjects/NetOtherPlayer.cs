@@ -18,6 +18,11 @@ public class NetOtherPlayer : NetPlayer
         Combat = GetComponent<OtherPlayerCombat>();
     }
 
+    protected void LateUpdate()
+    {
+        CheckChangePositionAndRotation();
+    }
+
     public void InitializePlayer(CreateOtherPlayerToClient package)
     {
         IdNet = package.IdNet;

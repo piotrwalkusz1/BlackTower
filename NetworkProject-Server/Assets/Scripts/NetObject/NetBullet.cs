@@ -5,7 +5,6 @@ using NetworkProject.Connection;
 using NetworkProject.Connection.ToClient;
 using NetworkProject.Combat;
 
-[System.CLSCompliant(false)]
 public class NetBullet : NetObject
 {
     public Bullet Bullet { get; set; }

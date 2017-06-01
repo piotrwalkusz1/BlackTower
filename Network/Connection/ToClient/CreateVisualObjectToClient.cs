@@ -12,10 +12,8 @@ namespace NetworkProject.Connection.ToClient
         public int IdVisualObject { get; set; }
 
         public CreateVisualObjectToClient(int idNet, Vector3 position, float rotation, int idVisualObject)
+            : base(idNet, position, rotation)
         {
-            IdNet = idNet;
-            Position = position;
-            Rotation = rotation;
             IdVisualObject = idVisualObject;
         }
     }

@@ -1,166 +1,261 @@
-﻿using UnityEngine;
-using System.Collections;
-using NetworkProject;
-using NetworkProject.BodyParts;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using UnityEngine;
 using NetworkProject.Items;
 using NetworkProject.Connection;
 using NetworkProject.Connection.ToClient;
 
-public class PlayerEquipment : MonoBehaviour, IEquipmentManager
+public class PlayerEquipment : MonoBehaviour
 {
-    private PlayerEquipedItems _equipedItems = new PlayerEquipedItems();
+    private List<Item> _itemsInBag;
 
-    private Equipment _equipment = new Equipment(NetworkProject.Settings.widthEquipment * NetworkProject.Settings.heightEquipment);
+    public int Gold { get; set; }
 
-    public void Set(Equipment equipment, PlayerEquipedItems equipedItems)
+    private List<BodyPart> _bodyParts;
+
+    public void Set(EquipmentPackage itemBag, PlayerEquipedItemsPackage equipedItems)
     {
-        _equipment = equipment;
-        _equipedItems = equipedItems;
+         _itemsInBag = PackageConverter.PackageToItem(itemBag.GetItems());
+
+         Gold = itemBag.Gold;
+
+        _bodyParts = PackageConverter.PackageToBodyPart(equipedItems.BodyParts.ToArray());
     }
 
-    public PlayerEquipedItems GetEquipedItems()
+    public void SetItemInBag(Item item, int idSlot)
     {
-        return _equipedItems;
+        _itemsInBag[idSlot] = item;
     }
 
-    public Equipment GetEquipment()
+    public Item GetItemFromBag(int slot)
     {
-        return _equipment;
+        try
+        {
+            return _itemsInBag[slot];
+        }
+        catch (IndexOutOfRangeException)
+        {
+            throw new ArgumentOutOfRangeException("Numer slotu ( " + slot.ToString() + ") jest poza zakresem");
+        }
     }
 
-    public Item GetEquipedItem(int slot)
+    public Item[] GetItemsFromBag()
     {
-        return _equipedItems.GetEquipedItem(slot);
+        return _itemsInBag.ToArray();
     }
 
-    public Item GetItemInEquipment(int slot)
+    public bool IsAnyEmptyBagSlot()
     {
-        return _equipment.GetItemBySlot(slot);
+        return _itemsInBag.Exists(x => x == null);
     }
 
-    public bool IsEmptySlotOnBody(int bodyPart)
+    public bool AreEmptyBagSlots(int number)
     {
-        return _equipedItems.IsEmptySlot(bodyPart);
+        int emptyBagSlotNumber = 0;
+
+        foreach (var item in _itemsInBag)
+        {
+            if (item == null)
+            {
+                emptyBagSlotNumber++;
+            }
+        }
+
+        return emptyBagSlotNumber >= number;
     }
 
-    public bool IsEmptySlotInEquipment(int slot)
+    public bool IsBagSlotEmpty(int slot)
     {
-        return _equipment.IsThisPlaceFree(slot);
+        return _itemsInBag[slot] == null;
     }
 
-    public bool IsAnyEmptySlotInEquipment()
+    public void ChangeItemsInBag(int slot1, int slot2)
     {
-        return _equipment.IsFreePlace();
+        Item item1 = GetItemFromBag(slot1);
+        Item item2 = GetItemFromBag(slot2);
+
+        SetItemInBag(item1, slot2);
+        SetItemInBag(item2, slot1);
     }
 
     public int AddItem(Item item)
     {
-        return _equipment.AddItem(item);
+        int slot = GetEmptyBagSlot();
+
+        SetItemInBag(item, slot);
+
+        return slot;
     }
 
-    public void AddItemAndSendUpdate(Item item)
+    public int AddItemAndSendUpdate(Item item)
     {
         int slot = AddItem(item);
 
-        var netPlayer = GetComponent<NetPlayer>();
+        SendUpdateBagSlot(slot, GetComponent<NetPlayer>().OwnerAddress);
 
-        SendUpdateSlot(slot, netPlayer.OwnerAddress);
+        return slot;
     }
 
-    public bool CanEquipeItem(Item item, int slot)
+    public Item GetEquipedItem(int slot)
     {
-        if (item == null)
-        {
-            return true; // puste pole zawsze możne "założyć", innymi słowy jest to ściągnięcie itemu    
-        }
-
-        IEquipableItemManager itemDataManager = (IEquipableItemManager)ItemRepository.GetItemByIdItem(item.IdItem);
-        EquipableItemData itemData = itemDataManager.GetEquipableItemData();
-        BodyPart bodyPart = IoC.GetBodyPart(slot);
-
-        return itemData.CanEquipe(GetComponent<PlayerStats>()) && bodyPart.CanEquipeItemOnThisBodyPart(itemData);
+        return _bodyParts[slot].EquipedItem;
     }
 
-    public void EquipeItem(Item item, int bodyPartType)
+    public BodyPart[] GetBodyParts()
     {
-        _equipedItems.EquipeItem(item, bodyPartType);
+        return _bodyParts.ToArray();
     }
 
-    public bool CanEquipeItemInEquipmentOnThisBodyPart(int equipmentSlot, int bodyPartSlot)
+    public BodyPart GetBodyPart(int bodyPartSlot)
     {
-        Item itemInEquipment = _equipment.GetItemBySlot(equipmentSlot);
-
-        return CanEquipeItem(itemInEquipment, bodyPartSlot);
+        return _bodyParts[bodyPartSlot];
     }
 
-    public void EquipeItemInEquipmentOnThisBodyPart(int equipmentSlot, int bodyPartSlot)
+    public bool CanEquipItem(Item item, PlayerStats stats)
     {
-        Item itemInEquipment = _equipment.GetItemBySlot(equipmentSlot);
-        Item equipedItem = GetEquipedItem(bodyPartSlot);
+        EquipableItemData itemData = (EquipableItemData)item.ItemData;
 
-        EquipeItem(itemInEquipment, bodyPartSlot);
-        _equipment.SetSlot(equipedItem, equipmentSlot);
+        return itemData.CanEquipe(stats);
     }
 
-    public bool TryEquipeItemInEquipmentOnThisBodyPart(int equipmentSlot, int bodyPartSlot)
+    public bool CanEquipItemOnBodyPart(Item item, PlayerStats stats, BodyPart bodyPart)
     {
-        if (CanEquipeItemInEquipmentOnThisBodyPart(equipmentSlot, bodyPartSlot))
-        {
-            EquipeItemInEquipmentOnThisBodyPart(equipmentSlot, bodyPartSlot);
-            return true;
-        }
-        else
-        {
-            return false;
-        } 
+        return item == null || (CanEquipItem(item, stats) && bodyPart.CanEquipeItemOnThisBodyPart((EquipableItemData)item.ItemData));
     }
 
-    public bool CanChangeEquipedItems(int slot1, int slot2)
+    public bool IsEmptyBodyPart(int bodyPart)
     {
-        Item item1 = GetEquipedItem(slot1);
-        Item item2 = GetEquipedItem(slot2);
-
-        return CanEquipeItem(item1, slot2) && CanEquipeItem(item2, slot1);
-    }
-
-    public void ChangeEquipedItems(int slot1, int slot2)
-    {
-        Item item1 = GetEquipedItem(slot1);
-        Item item2 = GetEquipedItem(slot2);
-
-        EquipeItem(item1, slot2);
-        EquipeItem(item2, slot1);
-    }
-
-    public bool TryChangeEquipedItems(int slot1, int slot2)
-    {
-        if (CanChangeEquipedItems(slot1, slot2))
-        {
-            ChangeEquipedItems(slot1, slot2);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    public void ApplyToStats(IEquipableStats stats)
-    {
-        _equipedItems.ApplyToStats(stats);
+        return GetEquipedItem(bodyPart) == null;
     }
 
     public bool IsEquipedWeapon()
     {
-        return _equipedItems.IsEquipedWeapon();
+        foreach (var bodyPart in _bodyParts)
+        {
+            if (bodyPart.EquipedItem == null)
+            {
+                continue;
+            }
+
+            EquipableItemData item = (EquipableItemData)ItemRepository.GetItemByIdItem(bodyPart.EquipedItem.IdItem);
+
+            if (item is WeaponData)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    public void SendUpdateSlot(int slot, IConnectionMember address)
+    public void SendUpdateBagSlot(int idSlot, IConnectionMember address)
     {
-        var netObject = GetComponent<NetObject>();
+        int idNet = GetComponent<NetObject>().IdNet;
 
-        var request = new UpdateItemInEquipmentToClient(netObject.IdNet, slot, GetItemInEquipment(slot));
+        Item item = GetItemFromBag(idSlot); 
+
+        var request = new UpdateItemInEquipmentToClient(idNet, idSlot, PackageConverter.ItemToPackage(item));
 
         Server.SendRequestAsMessage(request, address);
+    }
+
+    public void SendUpdateGold(IConnectionMember address)
+    {
+        var request = new UpdateGoldToClient(GetComponent<NetObject>().IdNet, Gold);
+
+        Server.SendRequestAsMessage(request, address);
+    }
+
+    public bool TryEquipItemFromBag(int bagSlot, int bodyPartSlot)
+    {
+        Item item = GetItemFromBag(bagSlot);
+
+        BodyPart bodyPart = GetBodyPart(bodyPartSlot);
+
+        Item oldItemOnBodyPart = bodyPart.EquipedItem;
+
+        if(CanEquipItemOnBodyPart(item, GetComponent<PlayerStats>(), bodyPart))
+        {
+            bodyPart.EquipedItem = item;
+
+            SetItemInBag(oldItemOnBodyPart, bagSlot);
+
+            return true;           
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public bool TryChangeEquipedItems(int bodySlot1, int bodySlot2)
+    {
+        PlayerStats stats = GetComponent<PlayerStats>();
+
+        var bodyPart1 = GetBodyPart(bodySlot1);
+        var item1 = bodyPart1.EquipedItem;
+
+        var bodyPart2 = GetBodyPart(bodySlot2);
+        var item2 = bodyPart2.EquipedItem;
+
+        if (CanEquipItemOnBodyPart(item1, stats, bodyPart2) && CanEquipItemOnBodyPart(item2, stats, bodyPart1))
+        {
+            bodyPart1.EquipedItem = item2;
+            bodyPart2.EquipedItem = item1;
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void ApplyEquipedItemsToStats()
+    {
+        var stats = GetComponent<PlayerStats>();
+
+        _bodyParts.ForEach(x => x.ApplyEquipedItemStats(stats));
+        _bodyParts.ForEach(x => x.ApplyEquipedItemBenefits(stats));
+    }
+
+    public void UseItem(int slot)
+    {
+        Item item = GetItemFromBag(slot);
+
+        if (item == null)
+        {
+            throw new ArgumentException("Nie ma itemu w tym slocie.");
+        }
+        
+        try
+        {
+            var usableItem = (ItemUsableData)item.ItemData;
+
+            usableItem.Use(gameObject);
+
+            _itemsInBag[slot] = null;
+
+            SendUpdateBagSlot(slot, GetComponent<NetPlayer>().OwnerAddress);
+        }
+        catch(InvalidCastException)
+        {
+            throw new ArgumentException("W tym slocie nie ma itemu zdolnego do użycia.");
+        }
+    }
+
+    public int GetEmptyBagSlot()
+    {
+        for (int i = 0; i < _itemsInBag.Count; i++)
+        {
+            if (_itemsInBag[i] == null)
+            {
+                return i;
+            }
+        }
+
+        return -1;
     }
 }

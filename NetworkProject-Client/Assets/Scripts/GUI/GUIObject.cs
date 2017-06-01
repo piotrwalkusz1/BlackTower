@@ -3,9 +3,19 @@ using System.Collections;
 
 public class GUIObject : MonoBehaviour
 {
-    protected void OnMouseDown()
+    protected virtual void OnMouseDown()
     {
         Focus();
+
+        if (transform.parent != null)
+        {
+            var guiObject = transform.parent.GetComponent<GUIObject>();
+
+            if (guiObject != null)
+            {
+                guiObject.Focus();
+            }
+        }
     }
 
     public virtual void OnDropItem(ItemInEquipmentWindow item)
@@ -16,6 +26,17 @@ public class GUIObject : MonoBehaviour
     public virtual void OnDropEquipedItem(ItemInCharacterWindow item)
     {
         item.GoToDefaultPlace();
+    }
+
+    public virtual void OnDropSpell(GUISpell spell)
+    {
+        spell.GoToDefaultPlace();
+    }
+
+    public virtual void OnDropHotkeysObject(GUIHotkeysObject hotkeysObject)
+    {
+        hotkeysObject.GoToDefaultPlace();
+        hotkeysObject.SetHotkeyAndSetUpdate(null);
     }
 
     public void Focus()
@@ -43,7 +64,7 @@ public class GUIObject : MonoBehaviour
         gui2.texture = tex;
     }
 
-    protected GUIElement GuiRaycast(Vector2 position)
+    protected GUIElement GuiRaycastUnderObject(Vector2 position)
     {
         Rect firstRect = guiTexture.pixelInset;
 
@@ -54,6 +75,15 @@ public class GUIObject : MonoBehaviour
         GUIElement element = layer.HitTest(new Vector3(position.x, position.y, 0));
 
         guiTexture.pixelInset = firstRect;
+
+        return element;
+    }
+
+    protected GUIElement GuiRaycast(Vector2 position)
+    {
+        GUILayer layer = Camera.main.GetComponent<GUILayer>();
+
+        GUIElement element = layer.HitTest(new Vector3(position.x, position.y, 0));
 
         return element;
     }

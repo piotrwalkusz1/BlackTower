@@ -11,18 +11,18 @@ namespace NetworkProject
 {
     public static class IoC
     {
-        private static List<BodyPart> _bodyParts;
+        private static List<BodyPartPackage> _bodyParts;
 
         static IoC()
         {
             InitializeBodyParts();
         }
 
-        public static BodyPart GetBodyPart(int slot)
+        public static BodyPartPackage GetBodyPart(int slot)
         {
             try
             {
-                return (BodyPart)Activator.CreateInstance(_bodyParts[slot].GetType());
+                return (BodyPartPackage)Activator.CreateInstance(_bodyParts[slot].GetType());
             }
             catch (IndexOutOfRangeException)
             {
@@ -30,13 +30,13 @@ namespace NetworkProject
             }
         }
 
-        public static BodyPart[] GetBodyParts()
+        public static BodyPartPackage[] GetBodyParts()
         {
-            BodyPart[] bodyParts = new BodyPart[_bodyParts.Count];
+            BodyPartPackage[] bodyParts = new BodyPartPackage[_bodyParts.Count];
 
             for (int i = 0; i < _bodyParts.Count; i++)
             {
-                bodyParts[i] = (BodyPart)Activator.CreateInstance(_bodyParts[i].GetType());
+                bodyParts[i] = (BodyPartPackage)Activator.CreateInstance(_bodyParts[i].GetType());
             }
 
             return bodyParts;
@@ -44,14 +44,14 @@ namespace NetworkProject
 
         private static void InitializeBodyParts()
         {
-            _bodyParts = new List<BodyPart>();
-            _bodyParts.Add(new BodyParts.Head());
-            _bodyParts.Add(new BodyParts.Chest());
-            _bodyParts.Add(new BodyParts.Feet());
-            _bodyParts.Add(new BodyParts.RightHand());
-            _bodyParts.Add(new BodyParts.LeftHand());
-            _bodyParts.Add(new BodyParts.Other());
-            _bodyParts.Add(new BodyParts.Other());
+            _bodyParts = new List<BodyPartPackage>();
+            _bodyParts.Add(new BodyParts.HeadPackage());
+            _bodyParts.Add(new BodyParts.ChestPackage());
+            _bodyParts.Add(new BodyParts.FeetPackage());
+            _bodyParts.Add(new BodyParts.RightHandPackage());
+            _bodyParts.Add(new BodyParts.LeftHandPackage());
+            _bodyParts.Add(new BodyParts.OtherPackage());
+            _bodyParts.Add(new BodyParts.OtherPackage());
         }
     }
 }

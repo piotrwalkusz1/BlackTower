@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using NetworkProject;
@@ -7,21 +8,44 @@ using NetworkProject.Connection.ToServer;
 
 public class NetOwnPlayer : NetPlayer
 {
+    private PlayerHealth _health;
+    private DateTime _nextCheckMovementAndRotation;
+    private float _checkMovementAndRotationRate = 0.05f;
+
+    protected new void Awake()
+    {
+        base.Awake();
+
+        _health = GetComponent<PlayerHealth>();
+
+        CheckChangePositionAndRotation();
+        _nextCheckMovementAndRotation = DateTime.UtcNow.AddSeconds(_checkMovementAndRotationRate);
+    }
+
 	protected void Update()
     {
-		if (IsMovement())
+        if (DateTime.UtcNow > _nextCheckMovementAndRotation)
         {
-            var request = new PlayerMoveToServer(transform.position);
+            CheckChangePositionAndRotation();
+            _nextCheckMovementAndRotation = DateTime.UtcNow.AddSeconds(_checkMovementAndRotationRate);
 
-            Client.SendRequestAsMessage(request);
-		}
+            if (_health.IsAlive())
+            {
+                if (IsMovement())
+                {
+                    var request = new PlayerMoveToServer(transform.position);
 
-        if (IsRotation())
-        {
-            var request = new PlayerRotationToServer(transform.eulerAngles.y);
+                    Client.SendRequestAsMessage(request);
+                }
 
-            Client.SendRequestAsMessage(request);
-        }
+                if (IsRotation())
+                {
+                    var request = new PlayerRotationToServer(transform.eulerAngles.y);
+
+                    Client.SendRequestAsMessage(request);
+                }
+            }
+        }   
 	}
 
     public void InitializePlayer(CreateOwnPlayerToClient package)
@@ -34,12 +58,10 @@ public class NetOwnPlayer : NetPlayer
         package.PlayerStats.CopyToStats(stats);
 
         var eq = GetComponent<OwnPlayerEquipment>();
-        eq.SetItemsInBag(package.Equipment.GetItems());
+        eq.SetEquipmentBag(package.Equipment);
         eq.SetEquipedItems(package.EquipedItems);
 
         var spellCaster = GetComponent<SpellCaster>();
-        List<SpellClient> spells = new List<SpellClient>();
-        package.Spells.ForEach(x => spells.Add(new SpellClient(x)));
-        spellCaster.SetSpells(spells.ToArray());
+        spellCaster.SetSpells(PackageConverter.PackageToSpell(package.Spells.ToArray()).ToArray());
     }
 }

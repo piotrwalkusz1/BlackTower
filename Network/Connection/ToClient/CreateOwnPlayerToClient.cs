@@ -13,18 +13,15 @@ namespace NetworkProject.Connection.ToClient
     {
         public PlayerStatsPackage PlayerStats { get; set; }
         public string Name { get; set; }
-        public Equipment Equipment { get; set; }
-        public PlayerEquipedItems EquipedItems { get; set; }
-        public List<Spell> Spells { get; set; }
+        public EquipmentPackage Equipment { get; set; }
+        public PlayerEquipedItemsPackage EquipedItems { get; set; }
+        public List<SpellPackage> Spells { get; set; }
 
         public CreateOwnPlayerToClient(int idNet, bool isModelVisible, Vector3 position, float rotation, IPlayerStats playerStats, string name,
-            Equipment equipment, PlayerEquipedItems equipedItems, List<Spell> spells)
+            EquipmentPackage equipment, PlayerEquipedItemsPackage equipedItems, List<SpellPackage> spells)
+            : base(idNet, isModelVisible, position, rotation)
         {
-            IdNet = idNet;
-            IsModelVisible = isModelVisible;
             PlayerStats = (PlayerStatsPackage)StatsPackage.GetStatsPackage(playerStats);
-            Position = position;
-            Rotation = rotation;
             Name = name;
             Equipment = equipment;
             EquipedItems = equipedItems;

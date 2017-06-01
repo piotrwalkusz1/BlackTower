@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using NetworkProject;
 using NetworkProject.Items;
 
-public class 
-EquipmentWindow : GUIObject
+public class EquipmentWindow : GUIObject, IClosable
 {  
     public Texture2D _texture;
     public Vector2 _externalBorder;
     public int _internalBorder;
     public int _sizeItemImage;
     public Rect _closeButtonRect;
+    public GUIText _gold;
 
     private OwnPlayerEquipment _equipment;
 
@@ -61,12 +61,16 @@ EquipmentWindow : GUIObject
 
     public void RefreshEquipment()
     {
+        SetEquipment(Client.GetNetOwnPlayer().GetComponent<OwnPlayerEquipment>());
+
         Item[] items = _equipment.GetItemsFromBag();
 
         for (int i = 0; i < items.Length; i++)
         {
             _items[i].SetTextureByItem(items[i]);
         }
+
+        _gold.text = _equipment.Gold.ToString();
     }
 
     public Vector2 GetPixelPositionToItem(ItemInEquipmentWindow item)
@@ -118,6 +122,16 @@ EquipmentWindow : GUIObject
     public OwnPlayerStats GetPlayerStats()
     {
         return _equipment.GetComponent<OwnPlayerStats>();
+    }
+
+    public OwnPlayerEquipment GetEquipment()
+    {
+        return _equipment;
+    }
+
+    public void Close()
+    {
+        GUIController.HideEquipment();
     }
 
     private void InitializeEquipmentGUI()

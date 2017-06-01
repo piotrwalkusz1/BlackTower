@@ -7,12 +7,6 @@ public class Health : MonoBehaviour
     public virtual int MaxHP { get; set; }
     public float HPRegeneration { get; set; }
 
-    public void Awake()
-    {
-        MaxHP = 1;
-        HP = 1;
-    }
-
     public bool IsDead()
     {
         return HP <= 0;
@@ -21,5 +15,10 @@ public class Health : MonoBehaviour
     public virtual void Dead()
     {
         HP = 0;
+    }
+
+    public bool IsAlive()
+    {
+        return !IsDead();
     }
 }

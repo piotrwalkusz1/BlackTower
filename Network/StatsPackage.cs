@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NetworkProject.Connection
+namespace NetworkProject
 {
     [Serializable]
     public abstract class StatsPackage : IStats
@@ -12,8 +12,6 @@ namespace NetworkProject.Connection
         {
             if (stats is IPlayerStats)
                 return new PlayerStatsPackage((IPlayerStats)stats);
-            else if (stats is ISpellCasterStats)
-                return new SpellCasterStatsPackage((ISpellCasterStats)stats);
             else if (stats is IMonsterStats)
                 return new MonsterStatsPackage((IMonsterStats)stats);
             else

@@ -12,6 +12,12 @@ public class PlayerExperience : Experience
         }
     }
 
+    public void SetExp(int exp)
+    {
+        Exp = exp;
+        CheckIsNewLvl();
+    }
+
     public void Set(int lvl, int exp)
     {
         Lvl = lvl;

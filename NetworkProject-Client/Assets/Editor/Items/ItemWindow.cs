@@ -14,7 +14,7 @@ namespace EditorExtension
 
         public ItemData ItemData
         {
-            get { return ItemWindowData.VisualItem; }
+            get { return ItemWindowData.Item; }
         }
 
         private bool _isShowed = false;      

@@ -10,9 +10,9 @@ namespace NetworkProject.Connection.ToClient
     public class UpdateSpellToClient : INetworkRequestToClient
     {
         public int IdNet { get; set; }
-        public Spell Spell { get; set; }
+        public SpellPackage Spell { get; set; }
 
-        public UpdateSpellToClient(int idNet, Spell spell)
+        public UpdateSpellToClient(int idNet, SpellPackage spell)
         {
             IdNet = idNet;
             Spell = spell;

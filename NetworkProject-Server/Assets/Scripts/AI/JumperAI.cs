@@ -5,31 +5,23 @@ using NetworkProject;
 using NetworkProject.Monsters;
 using NetworkProject.Items;
 
-[System.CLSCompliant(false)]
-public class JumperAI : MonoBehaviour
+public class JumperAI : MonsterAI
 {
-    private const float FIND_RANGE = 15f;
+    private const float FIND_RANGE = 35f;
     private const float TIME_BETWEEN_SEARCHING = 3f;
 
     private DateTime _nextSearchingTime = DateTime.UtcNow;
     private NetPlayer _targetPlayer;
 
     private JumperMovement _movement;
-    private NetMonster _netMonster;  
     private MonsterCombat _combat;
 
-	void Awake() 
+	void Start() 
     {
         _movement = GetComponent<JumperMovement>();
-        _netMonster = GetComponent<NetMonster>();
         _combat = GetComponent<MonsterCombat>();
 
-        MonsterFullData monster = (MonsterFullData)MonsterRepository.GetMonster(GetComponent<NetMonster>().IdMonster);
-
-        var stats = GetComponent<MonsterStats>();
-        monster.Stats.CopyToStats(stats);
-
-        InitializeItemsToDrop(monster);    
+        InitializeMonster(); 
 	}
 	
 	void Update()
@@ -47,7 +39,12 @@ public class JumperAI : MonoBehaviour
                 FindTargetPlayer();
             }
 
-            ChaseAndAttackPlayer();
+            if (_targetPlayer != null)
+            {
+                ChaseAndAttackPlayer();
+
+                _movement.RotateToTarget(_targetPlayer.transform.position);
+            }         
         }
 	}
 
@@ -58,28 +55,7 @@ public class JumperAI : MonoBehaviour
 
     private void FindTargetPlayer()
     {
-        NetPlayer[] players = GameObject.FindObjectsOfType(typeof(NetPlayer)) as NetPlayer[];
-
-        float nearest = FIND_RANGE;
-        NetPlayer nearestPlayer = null;
-
-        foreach (NetPlayer player in players)
-        {
-            if (player.GetComponent<PlayerHealthSystem>().IsDead())
-            {
-                continue;
-            }
-
-            Vector3 vector = player.transform.position - transform.position;
-
-            if (vector.sqrMagnitude < nearest * nearest)
-            {
-                nearest = vector.magnitude;
-                nearestPlayer = player;
-            }
-        }
-
-        _targetPlayer = nearestPlayer;
+        _targetPlayer = FindTargetPlayer(FIND_RANGE);
     }
 
     private void ChaseAndAttackPlayer()
@@ -98,7 +74,7 @@ public class JumperAI : MonoBehaviour
 
     private void TryAttack()
     {
-        if (_combat.IsEnoughTimeToAttack())
+        if (_combat.IsEnoughTimeToAttack() && !IsTargetBehindObstacle(_targetPlayer.transform))
         {
             _combat.Attack(_targetPlayer.GetComponent<HealthSystem>());
         }
@@ -112,12 +88,5 @@ public class JumperAI : MonoBehaviour
     private void Stop()
     {
         _movement.Stop();
-    }
-
-    private void InitializeItemsToDrop(MonsterFullData monster)
-    {
-        Drop drop = GetComponent<Drop>();
-
-        drop.AddItemToDrop(monster.Drop.ToArray());
     }
 }

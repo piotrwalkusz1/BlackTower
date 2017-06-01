@@ -11,7 +11,7 @@ namespace EditorExtension
 {
     public class SpellsWindow : EditorWindow
     {
-        public static TypeFinder<ISpellCasterRequirement> RequirementsList = new TypeFinder<ISpellCasterRequirement>();
+        public static TypeFinder<IRequirement> RequirementsList = new TypeFinder<IRequirement>();
 
         private List<SpellWindow> _spells = new List<SpellWindow>();
         private static List<SpellWindow> _spellsToDelete = new List<SpellWindow>();
@@ -83,7 +83,7 @@ namespace EditorExtension
 
         private void Save()
         {
-            var spells = new List<VisualSpellData>();
+            var spells = new List<SpellData>();
 
             _spells.ForEach(x => spells.Add(x.Spell));
 

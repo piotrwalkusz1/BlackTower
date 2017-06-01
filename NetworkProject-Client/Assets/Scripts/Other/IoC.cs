@@ -17,11 +17,6 @@ namespace Standard
         {
             return new GameObjectRepositoryByFind();
         }
-
-        public static ISpellRepository GetSpellRepository()
-        {
-            return new SpellClientRepository();
-        }
     } 
 }
 

@@ -10,6 +10,9 @@ namespace NetworkProject
     {
         public static void CopyAllSourceProperties(object source, object target)
         {
+            if (source == null) throw new ArgumentNullException("Source is null.");
+            if (target == null) throw new ArgumentNullException("Traget is null.");
+
             Type targetType = target.GetType();
 
             foreach (var property in source.GetType().GetProperties())
@@ -25,6 +28,10 @@ namespace NetworkProject
                     catch (NullReferenceException)
                     {
                         throw new ArgumentException("Source has more properties than target : " + property.Name);
+                    }
+                    catch
+                    {
+                        throw new Exception("Niezany błąd z właściwością : " + property.Name);
                     }
                 }
             }
@@ -47,6 +54,10 @@ namespace NetworkProject
                     catch (NullReferenceException)
                     {
                         throw new ArgumentException("Target has more properties than source : " + property.Name);
+                    }
+                    catch
+                    {
+                        throw new Exception("Niezany błąd z właściwością : " + property.Name);
                     }
                 }
             }

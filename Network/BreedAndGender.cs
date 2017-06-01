@@ -10,17 +10,13 @@ namespace NetworkProject
     {
         public int Breed
         {
-            get
-            {
-                return _breed;
-            }
+            get { return _breed; }               
+            set { _breed = value; }
         }
         public bool IsMale
         {
-            get
-            {
-                return _isMale;
-            }
+            get { return _isMale; }
+            set { _isMale = value; }
         }
 
         private int _breed;

@@ -1,18 +1,26 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
-[System.CLSCompliant(false)]
 public class DamageBullet : MonoBehaviour
 {
     public AttackInfo _attackInfo;
 
+    public List<GameObject> _insensitive = new List<GameObject>();
+
     void OnTriggerEnter(Collider hit)
     {
-        HealthSystem hp = hit.GetComponentInChildren<HealthSystem>();
+        if (!_insensitive.Contains(hit.gameObject))
+        {
+            HealthSystemBase hp = hit.GetComponentInChildren<HealthSystemBase>();
 
-        hp.AttackAndSendUpdate(_attackInfo);
+            if (hp != null)
+            {
+                hp.AttackAndSendUpdate(_attackInfo);
+            }
 
-        Destroy(gameObject);    
+            Destroy(gameObject);   
+        }
     }
 }

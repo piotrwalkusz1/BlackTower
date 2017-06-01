@@ -8,7 +8,7 @@ namespace NetworkProject.Items
     [Serializable]
     public struct ItemDrop
     {
-        public Item Item
+        public ItemPackage Item
         {
             get
             {
@@ -23,10 +23,10 @@ namespace NetworkProject.Items
             }
         }
 
-        public Item _item;
+        public ItemPackage _item;
         public float _chances;
 
-        public ItemDrop(Item item, float chances)
+        public ItemDrop(ItemPackage item, float chances)
         {
             _item = item;
             _chances = chances;

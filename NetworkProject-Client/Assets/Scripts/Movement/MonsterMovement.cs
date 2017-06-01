@@ -5,5 +5,12 @@ using System.Text;
 
 public class MonsterMovement : Movement
 {
-    public float MovementSpeed { get; set; }
+    public int MoveType { get; set; }
+
+    public float[] MovementSpeed { get; set; }
+
+    public float CurrentMovementSpeed
+    {
+        get { return MovementSpeed[MoveType]; }
+    }
 }

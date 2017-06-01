@@ -8,7 +8,7 @@ using NetworkProject.Connection;
 using NetworkProject.Connection.ToClient;
 using NetworkProject.Buffs;
 
-public class SpellCaster : MonoBehaviour, ISpellCaster
+public class SpellCaster : MonoBehaviour
 {
     public int Lvl
     {
@@ -17,7 +17,13 @@ public class SpellCaster : MonoBehaviour, ISpellCaster
             return GetComponent<Experience>().Lvl;
         }
     }
-    public int Mana { get; private set; }
+    public int Mana
+    {
+        get { return (int)_mana; }
+        set { _mana = value; }
+    }
+    public int MaxMana { get; set; }
+    public float ManaRegeneration;
     public Vector3 Position
     {
         get
@@ -32,19 +38,36 @@ public class SpellCaster : MonoBehaviour, ISpellCaster
             return transform.eulerAngles.y;
         }
     }
-    public ISpellCasterStats Stats
+    public PlayerStats Stats
     {
         get
         {
-            return (ISpellCasterStats)GetComponent(typeof(ISpellCasterStats));
+            return GetComponent<PlayerStats>();
         }
     }
-    public IBuffable Buffs
+    public PlayerBuff Buffs
     {
-        get { return (IBuffable)GetComponent(typeof(IBuffable)); }
+        get { return GetComponent<PlayerBuff>(); }
     }
 
+    private float _mana;
+
     private List<Spell> _spells;
+
+    void Update()
+    {
+        int mana = Mana;
+
+        if (_mana < MaxMana)
+        {
+            _mana += Time.deltaTime * ManaRegeneration;
+
+            if (mana != Mana)
+            {
+                SendUpdateMana();
+            }
+        }
+    }
 
     public void AddSpell(Spell spell)
     {
@@ -77,15 +100,15 @@ public class SpellCaster : MonoBehaviour, ISpellCaster
     {
         Spell spell = _spells.Find(x => x.IdSpell == idSpell);
 
-        if(spell == null || !spell.CanUseSpell(Stats))
+        if(spell == null)
         {
-            return false;
+            MonoBehaviour.print("Nie ma takiego spella w księdze zaklęć.");
+
+            return false;   
         }
         else
         {
-            spell.UseSpell(this, options);
-
-            return true;
+            return spell.TryUseSpell(this, options);
         }    
     }
 
@@ -93,8 +116,24 @@ public class SpellCaster : MonoBehaviour, ISpellCaster
 
     public void SendUpdateSpells()
     {
-        int idNet = GetComponent<NetObject>().IdNet;
-        var request = new UpdateAllSpellsToClient(idNet, _spells);
+        var netPlayer = GetComponent<NetPlayer>();
+        var request = new UpdateAllSpellsToClient(netPlayer.IdNet, PackageConverter.SpellToPackage(_spells.ToArray()));
+
+        Server.SendRequestAsMessage(request, netPlayer.OwnerAddress);
+    }
+
+    public void SendUpdateMana()
+    {
+        var netPlayer = GetComponent<NetPlayer>();
+
+        var request = new UpdateManaToClient(netPlayer.IdNet, Mana);
+
+        Server.SendRequestAsMessage(request, netPlayer.OwnerAddress);
+    }
+
+    public bool IsSpell(int idSpell)
+    {
+        return _spells.Exists(x => x.IdSpell == idSpell);
     }
 }
 

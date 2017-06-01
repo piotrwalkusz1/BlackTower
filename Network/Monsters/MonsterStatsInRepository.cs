@@ -11,6 +11,11 @@ namespace NetworkProject.Monsters
     [Serializable]
     public class MonsterStatsInRepository : IMonsterStats
     {
+        public MonsterStatsInRepository()
+        {
+            MovementSpeed = new float[0];
+        }
+
         public int HP { get; set; }
 
         public int MaxHP { get; set; }
@@ -21,6 +26,6 @@ namespace NetworkProject.Monsters
 
         public int AttackSpeed { get; set; }
 
-        public float MovementSpeed { get; set; }
+        public float[] MovementSpeed { get; set; }
     }
 }

@@ -5,10 +5,15 @@ using NetworkProject.Connection.ToServer;
 
 public class InputPlayer : MonoBehaviour 
 {
+    public MouseLook _playerAxis;
+
 	private CharacterMotor movement;
 	
 	private float rateSpeed;
 	private float directionRotate;
+
+    private bool _lookRotationByKey;
+    private bool _lookRotationByGUI;
 
 	void Start ()
     {
@@ -33,6 +38,7 @@ public class InputPlayer : MonoBehaviour
         {
             movement.inputJump = false;
         }
+        
         if (Inputs.DownButton("PickItem"))
         {
             float distance;
@@ -68,12 +74,106 @@ public class InputPlayer : MonoBehaviour
                 GUIController.ShowCharacterGUI();
             }
         }
-
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Inputs.DownButton("Quests"))
         {
-            GetComponent<SpellCaster>().TryCastSpellFromSpellBook(0);
+            if (GUIController.IsQuestManagerActive())
+            {
+                GUIController.HideQuestManager();
+            }
+            else
+            {
+                GUIController.ShowQuestManager();
+            }
+        }
+        if (Input.GetKeyDown(InputsK.magicBook))
+        {
+            if (GUIController.IsMagicBookActive())
+            {
+                GUIController.HideMagicBook();
+            }
+            else
+            {
+                GUIController.ShowMagicBook();
+            }
+        }
+        if (Inputs.DownButton("Mouse"))
+        {
+            SetLockRotationByKey(true);
+            SetCombatAssent(false);
+        }
+        if (Inputs.UpButton("Mouse"))
+        {
+            SetLockRotationByKey(false);
+            SetCombatAssent(true);
+        }
+        if (Input.GetKeyDown(InputsK.menu))
+        {
+            GUIController.ShowWindow(new MessageGUI("Menu",
+                delegate(Rect position)
+                {
+                    if (GUILayout.Button("Wyloguj"))
+                    {
+                        ClientController.Logout();
+                        return true;
+                    }
+                    if (GUILayout.Button("Wyjdź z gry"))
+                    {
+                        ClientController.Logout();
+                        ApplicationControler.Quit();
+                        return true;
+                    }
+                    if (GUILayout.Button("Wróć"))
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }));
         }
 	}
+
+    public void SetLockRotationByGUI(bool isLock)
+    {
+        _lookRotationByGUI = isLock;
+
+        RefreshLockRotation();
+    }
+
+    private void SetLockRotationByKey(bool isLock)
+    {
+        _lookRotationByKey = isLock;
+
+        RefreshLockRotation();
+    }
+
+    private void SetCombatAssent(bool isAssent)
+    {
+        GetComponent<OwnPlayerCombat>().IsMouseLockAssent = isAssent;
+    }
+
+    private void RefreshLockRotation()
+    {
+        if (_lookRotationByKey || _lookRotationByGUI)
+        {
+            LockRotation();
+        }
+        else
+        {
+            UnlockRotation();
+        }
+    }
+
+    private void LockRotation()
+    {
+        GetComponent<MouseLook>().enabled = false;
+        _playerAxis.enabled = false;
+    }
+
+    private void UnlockRotation()
+    {
+        GetComponent<MouseLook>().enabled = true;
+        _playerAxis.enabled = true;
+    }
 
     NetItem FindNearestItem(out float distance)
     {

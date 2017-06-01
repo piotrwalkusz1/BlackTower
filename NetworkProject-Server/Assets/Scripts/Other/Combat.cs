@@ -8,5 +8,13 @@ using NetworkProject.Quests;
 
 public class Combat : MonoBehaviour
 {
-    public event Action<KillInfo> OnKill;
+    public event Action<KillInfo, GameObject> OnKill;
+
+    public void OnKillInvoke(KillInfo killInfo)
+    {
+        if (OnKill != null)
+        {
+            OnKill(killInfo, gameObject);
+        }  
+    }
 }

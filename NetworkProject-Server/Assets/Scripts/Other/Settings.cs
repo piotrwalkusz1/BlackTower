@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using NetworkProject;
 
 [assembly : System.CLSCompliant(false)]
 
 namespace Standard
 {
-    [System.CLSCompliant(false)]
-    static public class Settings
+    public static class Settings
     {
         public static readonly string PATH_TO_MONSTER_IN_RESOURCE = "monsters";
         public static readonly string PATH_TO_ITEMS_IN_RESOURCE = "items";
@@ -21,7 +21,20 @@ namespace Standard
         public static int GetMap(Vector3 position)
         {
             float a = position.y / heightMap;
-            return (int)Mathf.CeilToInt(a);
+            return Mathf.CeilToInt(a);
+        }
+
+        public static void StatsToDefault(IPlayerStats stats)
+        {
+            stats.MaxHP = NetworkProject.Settings.basicPlayerMaxExp;
+            stats.HPRegeneration = NetworkProject.Settings.basicHPRegeneration;
+            stats.MaxMana = NetworkProject.Settings.basicPlayerMaxMana;
+            stats.ManaRegeneration = NetworkProject.Settings.basicManaRegeneration;
+            stats.MovementSpeed = NetworkProject.Settings.basicPlayerMovementSpeed;
+            stats.AttackSpeed = 0;
+            stats.MinDmg = 0;
+            stats.MaxDmg = 0;
+            stats.Defense = 0;
         }
     }
 }

@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using NetworkProject.Items;
 
-[System.CLSCompliant(false)]
 public class Drop : MonoBehaviour
 {
     private List<ItemDrop> _itemsDrop = new List<ItemDrop>(); 
@@ -62,20 +61,13 @@ public class Drop : MonoBehaviour
         float x = UnityEngine.Random.Range(-Standard.Settings.maxDropDistance, Standard.Settings.maxDropDistance);
         float z = UnityEngine.Random.Range(-Standard.Settings.maxDropDistance, Standard.Settings.maxDropDistance);
 
-        Vector3 position = transform.position + new Vector3(x, 0, z);
+        Vector3 position = transform.position + new Vector3(x, 0.5f, z);
 
         if (Physics.Raycast(position, Vector3.down, out hitInfo, Mathf.Infinity, layerMask))
         {
             Vector3 offset = transform.position - hitInfo.point;
 
-            if (offset.sqrMagnitude > 4 * Standard.Settings.maxDropDistance * Standard.Settings.maxDropDistance)
-            {
-                return CalculatePosition2();
-            }
-            else
-            {
-                return hitInfo.point + Vector3.up * Standard.Settings.distanceBetweenDroppedItemAndGround;
-            }
+            return hitInfo.point + Vector3.up * Standard.Settings.distanceBetweenDroppedItemAndGround;
         }
         else
         {
@@ -88,7 +80,7 @@ public class Drop : MonoBehaviour
         LayerMask layerMask = LayerMask.GetMask("Terrain");
         RaycastHit hitInfo;
 
-        if (Physics.Raycast(transform.position, Vector3.down, out hitInfo, Mathf.Infinity, layerMask))
+        if (Physics.Raycast(transform.position + Vector3.up * 0.5f, Vector3.down, out hitInfo, Mathf.Infinity, layerMask))
         {
             return hitInfo.point + Vector3.up * Standard.Settings.distanceBetweenDroppedItemAndGround;
         }

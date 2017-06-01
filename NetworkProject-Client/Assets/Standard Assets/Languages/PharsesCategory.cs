@@ -42,7 +42,7 @@ namespace Standard
             {
                 foreach (var exludeCategory in _exludeCategories)
                 {
-                    if (exludeCategory.ContainPhrase(phrase))
+                    if (exludeCategory.IsPharseMatchToCategory(phrase))
                     {
                         copyPhrases.Remove(phrase);
                     }

@@ -46,9 +46,10 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Editor\Buffs\BuffMultiData.cs" />
      <Compile Include="Assets\Editor\Buffs\BuffWindow.cs" />
      <Compile Include="Assets\Editor\Buffs\BuffsWindow.cs" />
+     <Compile Include="Assets\Editor\Conversation\ConversationsWindow.cs" />
+     <Compile Include="Assets\Editor\Conversation\NPCConversations.cs" />
      <Compile Include="Assets\Editor\EditorSaveLoad.cs" />
      <Compile Include="Assets\Editor\Inputs\AxisInputsWindow.cs" />
      <Compile Include="Assets\Editor\Inputs\ButtonInputsWindow.cs" />
@@ -65,6 +66,7 @@
      <Compile Include="Assets\Editor\Items\ItemWindowHelmetData.cs" />
      <Compile Include="Assets\Editor\Items\ItemWindowShieldData.cs" />
      <Compile Include="Assets\Editor\Items\ItemWindowShoesData.cs" />
+     <Compile Include="Assets\Editor\Items\ItemWindowUsableData.cs" />
      <Compile Include="Assets\Editor\Items\ItemWindowWeaponData.cs" />
      <Compile Include="Assets\Editor\Items\ItemsWindow.cs" />
      <Compile Include="Assets\Editor\Languages\LanguageWindow.cs" />
@@ -77,18 +79,32 @@
      <Compile Include="Assets\Editor\Spells\SpellWindow.cs" />
      <Compile Include="Assets\Editor\Spells\SpellsWindow.cs" />
      <Compile Include="Assets\Editor\Utility\Indentation.cs" />
+     <Compile Include="Assets\Editor\Water (Pro Only)\Water4\GerstnerDisplaceEditor.cs" />
+     <Compile Include="Assets\Editor\Water (Pro Only)\Water4\PlanarReflectionEditor.cs" />
+     <Compile Include="Assets\Editor\Water (Pro Only)\Water4\SpecularLightingEditor.cs" />
+     <Compile Include="Assets\Editor\Water (Pro Only)\Water4\WaterBaseEditor.cs" />
+     <Compile Include="Assets\Editor\Water (Pro Only)\Water4\WaterEditorUtility.cs" />
+     <None Include="Assets\Resources\conversations.txt" />
      <None Include="Assets\Resources\spells.txt" />
      <None Include="Assets\Resources\defaultSettings.xml" />
      <None Include="Assets\Resources\buffs.txt" />
+     <None Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Shaders\FX-SimpleWater4.shader" />
      <None Include="Assets\Standard Assets\Skyboxes\_skybox info.txt" />
      <None Include="Assets\Resources\Language-Polski.xml" />
      <None Include="Assets\Editor\Languages\languagePhrases.xml" />
+     <None Include="Assets\settings.xml" />
      <None Include="Assets\Resources\monsters.txt" />
      <None Include="Assets\Standard Assets\Water (Basic)\Sources\Shaders\FX-Water Simple.shader" />
      <None Include="Assets\Resources\items.txt" />
+     <None Include="Assets\Standard Assets\Water (Pro Only)\Sources\Shaders\FX-Water.shader" />
      <None Include="Assets\Resources\defaultInputs.txt" />
+     <None Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Shaders\WaterInclude.cginc" />
+     <None Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Shaders\FX-Water4.shader" />
  <Reference Include="Assembly-UnityScript-firstpass">
  <HintPath>C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Client/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
+ </Reference>
+ <Reference Include="Assembly-UnityScript">
+ <HintPath>C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Client/Library/ScriptAssemblies/Assembly-UnityScript.dll</HintPath>
  </Reference>
  <Reference Include="Lidgren.Network">
  <HintPath>C:/Users/Piotr/Source/Repos/NetworkProject/NetworkProject-Client/Assets/Plugins/Lidgren.Network.dll</HintPath>

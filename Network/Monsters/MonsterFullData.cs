@@ -34,7 +34,7 @@ namespace NetworkProject.Monsters
             set { Stats.AttackSpeed = value; }
         }
 
-        public float MovementSpeed
+        public float[] MovementSpeed
         {
             get { return Stats.MovementSpeed; }
             set { Stats.MovementSpeed = value; }

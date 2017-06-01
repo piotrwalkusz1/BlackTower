@@ -25,9 +25,8 @@ namespace NetworkProject.Connection.ToClient
         public Bullet Bullet { get; set; }
 
         public CreateBulletToClient(int idNet, Vector3 position, Vector3 rotation, Bullet bullet)
+            : base(idNet, position, rotation.y)
         {
-            IdNet = idNet;
-            Position = position;
             FullRotation = rotation;
             Bullet = bullet;
         }

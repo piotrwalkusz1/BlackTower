@@ -47,7 +47,7 @@ public class MonsterStats : Stats, IMonsterStats
         set { GetComponent<MonsterCombat>().AttackSpeed = value; }
     }
 
-    public float MovementSpeed
+    public float[] MovementSpeed
     {
         get { return GetComponent<MonsterMovement>().MovementSpeed; }
         set { GetComponent<MonsterMovement>().MovementSpeed = value; }
